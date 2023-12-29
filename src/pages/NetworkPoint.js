@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid, Segment, Message } from "semantic-ui-react";
 import Models from "../component/Model";
+import Map from "../component/Map";
 
 export default function NetworkPoint() {
   return (
@@ -12,7 +13,9 @@ export default function NetworkPoint() {
         </Segment>
       </Grid.Column>
       <Grid.Column width={13}>
-        <Segment>2</Segment>
+        <Segment>
+          <Map />
+        </Segment>
       </Grid.Column>
     </Grid>
   );
