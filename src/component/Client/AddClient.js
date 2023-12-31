@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import MapContext from "../../store/map-context";
 import {
   Grid,
   Header,
@@ -11,6 +12,8 @@ import {
 } from "semantic-ui-react";
 
 const AddClient = ({ show, hide }) => {
+  const context = useContext(MapContext);
+  console.log("addclient", context.latlang);
   return (
     <Sidebar
       as={Segment}
@@ -52,11 +55,17 @@ const AddClient = ({ show, hide }) => {
               </Form.Field>
               <Form.Field required>
                 <label>Latitude</label>
-                <input disabled />
+                <input
+                  value={context.latlang ? context.latlang.lat : ""}
+                  disabled
+                />
               </Form.Field>
               <Form.Field required>
                 <label>Longitude</label>
-                <input disabled />
+                <input
+                  value={context.latlang ? context.latlang.lng : ""}
+                  disabled
+                />
               </Form.Field>
               <Form.TextArea required label="Address" />
               <Form.TextArea label="Note" />

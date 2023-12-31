@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import MapContext from "../../store/map-context";
 import { List, Button, Input, Icon, Grid } from "semantic-ui-react";
 import AddClient from "./AddClient";
 const Client = () => {
   const [visible, setVisible] = useState(false);
+  const context = useContext(MapContext);
   const hideAddClient = () => {
     setVisible(false);
   };
@@ -96,6 +98,7 @@ const Client = () => {
             fluid
             secondary
             onClick={() => {
+              context.setCable(null);
               setVisible(true);
             }}
           >

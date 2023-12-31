@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Popup, Marker, useMapEvents } from "react-leaflet";
-
+import MapContext from "../../store/map-context";
 function LocationMarker() {
-  const [position, setPosition] = useState(null);
+  const context = useContext(MapContext);
+
   useMapEvents({
     click(e) {
-      setPosition(e.latlng);
+      context.setlatlang(e.latlng);
     },
   });
-  return position === null ? null : (
-    <Marker position={position}>{console.log(position)}</Marker>
+  return context.latlang === null ? null : (
+    <Marker position={context.latlang}></Marker>
   );
 }
 

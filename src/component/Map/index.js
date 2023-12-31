@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import MapContext from "../../store/map-context";
+import AddCable from "../Cable/AddCable";
 
 import {
   MapContainer,
@@ -30,9 +32,13 @@ L.Icon.Default.mergeOptions({
 const NetworkMap = () => {
   const [center, setCenter] = useState({ lat: 23.8041, lng: 90.4152 });
   const [drawing, setDrawing] = useState(false);
+  const [showAddCable, setShowAddCable] = useState(false);
+
+  const context = useContext(MapContext);
 
   const handleCreated = (e) => {
-    console.log(e);
+    context.setCable(e.layer._latlngs);
+    setShowAddCable(true);
   };
   const drawOptions = {
     rectangle: false,
@@ -43,24 +49,34 @@ const NetworkMap = () => {
   };
 
   return (
-    <MapContainer center={center} zoom={13}>
-      {!drawing && <LocationMarker />}
-
-      <FeatureGroup>
-        <EditControl
-          position="topright"
-          onCreated={handleCreated}
-          draw={drawOptions}
-          onDrawStart={() => setDrawing(true)}
-          onDrawStop={() => setDrawing(false)}
-          edit={{ edit: false }}
-        />
-      </FeatureGroup>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    <>
+      <AddCable
+        visible={showAddCable && context.cable !== null}
+        hide={() => setShowAddCable(false)}
       />
-    </MapContainer>
+
+      <MapContainer center={center} zoom={13}>
+        {!drawing && <LocationMarker />}
+
+        <FeatureGroup>
+          <EditControl
+            position="topright"
+            onCreated={handleCreated}
+            draw={drawOptions}
+            onDrawStart={() => {
+              setDrawing(true);
+              context.setlatlang(null);
+            }}
+            onDrawStop={() => setDrawing(false)}
+            edit={{ edit: false }}
+          />
+        </FeatureGroup>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+      </MapContainer>
+    </>
   );
 };
 
