@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 
 const AddJunction = ({ show, hide }) => {
+  console.log("add junction");
   return (
     <Sidebar
       as={Segment}

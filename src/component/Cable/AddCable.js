@@ -29,6 +29,7 @@ const coreOptions = [
 ];
 
 const AddCable = ({ visible, hide }) => {
+  console.log("add cable");
   const context = useContext(MapContext);
   const [cableType, setCableType] = useState(null);
   const [core, setCore] = useState(null);
