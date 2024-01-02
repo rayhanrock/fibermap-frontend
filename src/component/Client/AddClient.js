@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import MapContext from "../../store/map-context";
 import { createClient } from "../../services";
 import {

@@ -19,3 +19,13 @@ export async function createClient(params = {}) {
     return { data: null, status: null, error };
   }
 }
+
+export async function createJunction(params = {}) {
+  try {
+    const { data, status } = await api.post("/junction/", params);
+
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
