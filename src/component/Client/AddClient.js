@@ -14,7 +14,7 @@ import {
 
 const AddClient = ({ show, hide }) => {
   console.log("add client");
-  const { latlang, setlatlang, updateNetworkPoint } = useContext(MapContext);
+  const { latlang, setlatlang, updateClients } = useContext(MapContext);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
@@ -43,7 +43,7 @@ const AddClient = ({ show, hide }) => {
       const response = await createClient(data);
       if (response.status === 201) {
         setlatlang(null);
-        updateNetworkPoint();
+        updateClients();
       }
     } catch (error) {
       console.log(error);

@@ -14,7 +14,7 @@ import {
 
 const AddJunction = ({ show, hide }) => {
   console.log("add junction");
-  const { latlang, setlatlang, updateNetworkPoint } = useContext(MapContext);
+  const { latlang, setlatlang, updateJunctions } = useContext(MapContext);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -41,7 +41,7 @@ const AddJunction = ({ show, hide }) => {
       const response = await createJunction(data);
       if (response.status === 201) {
         setlatlang(null);
-        updateNetworkPoint();
+        updateJunctions();
       }
     } catch (error) {
       console.log(error);

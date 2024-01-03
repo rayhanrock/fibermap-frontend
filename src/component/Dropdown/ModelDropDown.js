@@ -2,10 +2,10 @@ import React from "react";
 import { Dropdown } from "semantic-ui-react";
 import { useState } from "react";
 const options = [
-  { key: 1, text: "Pop", value: 1 },
-  { key: 2, text: "Client", value: 2 },
-  { key: 3, text: "Junction", value: 3 },
-  { key: 4, text: "Gpon", value: 4 },
+  { key: 1, text: "Pop", value: "POP" },
+  { key: 2, text: "Client", value: "CLIENT" },
+  { key: 3, text: "Junction", value: "JUNCTION" },
+  { key: 4, text: "Gpon", value: "GPON" },
 ];
 
 const ModelDropDown = ({ getValue }) => {

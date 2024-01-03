@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import MapContext from "../../store/map-context";
 import { List, Button, Input, Icon, Grid } from "semantic-ui-react";
 import AddGpon from "./AddGpon";
 const Gpon = () => {
   const [visible, setVisible] = useState(false);
+  const { setDrawLine } = useContext(MapContext);
   const hideAddGpon = () => {
     setVisible(false);
   };
@@ -96,6 +98,7 @@ const Gpon = () => {
             fluid
             secondary
             onClick={() => {
+              setDrawLine(null);
               setVisible(true);
             }}
           >

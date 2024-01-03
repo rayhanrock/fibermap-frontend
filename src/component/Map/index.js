@@ -8,6 +8,7 @@ import {
   Popup,
   Marker,
   FeatureGroup,
+  Polyline,
 } from "react-leaflet";
 
 import { EditControl } from "react-leaflet-draw";
@@ -44,17 +45,26 @@ const NetworkMap = () => {
   const [drawing, setDrawing] = useState(false);
   const [showAddCable, setShowAddCable] = useState(false);
 
-  const context = useContext(MapContext);
+  const {
+    clients,
+    pops,
+    drawLine,
+    setDrawLine,
+    setlatlang,
+    junctions,
+    gpons,
+    cables,
+  } = useContext(MapContext);
 
   const handleCreated = (e) => {
-    context.setCable(e.layer._latlngs);
+    setDrawLine(e.layer._latlngs);
     setShowAddCable(true);
   };
 
   return (
     <>
       <AddCable
-        visible={showAddCable && context.cable !== null}
+        visible={showAddCable && drawLine !== null}
         hide={() => setShowAddCable(false)}
       />
 
@@ -68,7 +78,7 @@ const NetworkMap = () => {
             draw={drawOptions}
             onDrawStart={() => {
               setDrawing(true);
-              context.setlatlang(null);
+              setlatlang(null);
             }}
             onDrawStop={() => setDrawing(false)}
             edit={{ edit: false }}
@@ -79,7 +89,7 @@ const NetworkMap = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {context.networkPoint?.pops.map((pop) => {
+        {pops?.map((pop) => {
           return (
             <Marker
               icon={PopIcon}
@@ -97,7 +107,7 @@ const NetworkMap = () => {
             </Marker>
           );
         })}
-        {context.networkPoint?.clients.map((client) => {
+        {clients?.map((client) => {
           return (
             <Marker
               icon={ClientIcon}
@@ -115,7 +125,7 @@ const NetworkMap = () => {
             </Marker>
           );
         })}
-        {context.networkPoint?.junctions.map((junction) => {
+        {junctions?.map((junction) => {
           return (
             <Marker
               icon={JunctionIcon}
@@ -133,7 +143,7 @@ const NetworkMap = () => {
             </Marker>
           );
         })}
-        {context.networkPoint?.gpons.map((gpon) => {
+        {gpons?.map((gpon) => {
           return (
             <Marker
               icon={GponIcon}
@@ -151,6 +161,15 @@ const NetworkMap = () => {
             </Marker>
           );
         })}
+        {cables?.map((cable) => (
+          <Polyline
+            key={cable.identifier}
+            pathOptions={{ color: "green", weight: 6 }}
+            positions={cable.polyline}
+          >
+            <Popup>{cable.identifier}</Popup>
+          </Polyline>
+        ))}
       </MapContainer>
     </>
   );

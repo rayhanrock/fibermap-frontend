@@ -5,48 +5,120 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import { getNetworkPoint } from "../services";
+import {
+  getClients,
+  getJunctions,
+  getGpons,
+  getPops,
+  getCables,
+} from "../services";
 
 const defaultValues = {
   latlang: null,
   setlatlang: () => {},
-  cable: null,
-  setCable: () => {},
-  networkPoint: null,
-  updateNetworkPoint: () => {},
+  drawLine: null,
+  setDrawLine: () => {},
+
+  pops: null,
+  updatePops: () => {},
+  clients: null,
+  updateClients: () => {},
+  junctions: null,
+  updateJunctions: () => {},
+  gpons: null,
+  updateGpons: () => {},
+
+  cables: null,
+  updateCables: () => {},
 };
 
 const MapContext = createContext(defaultValues);
 
 export const MapContextProvider = (props) => {
   const [latlang, setlatlang] = useState(defaultValues.latlang);
-  const [cable, setCable] = useState(defaultValues.cable);
-  const [networkPoint, setNetworkPoint] = useState(defaultValues.networkPoint);
+  const [drawLine, setDrawLine] = useState(defaultValues.drawLine);
+  const [pops, setPops] = useState(defaultValues.pops);
+  const [clients, setclients] = useState(defaultValues.clients);
+  const [junctions, setJunctions] = useState(defaultValues.junctions);
+  const [gpons, setGpons] = useState(defaultValues.gpons);
+  const [cables, setCables] = useState(defaultValues.cables);
 
-  const updateNetworkPoint = useCallback(async () => {
+  const updatePops = useCallback(async () => {
     try {
-      const { data, status } = await getNetworkPoint();
+      const { data, status } = await getPops();
       if (status === 200) {
-        setNetworkPoint(data);
+        setPops(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  const updateClients = useCallback(async () => {
+    try {
+      const { data, status } = await getClients();
+      if (status === 200) {
+        setclients(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  const updateJunctions = useCallback(async () => {
+    try {
+      const { data, status } = await getJunctions();
+      if (status === 200) {
+        setJunctions(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  const updateGpons = useCallback(async () => {
+    try {
+      const { data, status } = await getGpons();
+      if (status === 200) {
+        setGpons(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  const updateCables = useCallback(async () => {
+    try {
+      const { data, status } = await getCables();
+      if (status === 200) {
+        setCables(data);
       }
     } catch (error) {
       console.error(error);
     }
   }, []);
   useEffect(() => {
-    updateNetworkPoint();
+    updatePops();
+    updateClients();
+    updateJunctions();
+    updateGpons();
+    updateCables();
   }, []);
 
   const contextValue = useMemo(
     () => ({
       latlang,
       setlatlang,
-      cable,
-      setCable,
-      networkPoint,
-      updateNetworkPoint,
+      drawLine,
+      setDrawLine,
+      pops,
+      updatePops,
+      clients,
+      updateClients,
+      junctions,
+      updateJunctions,
+      gpons,
+      updateGpons,
+      cables,
+      updateCables,
     }),
-    [latlang, cable, networkPoint, setlatlang, setCable, updateNetworkPoint]
+    [latlang, drawLine, pops, clients, junctions, gpons, cables]
   );
 
   return (

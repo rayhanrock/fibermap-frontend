@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
+import { createPop } from "../../services";
+import MapContext from "../../store/map-context";
 import {
   Grid,
   Header,
@@ -11,6 +13,48 @@ import {
 } from "semantic-ui-react";
 
 const AddPop = ({ show, hide }) => {
+  console.log("add pop");
+  const { latlang, setlatlang, updatePops } = useContext(MapContext);
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [note, setNote] = useState("");
+  const [description, setDescription] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const data = {
+        identifier: id,
+        name: name,
+        marker: {
+          type: "POP",
+          latitude: latlang.lat,
+          longitude: latlang.lng,
+          address: address,
+          notes: note,
+          description: description,
+        },
+      };
+
+      const response = await createPop(data);
+      if (response.status === 201) {
+        setlatlang(null);
+        updatePops();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleReset = (e) => {
+    e.preventDefault();
+    setId("");
+    setName("");
+    setAddress("");
+    setNote("");
+    setDescription("");
+  };
   return (
     <Sidebar
       as={Segment}
@@ -37,32 +81,53 @@ const AddPop = ({ show, hide }) => {
         <Grid.Row>
           <Grid.Column>
             <Message info>Please click on the map to get coordinate </Message>
-            <Form>
+            <Form onSubmit={handleSubmit} onReset={handleReset}>
               <Form.Field required>
                 <label>ID</label>
-                <input placeholder="Must be unique" />
+                <input
+                  placeholder="Must be unique"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
               </Form.Field>
               <Form.Field required>
                 <label>Name</label>
-                <input placeholder="Pop name" />
+                <input
+                  placeholder="Pop name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </Form.Field>
 
               <Form.Field required>
                 <label>Latitude</label>
-                <input disabled />
+                <input disabled value={latlang ? latlang.lat : ""} />
               </Form.Field>
               <Form.Field required>
                 <label>Longitude</label>
-                <input disabled />
+                <input disabled value={latlang ? latlang.lng : ""} />
               </Form.Field>
-              <Form.TextArea required label="Address" />
-              <Form.TextArea label="Note" />
-              <Form.TextArea label="Description" />
+              <Form.TextArea
+                required
+                label="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+              <Form.TextArea
+                label="Note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+              />
+              <Form.TextArea
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
 
               <Button secondary type="submit">
                 Submit
               </Button>
-              <Button color="red" type="submit">
+              <Button color="red" type="reset">
                 Clear
               </Button>
             </Form>

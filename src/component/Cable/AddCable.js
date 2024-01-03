@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import MapContext from "../../store/map-context";
+import { createCable } from "../../services";
+
 import {
   Grid,
   Header,
@@ -11,12 +13,12 @@ import {
   Dropdown,
 } from "semantic-ui-react";
 import ModelDropDown from "../Dropdown/ModelDropDown";
-import SearchClient from "./SearchClient";
+import SearchModelDropdown from "../Dropdown/SearchModelDropdown";
 
 const cableOptions = [
-  { key: "1", text: "Line", value: "line" },
-  { key: "2", text: "Underground", value: "underground" },
-  { key: "3", text: "Wireless", value: "wireless" },
+  { key: "1", text: "Line", value: "LINE" },
+  { key: "2", text: "Underground", value: "UNDERGROUND" },
+  { key: "3", text: "Wireless", value: "WIRELESS" },
 ];
 const coreOptions = [
   { key: "1", text: "2", value: "2" },
@@ -30,9 +32,59 @@ const coreOptions = [
 
 const AddCable = ({ visible, hide }) => {
   console.log("add cable");
-  const context = useContext(MapContext);
+
+  const { drawLine, updateCables, setDrawLine } = useContext(MapContext);
+  const [id, setId] = useState(null);
+
   const [cableType, setCableType] = useState(null);
   const [core, setCore] = useState(null);
+  const [startFrom, setStartFrom] = useState(null);
+  const [startingPoint, setStartingPoint] = useState(null);
+  const [endFrom, setEndFrom] = useState(null);
+  const [endingPoint, setEndingPoint] = useState(null);
+  const [length, setLength] = useState(null);
+  const [note, setNote] = useState(null);
+  const [description, setDescription] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const data = {
+        identifier: id,
+        type: cableType,
+        start_from: startFrom,
+        starting_point: startingPoint,
+        end_to: endFrom,
+        ending_point: endingPoint,
+        number_of_cores: core,
+        length: length,
+        notes: note,
+        description: description,
+        polyline: drawLine,
+      };
+
+      const response = await createCable(data);
+      if (response.status === 201) {
+        // setDrawLine(null);
+        updateCables();
+        console.log(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleReset = (e) => {
+    e.preventDefault();
+    setId("");
+    setCableType("");
+    setCore("");
+    setStartFrom("");
+    setEndFrom("");
+    setLength("");
+    setNote("");
+    setDescription("");
+  };
 
   return (
     <Sidebar
@@ -59,14 +111,19 @@ const AddCable = ({ visible, hide }) => {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <Form>
+            <Form onSubmit={handleSubmit} onReset={handleReset}>
               <Form.Field required>
                 <label>Cable ID</label>
-                <input placeholder="Must be unique" />
+                <input
+                  placeholder="Must be unique"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
               </Form.Field>
               <Form.Field required>
                 <label>Type</label>
                 <Dropdown
+                  fluid
                   selection
                   options={cableOptions}
                   value={cableType}
@@ -75,23 +132,30 @@ const AddCable = ({ visible, hide }) => {
               </Form.Field>
               <Form.Field required>
                 <label>Start from</label>
-                <ModelDropDown getValue={(value) => console.log(value)} />
+                <ModelDropDown getValue={(value) => setStartFrom(value)} />
               </Form.Field>
               <Form.Field required>
                 <label>Starting Point</label>
-                <SearchClient getValue={(value) => console.log(value)} />
+                <SearchModelDropdown
+                  getValue={(value) => setStartingPoint(value)}
+                  optionsType={startFrom}
+                />
               </Form.Field>
               <Form.Field required>
                 <label>End from</label>
-                <ModelDropDown getValue={(value) => console.log(value)} />
+                <ModelDropDown getValue={(value) => setEndFrom(value)} />
               </Form.Field>
               <Form.Field required>
                 <label>Ending Point</label>
-                <SearchClient getValue={(value) => console.log(value)} />
+                <SearchModelDropdown
+                  getValue={(value) => setEndingPoint(value)}
+                  optionsType={endFrom}
+                />
               </Form.Field>
               <Form.Field required>
                 <label>Core</label>
                 <Dropdown
+                  fluid
                   selection
                   options={coreOptions}
                   value={core}
@@ -100,15 +164,27 @@ const AddCable = ({ visible, hide }) => {
               </Form.Field>
               <Form.Field required>
                 <label>Length (meter)</label>
-                <input placeholder="10" />
+                <input
+                  placeholder="10"
+                  onChange={(e) => setLength(e.target.value)}
+                  value={length}
+                />
               </Form.Field>
-              <Form.TextArea label="Note" />
-              <Form.TextArea label="Description" />
+              <Form.TextArea
+                label="Note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+              />
+              <Form.TextArea
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
 
               <Button secondary type="submit">
                 Submit
               </Button>
-              <Button color="red" type="submit">
+              <Button color="red" type="reset">
                 Clear
               </Button>
             </Form>

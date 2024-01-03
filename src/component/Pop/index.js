@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import MapContext from "../../store/map-context";
+
 import { List, Button, Input, Icon, Grid } from "semantic-ui-react";
 import AddPop from "./AddPop";
 const Pop = () => {
+  const { setDrawLine } = useContext(MapContext);
+
   const [visible, setVisible] = useState(false);
   const hideAddPop = () => {
     setVisible(false);
@@ -96,6 +100,7 @@ const Pop = () => {
             fluid
             secondary
             onClick={() => {
+              setDrawLine(null);
               setVisible(true);
             }}
           >
