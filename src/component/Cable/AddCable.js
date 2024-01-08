@@ -31,8 +31,7 @@ const coreOptions = [
 ];
 
 const AddCable = ({ visible, hide }) => {
-  console.log("add cable");
-
+  console.log("add cable visible");
   const { drawLine, updateCables, setDrawLine } = useContext(MapContext);
   const [id, setId] = useState(null);
 
@@ -79,8 +78,6 @@ const AddCable = ({ visible, hide }) => {
     setId("");
     setCableType("");
     setCore("");
-    setStartFrom("");
-    setEndFrom("");
     setLength("");
     setNote("");
     setDescription("");
@@ -132,23 +129,33 @@ const AddCable = ({ visible, hide }) => {
               </Form.Field>
               <Form.Field required>
                 <label>Start from</label>
-                <ModelDropDown getValue={(value) => setStartFrom(value)} />
+                <ModelDropDown
+                  getValue={(value) => {
+                    setStartFrom(value);
+                    setStartingPoint(null);
+                  }}
+                />
               </Form.Field>
               <Form.Field required>
                 <label>Starting Point</label>
                 <SearchModelDropdown
-                  getValue={(value) => setStartingPoint(value)}
+                  getValue={setStartingPoint}
                   optionsType={startFrom}
                 />
               </Form.Field>
               <Form.Field required>
                 <label>End from</label>
-                <ModelDropDown getValue={(value) => setEndFrom(value)} />
+                <ModelDropDown
+                  getValue={(value) => {
+                    setEndFrom(value);
+                    setEndingPoint(null);
+                  }}
+                />
               </Form.Field>
               <Form.Field required>
                 <label>Ending Point</label>
                 <SearchModelDropdown
-                  getValue={(value) => setEndingPoint(value)}
+                  getValue={setEndingPoint}
                   optionsType={endFrom}
                 />
               </Form.Field>

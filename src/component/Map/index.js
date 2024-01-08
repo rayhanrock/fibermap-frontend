@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import MapContext from "../../store/map-context";
 import AddCable from "../Cable/AddCable";
+import ClientModal from "../Modal/Client/ClientModal";
 
 import {
   MapContainer,
@@ -44,6 +45,8 @@ const NetworkMap = () => {
   const [center, setCenter] = useState({ lat: 23.8041, lng: 90.4152 });
   const [drawing, setDrawing] = useState(false);
   const [showAddCable, setShowAddCable] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState(null);
 
   const {
     clients,
@@ -117,7 +120,8 @@ const NetworkMap = () => {
                 mouseover: (event) => event.target.openPopup(),
                 mouseout: (event) => event.target.closePopup(),
                 click: (event) => {
-                  console.log("clicked");
+                  setShowModal(true);
+                  setSelectedClientId(client.id);
                 },
               }}
             >
@@ -125,6 +129,12 @@ const NetworkMap = () => {
             </Marker>
           );
         })}
+        {showModal && (
+          <ClientModal
+            clientId={selectedClientId}
+            onClose={() => setShowModal(false)}
+          />
+        )}
         {junctions?.map((junction) => {
           return (
             <Marker

@@ -98,3 +98,12 @@ export async function getCables(params = {}) {
     return { data: null, status: null, error };
   }
 }
+
+export async function getClientCoreDetails(id) {
+  try {
+    const { data, status } = await api.get(`client-details/${id}/cores/`, {});
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}

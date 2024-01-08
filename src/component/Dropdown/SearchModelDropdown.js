@@ -1,11 +1,10 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import MapContext from "../../store/map-context";
 import { Dropdown } from "semantic-ui-react";
 
-const SearchClient = ({ getValue, optionsType }) => {
+const SearchModelDropdown = ({ getValue, optionsType }) => {
   const { clients, pops, junctions, gpons } = useContext(MapContext);
   const [value, setValue] = useState(null);
-
   const optionSelection = {
     CLIENT: clients,
     POP: pops,
@@ -13,15 +12,17 @@ const SearchClient = ({ getValue, optionsType }) => {
     GPON: gpons,
   };
 
-  const options =
-    optionSelection[optionsType] &&
-    optionSelection[optionsType].map((item) => {
-      return {
-        key: item.id,
-        text: item.name,
-        value: item.id,
-      };
-    });
+  useEffect(() => {
+    setValue(null);
+  }, [optionsType]);
+
+  const options = optionSelection[optionsType]?.map((item) => ({
+    key: item.id,
+    text: item.name,
+    value: item.id,
+  }));
+
+  console.log("options", options);
   const handleChange = (e, { value }) => {
     setValue(value);
     getValue(value);
@@ -35,10 +36,10 @@ const SearchClient = ({ getValue, optionsType }) => {
       options={options}
       search
       onChange={handleChange}
-      value={value}
       placeholder="Select starting point"
+      value={value}
     />
   );
 };
 
-export default SearchClient;
+export default SearchModelDropdown;
