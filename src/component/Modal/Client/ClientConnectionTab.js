@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getClientCoreDetails } from "../../../services";
+import {
+  getClientCoreDetails,
+  updateCoreAssignStatus,
+} from "../../../services";
 import {
   Grid,
   GridRow,
@@ -11,6 +14,10 @@ import {
 
 const ClientConnectionTab = ({ clientId }) => {
   const [cableDetails, setCableDetails] = useState(null);
+  useEffect(() => {
+    getCoreDetails(clientId);
+  }, []);
+
   const getCoreDetails = async (id) => {
     try {
       const { data, status } = await getClientCoreDetails(id);
@@ -21,16 +28,23 @@ const ClientConnectionTab = ({ clientId }) => {
       return { data: null, status: null, error };
     }
   };
-  console.log("cableDetails", cableDetails);
 
-  useEffect(() => {
-    getCoreDetails(clientId);
-  }, []);
+  const handleAssign = async (id, payload) => {
+    try {
+      const { data, status } = await updateCoreAssignStatus(id, payload);
+
+      if (status === 200) {
+        getCoreDetails(clientId);
+      }
+    } catch (error) {
+      return { data: null, status: null, error };
+    }
+  };
 
   return (
     <Grid columns={2}>
-      {cableDetails?.map((cable) => (
-        <GridRow stretched>
+      {cableDetails?.map((cable, index) => (
+        <GridRow stretched key={index}>
           <GridColumn>
             <Message attached header="cable details" />
             <Segment attached>
@@ -51,14 +65,20 @@ const ClientConnectionTab = ({ clientId }) => {
             <Message attached header="core details" />
             <Segment attached textAlign="center">
               {cable.cores?.map((core) => (
-                <p>
+                <p key={core.id}>
                   <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
                   {core.assigned ? (
                     <>
                       <Button basic compact color={core.color}>
                         Used
                       </Button>
-                      <Button compact color="red">
+                      <Button
+                        compact
+                        color="red"
+                        onClick={() =>
+                          handleAssign(core.id, { assigned: false })
+                        }
+                      >
                         Remove
                       </Button>
                     </>
@@ -67,7 +87,13 @@ const ClientConnectionTab = ({ clientId }) => {
                       <Button basic compact color={core.color}>
                         Unused
                       </Button>
-                      <Button compact color="blue">
+                      <Button
+                        compact
+                        color="blue"
+                        onClick={() =>
+                          handleAssign(core.id, { assigned: true })
+                        }
+                      >
                         Assign
                       </Button>
                     </>

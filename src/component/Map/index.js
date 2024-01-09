@@ -20,6 +20,7 @@ import "leaflet/dist/leaflet.css";
 import "./map.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { ClientIcon, PopIcon, JunctionIcon, GponIcon } from "./MarkerIcons";
+import JunctionModal from "../Modal/Junction/JunctionModal";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -45,8 +46,12 @@ const NetworkMap = () => {
   const [center, setCenter] = useState({ lat: 23.8041, lng: 90.4152 });
   const [drawing, setDrawing] = useState(false);
   const [showAddCable, setShowAddCable] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+
+  const [showClientModal, setShowClientModal] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState(null);
+
+  const [selectedJunctionId, setSelectedJunctionId] = useState(null);
+  const [showJunctionModal, setShowJunctionModal] = useState(false);
 
   const {
     clients,
@@ -120,7 +125,7 @@ const NetworkMap = () => {
                 mouseover: (event) => event.target.openPopup(),
                 mouseout: (event) => event.target.closePopup(),
                 click: (event) => {
-                  setShowModal(true);
+                  setShowClientModal(true);
                   setSelectedClientId(client.id);
                 },
               }}
@@ -129,10 +134,10 @@ const NetworkMap = () => {
             </Marker>
           );
         })}
-        {showModal && (
+        {showClientModal && (
           <ClientModal
             clientId={selectedClientId}
-            onClose={() => setShowModal(false)}
+            onClose={() => setShowClientModal(false)}
           />
         )}
         {junctions?.map((junction) => {
@@ -145,7 +150,8 @@ const NetworkMap = () => {
                 mouseover: (event) => event.target.openPopup(),
                 mouseout: (event) => event.target.closePopup(),
                 click: (event) => {
-                  console.log("clicked");
+                  setShowJunctionModal(true);
+                  setSelectedJunctionId(junction.id);
                 },
               }}
             >
@@ -153,6 +159,12 @@ const NetworkMap = () => {
             </Marker>
           );
         })}
+        {showJunctionModal && (
+          <JunctionModal
+            junctionId={selectedJunctionId}
+            onClose={() => setShowJunctionModal(false)}
+          />
+        )}
         {gpons?.map((gpon) => {
           return (
             <Marker

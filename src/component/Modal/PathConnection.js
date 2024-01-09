@@ -7,9 +7,13 @@ const style = {
   paddingBottom: "1px",
   minWidth: "6rem",
 };
-const PathConnectionUnit = () => (
+const PathConnection = ({ path }) => (
   <div style={{ display: "flex", marginTop: "5px", marginBottom: "5rem" }}>
-    <div style={{ flex: 1 }}>
+    <div
+      style={{
+        flex: 1,
+      }}
+    >
       <Segment basic style={style}>
         Model
       </Segment>
@@ -29,25 +33,27 @@ const PathConnectionUnit = () => (
         Distance
       </Segment>
     </div>
-    {["red", "green", "yellow", "olive", "orange"].map((i) => {
+    {path.path_direction.map((item, index) => {
       return (
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1 }} key={index}>
           <Segment basic style={style}>
-            Orange
+            {item.model_type + " >"}
           </Segment>
-          <Segment basic color={i} style={style}>
-            Orange
+          <Segment basic color={item.color} style={style}>
+            {item.cable_identifier}
           </Segment>
-          <Segment basic color={i} style={style}>
-            Yellow
+          <Segment basic color={item.color} style={style}>
+            {item.model_identifier}
           </Segment>
-          <Segment basic color={i} style={style}>
-            Olive
+          <Segment basic color={item.color} style={style}>
+            {item.color}
           </Segment>
-          <Segment basic color={i} style={style}>
-            Orange
+          <Segment basic color={item.color} style={style}>
+            {item.total_cable_core}
           </Segment>
-          <Segment basic color={i} style={style}></Segment>
+          <Segment basic color={item.color} style={style}>
+            {item.cable_length}
+          </Segment>
         </div>
       );
     })}
@@ -59,19 +65,19 @@ const PathConnectionUnit = () => (
         Total length
       </Segment>
       <Segment basic color="grey" style={style}>
-        3200
+        {path.total_length}
       </Segment>
       <Segment basic color="grey" style={style}>
         &nbsp;
       </Segment>
-      <Segment basic color="grey" style={style}>
+      <Segment basic style={style}>
         &nbsp;
       </Segment>
-      <Segment basic color="grey" style={style}>
+      <Segment basic style={style}>
         &nbsp;
       </Segment>
     </div>
   </div>
 );
 
-export default PathConnectionUnit;
+export default PathConnection;

@@ -107,3 +107,33 @@ export async function getClientCoreDetails(id) {
     return { data: null, status: null, error };
   }
 }
+
+export async function getClientConnectedPaths(id = 0) {
+  try {
+    const { data, status } = await api.get(`client/${id}/paths/`, {});
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function updateCoreAssignStatus(id = 0, payload = {}) {
+  try {
+    const { data, status } = await api.patch(
+      `core/${id}/update-assign-status/`,
+      payload
+    );
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function getJunctionCoreDetails(id) {
+  try {
+    const { data, status } = await api.get(`junction-details/${id}/cores/`, {});
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
