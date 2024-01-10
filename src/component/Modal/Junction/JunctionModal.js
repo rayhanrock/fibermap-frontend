@@ -1,5 +1,3 @@
-// import ClientConnectionTab from "./ClientConnectionTab";
-// import ClientDetailsTab from "./ClientDetailsTab";
 import JunctionConnectionTab from "./JunctionConnectionTab";
 import JunctionDetailsTab from "./JunctionDetailsTab";
 import {

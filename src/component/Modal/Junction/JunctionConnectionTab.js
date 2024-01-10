@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getJunctionCoreDetails } from "../../../services";
+import { connectCores, disconnectCores } from "../../../services";
 import {
   Grid,
   GridRow,
@@ -17,9 +18,12 @@ const JunctionConnectionTab = ({ junctionId }) => {
     left: null,
     right: null,
   });
+  const [highlight, setHighlight] = useState([]);
+  const [disableButtonList, setDisableButtonList] = useState([]);
+  console.log("cableDetails", cableDetails);
   // const [connection, setConnection] = useState({
-  //   left: { cableId: null, coreId: null, color: null },
-  //   right: { cableId: null, coreId: null, color: null },
+  //   left: { cableIdentifier: null, coreId: null, color: null },
+  //   right: { cableIdentifier: null, coreId: null, color: null },
   // });
   useEffect(() => {
     getCoreDetails(junctionId);
@@ -35,28 +39,71 @@ const JunctionConnectionTab = ({ junctionId }) => {
       return { data: null, status: null, error };
     }
   };
+  const onConnect = async () => {
+    if (!connection.left || !connection.right) {
+      return;
+    }
+    const payload = {
+      core_from: connection.left.coreId,
+      core_to: connection.right.coreId,
+    };
+    try {
+      const { status } = await connectCores(payload);
+      if (status === 201) {
+        getCoreDetails(junctionId);
+        onReset();
+      }
+    } catch (error) {
+      return { data: null, status: null, error };
+    }
+  };
 
-  const handle = async () => {};
+  const onRemove = async (coreFrom, coreTo) => {
+    const payload = {
+      core_from: coreFrom,
+      core_to: coreTo,
+    };
+    try {
+      const { status } = await disconnectCores(payload);
+      if (status === 204) {
+        onReset();
+        getCoreDetails(junctionId);
+      }
+    } catch (error) {
+      return { data: null, status: null, error };
+    }
+  };
+
   const onSelect = async (data) => {
     if (connection.left && connection.right) {
       return;
     }
     if (!connection.left) {
-      setConnection({ ...connection, left: data });
+      setConnection((prev) => ({ ...prev, left: data }));
     } else {
-      setConnection({ ...connection, right: data });
+      setConnection((prev) => ({ ...prev, right: data }));
     }
+    const cable = cableDetails.find((cable) => cable.id === data.cableId);
+    const core = cable.cores.map((core) => core.id);
+    setDisableButtonList((prev) => [...prev, ...core]);
   };
-
+  console.log("disbalecore", disableButtonList);
   const onReset = () => {
+    setDisableButtonList([]);
+    setHighlight([]);
     setConnection({
       left: null,
       right: null,
     });
   };
 
-  const highlightConnectedCore = async (data) => {
-    console.log(data);
+  const highlightConnectedCore = async (cableId, coreId) => {
+    const cable = cableDetails.find((cable) => cable.id === cableId);
+    const core = cable.cores.find((core) => core.id === coreId);
+
+    if (!core.connected_to) return;
+
+    setHighlight([core.connected_to.id, coreId]);
   };
 
   return (
@@ -67,20 +114,20 @@ const JunctionConnectionTab = ({ junctionId }) => {
             <Segment>
               <Header as="h4">
                 {connection.left &&
-                  `Cable : ${connection.left.cableId} | Core : ${connection.left.coreId} (${connection.left.color})`}
+                  `Cable : ${connection.left.cableIdentifier} | Core : ${connection.left.coreId} (${connection.left.color})`}
               </Header>
             </Segment>
             <Segment>----- Connected with -----</Segment>
             <Segment secondary>
               <Header as="h4" disabled={connection.right ? false : true}>
                 {connection.right
-                  ? `Cable : ${connection.right.cableId} | Core : ${connection.right.coreId} (${connection.right.color})`
+                  ? `Cable : ${connection.right.cableIdentifier} | Core : ${connection.right.coreId} (${connection.right.color})`
                   : "SELECT ANOTHER TO CONNECT"}
               </Header>
             </Segment>
           </SegmentGroup>
           {connection.left && connection.right && (
-            <Button positive onClick={handle}>
+            <Button positive onClick={onConnect}>
               Connect
             </Button>
           )}
@@ -114,8 +161,12 @@ const JunctionConnectionTab = ({ junctionId }) => {
                 {cable.cores?.map((core) => (
                   <p
                     key={core.id}
-                    onClick={() => highlightConnectedCore(core.id)}
-                    style={{}}
+                    onClick={() => highlightConnectedCore(cable.id, core.id)}
+                    style={
+                      highlight.includes(core.id)
+                        ? { backgroundColor: "#1EA1A1" }
+                        : null
+                    }
                   >
                     <span
                       key={core.id}
@@ -129,12 +180,18 @@ const JunctionConnectionTab = ({ junctionId }) => {
                       }
                     >
                       <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
-                      {core.assigned ? (
+                      {core.connected_to !== null ? (
                         <>
                           <Button basic compact color={core.color}>
                             Connected
                           </Button>
-                          <Button compact color="red" onClick={() => {}}>
+                          <Button
+                            compact
+                            color="red"
+                            onClick={() => {
+                              onRemove(core.id, core.connected_to.id);
+                            }}
+                          >
                             Remove
                           </Button>
                         </>
@@ -146,9 +203,11 @@ const JunctionConnectionTab = ({ junctionId }) => {
                           <Button
                             compact
                             color="blue"
+                            disabled={disableButtonList.includes(core.id)}
                             onClick={() => {
                               onSelect({
-                                cableId: cable.identifier,
+                                cableId: cable.id,
+                                cableIdentifier: cable.identifier,
                                 coreId: core.id,
                                 color: core.color,
                               });

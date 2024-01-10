@@ -137,3 +137,20 @@ export async function getJunctionCoreDetails(id) {
     return { data: null, status: null, error };
   }
 }
+export async function connectCores(payload = {}) {
+  try {
+    const { data, status } = await api.post(`connect-cores/`, payload);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function disconnectCores(payload = {}) {
+  try {
+    const { data, status } = await api.post(`disconnect-cores/`, payload);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
