@@ -44,8 +44,8 @@ const ClientConnectionTab = ({ clientId }) => {
   return (
     <Grid columns={2}>
       {cableDetails?.map((cable, index) => (
-        <GridRow stretched key={index}>
-          <GridColumn>
+        <GridRow key={index}>
+          <GridColumn width={5}>
             <Message attached header="cable details" />
             <Segment attached>
               <p>
@@ -61,7 +61,7 @@ const ClientConnectionTab = ({ clientId }) => {
               </p>
             </Segment>
           </GridColumn>
-          <GridColumn>
+          <GridColumn width={11}>
             <Message attached header="core details" />
             <Segment attached textAlign="center">
               {cable.cores?.map((core) => (

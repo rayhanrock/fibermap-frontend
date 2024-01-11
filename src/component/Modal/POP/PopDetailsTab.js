@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import PathConnection from "../PathConnection";
-import { getClientConnectedPaths } from "../../../services";
+import { getPopConnectedPaths } from "../../../services";
 
-const ClientDetailsTab = ({ clientId }) => {
+const PopDetailsTab = ({ popId }) => {
   const [connectionPaths, setConnectionPaths] = useState(null);
   useEffect(() => {
-    getPaths(clientId);
+    getPaths(popId);
   }, []);
 
   const getPaths = async (id) => {
     try {
-      const { data, status } = await getClientConnectedPaths(id);
+      const { data, status } = await getPopConnectedPaths(id);
       if (status === 200) {
         setConnectionPaths(data);
       }
@@ -27,4 +27,4 @@ const ClientDetailsTab = ({ clientId }) => {
   );
 };
 
-export default ClientDetailsTab;
+export default PopDetailsTab;

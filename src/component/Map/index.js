@@ -2,6 +2,8 @@ import { useState, useContext } from "react";
 import MapContext from "../../store/map-context";
 import AddCable from "../Cable/AddCable";
 import ClientModal from "../Modal/Client/ClientModal";
+import JunctionModal from "../Modal/Junction/JunctionModal";
+import PopModal from "../Modal/POP/PopModal";
 
 import {
   MapContainer,
@@ -20,7 +22,6 @@ import "leaflet/dist/leaflet.css";
 import "./map.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { ClientIcon, PopIcon, JunctionIcon, GponIcon } from "./MarkerIcons";
-import JunctionModal from "../Modal/Junction/JunctionModal";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -52,6 +53,9 @@ const NetworkMap = () => {
 
   const [selectedJunctionId, setSelectedJunctionId] = useState(null);
   const [showJunctionModal, setShowJunctionModal] = useState(false);
+
+  const [selectedPopId, setSelectedPopId] = useState(null);
+  const [showPopModal, setShowPopModal] = useState(false);
 
   const {
     clients,
@@ -107,7 +111,8 @@ const NetworkMap = () => {
                 mouseover: (event) => event.target.openPopup(),
                 mouseout: (event) => event.target.closePopup(),
                 click: (event) => {
-                  console.log("clicked");
+                  setShowPopModal(true);
+                  setSelectedPopId(pop.id);
                 },
               }}
             >
@@ -115,6 +120,12 @@ const NetworkMap = () => {
             </Marker>
           );
         })}
+        {showPopModal && (
+          <PopModal
+            popId={selectedPopId}
+            onClose={() => setShowPopModal(false)}
+          />
+        )}
         {clients?.map((client) => {
           return (
             <Marker

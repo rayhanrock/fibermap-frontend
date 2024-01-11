@@ -5,7 +5,7 @@ const style = {
   padding: "0",
   paddingTop: "1px",
   paddingBottom: "1px",
-  minWidth: "6rem",
+  whiteSpace: "nowrap",
 };
 const PathConnection = ({ path }) => (
   <div style={{ display: "flex", marginTop: "5px", marginBottom: "5rem" }}>

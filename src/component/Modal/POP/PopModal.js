@@ -1,5 +1,5 @@
-import ClientConnectionTab from "./ClientConnectionTab";
-import ClientDetailsTab from "./ClientDetailsTab";
+import PopConnectionTab from "./PopConnectionTab";
+import PopDetailsTab from "./PopDetailsTab";
 import {
   ModalHeader,
   ModalDescription,
@@ -13,13 +13,13 @@ import {
   Segment,
 } from "semantic-ui-react";
 
-const ClientModal = ({ clientId, onClose }) => {
+const PopModal = ({ popId, onClose }) => {
   const panes = [
     {
       menuItem: "Details",
       pane: (
         <TabPane attached={false} as={Segment} basic>
-          <ClientDetailsTab clientId={clientId} />
+          <PopDetailsTab popId={popId} />
         </TabPane>
       ),
     },
@@ -27,7 +27,7 @@ const ClientModal = ({ clientId, onClose }) => {
       menuItem: "Connection",
       pane: (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
-          <ClientConnectionTab clientId={clientId} />
+          <PopConnectionTab popId={popId} />
         </TabPane>
       ),
     },
@@ -35,7 +35,7 @@ const ClientModal = ({ clientId, onClose }) => {
 
   return (
     <Modal open onClose={onClose} size="large">
-      <ModalHeader>Client Details</ModalHeader>
+      <ModalHeader>Pop Details</ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
           <Tab
@@ -54,4 +54,4 @@ const ClientModal = ({ clientId, onClose }) => {
   );
 };
 
-export default ClientModal;
+export default PopModal;

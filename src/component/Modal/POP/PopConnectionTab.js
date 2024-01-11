@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getJunctionCoreDetails } from "../../../services";
+import { getPopCoreDetails, updateCoreAssignStatus } from "../../../services";
 import { connectCores, disconnectCores } from "../../../services";
 import {
   Grid,
@@ -12,7 +12,7 @@ import {
   Header,
 } from "semantic-ui-react";
 
-const JunctionConnectionTab = ({ junctionId }) => {
+const PopConnectionTab = ({ popId }) => {
   const [cableDetails, setCableDetails] = useState(null);
   const [connection, setConnection] = useState({
     left: null,
@@ -20,17 +20,18 @@ const JunctionConnectionTab = ({ junctionId }) => {
   });
   const [highlight, setHighlight] = useState([]);
   const [disableButtonList, setDisableButtonList] = useState([]);
+  console.log("cableDetails", cableDetails);
   // const [connection, setConnection] = useState({
   //   left: { cableIdentifier: null, coreId: null, color: null },
   //   right: { cableIdentifier: null, coreId: null, color: null },
   // });
   useEffect(() => {
-    getCoreDetails(junctionId);
+    getCoreDetails(popId);
   }, []);
 
   const getCoreDetails = async (id) => {
     try {
-      const { data, status } = await getJunctionCoreDetails(id);
+      const { data, status } = await getPopCoreDetails(id);
       if (status === 200) {
         setCableDetails(data);
       }
@@ -49,7 +50,7 @@ const JunctionConnectionTab = ({ junctionId }) => {
     try {
       const { status } = await connectCores(payload);
       if (status === 201) {
-        getCoreDetails(junctionId);
+        getCoreDetails(popId);
         onReset();
       }
     } catch (error) {
@@ -66,13 +67,23 @@ const JunctionConnectionTab = ({ junctionId }) => {
       const { status } = await disconnectCores(payload);
       if (status === 204) {
         onReset();
-        getCoreDetails(junctionId);
+        getCoreDetails(popId);
       }
     } catch (error) {
       return { data: null, status: null, error };
     }
   };
+  const handleAssign = async (id, payload) => {
+    try {
+      const { data, status } = await updateCoreAssignStatus(id, payload);
 
+      if (status === 200) {
+        getCoreDetails(popId);
+      }
+    } catch (error) {
+      return { data: null, status: null, error };
+    }
+  };
   const onSelect = async (data) => {
     if (connection.left && connection.right) {
       return;
@@ -86,6 +97,8 @@ const JunctionConnectionTab = ({ junctionId }) => {
     const core = cable.cores.map((core) => core.id);
     setDisableButtonList((prev) => [...prev, ...core]);
   };
+
+  console.log("disbalecore", disableButtonList);
   const onReset = () => {
     setDisableButtonList([]);
     setHighlight([]);
@@ -178,26 +191,12 @@ const JunctionConnectionTab = ({ junctionId }) => {
                       }
                     >
                       <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
-                      {core.connected_to !== null ? (
+                      {!core.assigned && !core.connected_to && (
                         <>
-                          <Button basic compact color={core.color}>
-                            Connected
-                          </Button>
-                          <Button
-                            compact
-                            color="red"
-                            onClick={() => {
-                              onRemove(core.id, core.connected_to.id);
-                            }}
-                          >
-                            Remove
-                          </Button>
-                        </>
-                      ) : (
-                        <>
+                          {" "}
                           <Button basic compact color={core.color}>
                             Unused
-                          </Button>
+                          </Button>{" "}
                           <Button
                             compact
                             color="blue"
@@ -212,13 +211,51 @@ const JunctionConnectionTab = ({ junctionId }) => {
                             }}
                           >
                             Select
+                          </Button>{" "}
+                          <Button
+                            compact
+                            color="blue"
+                            disabled={disableButtonList.includes(core.id)}
+                            onClick={() =>
+                              handleAssign(core.id, { assigned: true })
+                            }
+                          >
+                            Assign
                           </Button>
                         </>
                       )}
-                      &nbsp; &nbsp; Connected with -
-                      <b>
-                        {core.last_point.type} - ({core.last_point.identifier})
-                      </b>
+                      {core.connected_to && (
+                        <>
+                          <Button basic compact color={core.color}>
+                            Connected
+                          </Button>
+                          <Button
+                            compact
+                            color="red"
+                            onClick={() => {
+                              onRemove(core.id, core.connected_to.id);
+                            }}
+                          >
+                            Disconnect
+                          </Button>
+                        </>
+                      )}
+                      {core.assigned && (
+                        <>
+                          <Button basic compact color={core.color}>
+                            Used
+                          </Button>
+                          <Button
+                            compact
+                            color="red"
+                            onClick={() =>
+                              handleAssign(core.id, { assigned: false })
+                            }
+                          >
+                            Withdraw
+                          </Button>
+                        </>
+                      )}
                     </span>
                   </p>
                 ))}
@@ -231,4 +268,4 @@ const JunctionConnectionTab = ({ junctionId }) => {
   );
 };
 
-export default JunctionConnectionTab;
+export default PopConnectionTab;
