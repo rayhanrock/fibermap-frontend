@@ -14,6 +14,7 @@ import {
 
 const JunctionConnectionTab = ({ junctionId }) => {
   const [cableDetails, setCableDetails] = useState(null);
+  console.log("hukkkkaa", cableDetails);
   const [connection, setConnection] = useState({
     left: null,
     right: null,

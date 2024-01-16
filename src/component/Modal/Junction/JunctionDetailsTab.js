@@ -1,4 +1,4 @@
-const JunctionDetailsTab = ({ clientId }) => {
+const JunctionDetailsTab = ({ junctionId }) => {
   return <>"hello"</>;
 };
 

@@ -154,6 +154,54 @@ export async function getPopCoreDetails(id) {
     return { data: null, status: null, error };
   }
 }
+export async function getGponCoreDetails(id = 0) {
+  try {
+    const { data, status } = await api.get(`gpon-details/${id}/cores/`, {});
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function addGponInputCable(id = 0, payload = {}) {
+  try {
+    const { data, status } = await api.post(
+      `gpon/${id}/add-input-cable/`,
+      payload
+    );
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function removeGponInputCable(id = 0) {
+  try {
+    const { data, status } = await api.get(`gpon/${id}/remove-input-cable/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function gponInputAssignCore(id = 0, payload = {}) {
+  try {
+    const { data, status } = await api.post(`gpon/${id}/assign-core/`, payload);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function gponInputWithdrawCore(id = 0, payload = {}) {
+  try {
+    const { data, status } = await api.post(
+      `gpon/${id}/withdraw-core/`,
+      payload
+    );
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
 export async function connectCores(payload = {}) {
   try {
     const { data, status } = await api.post(`connect-cores/`, payload);

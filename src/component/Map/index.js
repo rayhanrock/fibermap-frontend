@@ -22,6 +22,7 @@ import "leaflet/dist/leaflet.css";
 import "./map.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { ClientIcon, PopIcon, JunctionIcon, GponIcon } from "./MarkerIcons";
+import GponModal from "../Modal/Gpon/GponModal";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -57,6 +58,8 @@ const NetworkMap = () => {
   const [selectedPopId, setSelectedPopId] = useState(null);
   const [showPopModal, setShowPopModal] = useState(false);
 
+  const [selectedGponId, setSelectedGponId] = useState(null);
+  const [showGponModal, setShowGponModal] = useState(false);
   const {
     clients,
     pops,
@@ -186,7 +189,8 @@ const NetworkMap = () => {
                 mouseover: (event) => event.target.openPopup(),
                 mouseout: (event) => event.target.closePopup(),
                 click: (event) => {
-                  console.log("clicked");
+                  setShowGponModal(true);
+                  setSelectedGponId(gpon.id);
                 },
               }}
             >
@@ -194,6 +198,12 @@ const NetworkMap = () => {
             </Marker>
           );
         })}
+        {showGponModal && (
+          <GponModal
+            gponId={selectedGponId}
+            onClose={() => setShowGponModal(false)}
+          />
+        )}
         {cables?.map((cable) => (
           <Polyline
             key={cable.identifier}
