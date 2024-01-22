@@ -1,18 +1,23 @@
-import { useState, useContext } from "react";
-import MapContext from "../../store/map-context";
-import AddCable from "../Cable/AddCable";
-import ClientModal from "../Modal/Client/ClientModal";
-import JunctionModal from "../Modal/Junction/JunctionModal";
-import PopModal from "../Modal/POP/PopModal";
-
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { mapActions } from "../../store/map/reducer";
 import {
-  MapContainer,
-  TileLayer,
-  Popup,
-  Marker,
-  FeatureGroup,
-  Polyline,
-} from "react-leaflet";
+  updatePops,
+  updateClients,
+  updateJunctions,
+  updateGpons,
+  updateCables,
+} from "../../store/map/actions";
+import AddCable from "../Cable/AddCable";
+
+import Cables from "./Cables";
+import Pops from "./Pops";
+import Junctions from "./Junctions";
+import Clients from "./Clients";
+import Gpons from "./Gpons";
+import HighlightPath from "./HighlightPath";
+
+import { MapContainer, TileLayer, FeatureGroup } from "react-leaflet";
 
 import { EditControl } from "react-leaflet-draw";
 import LocationMarker from "./LocationMarker";
@@ -21,9 +26,6 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./map.css";
 import "leaflet-draw/dist/leaflet.draw.css";
-import { ClientIcon, PopIcon, JunctionIcon, GponIcon } from "./MarkerIcons";
-import GponModal from "../Modal/Gpon/GponModal";
-
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -47,45 +49,37 @@ const NetworkMap = () => {
   console.log("map");
   const [center, setCenter] = useState({ lat: 23.8041, lng: 90.4152 });
   const [drawing, setDrawing] = useState(false);
-  const [showAddCable, setShowAddCable] = useState(false);
 
-  const [showClientModal, setShowClientModal] = useState(false);
-  const [selectedClientId, setSelectedClientId] = useState(null);
-
-  const [selectedJunctionId, setSelectedJunctionId] = useState(null);
-  const [showJunctionModal, setShowJunctionModal] = useState(false);
-
-  const [selectedPopId, setSelectedPopId] = useState(null);
-  const [showPopModal, setShowPopModal] = useState(false);
-
-  const [selectedGponId, setSelectedGponId] = useState(null);
-  const [showGponModal, setShowGponModal] = useState(false);
-  const {
-    clients,
-    pops,
-    drawLine,
-    setDrawLine,
-    setlatlang,
-    junctions,
-    gpons,
-    cables,
-  } = useContext(MapContext);
+  const dispatch = useDispatch();
+  const drawLine = useSelector((state) => state.map.drawLine);
 
   const handleCreated = (e) => {
-    setDrawLine(e.layer._latlngs);
-    setShowAddCable(true);
+    const parsed = e.layer._latlngs.map((latlng) => {
+      return {
+        lat: latlng.lat,
+        lng: latlng.lng,
+      };
+    });
+    dispatch(mapActions.setDrawLine(parsed));
   };
+
+  useEffect(() => {
+    dispatch(updatePops());
+    dispatch(updateClients());
+    dispatch(updateJunctions());
+    dispatch(updateGpons());
+    dispatch(updateCables());
+  }, [dispatch]);
 
   return (
     <>
-      <AddCable
-        visible={showAddCable && drawLine !== null}
-        hide={() => setShowAddCable(false)}
-      />
+      <AddCable visible={drawLine !== null} />
 
       <MapContainer center={center} zoom={13}>
-        {!drawing && <LocationMarker />}
-
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
         <FeatureGroup>
           <EditControl
             position="topright"
@@ -93,126 +87,20 @@ const NetworkMap = () => {
             draw={drawOptions}
             onDrawStart={() => {
               setDrawing(true);
-              setlatlang(null);
+              dispatch(mapActions.updateLatLang(null));
             }}
             onDrawStop={() => setDrawing(false)}
             edit={{ edit: false }}
           />
         </FeatureGroup>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
 
-        {pops?.map((pop) => {
-          return (
-            <Marker
-              icon={PopIcon}
-              key={pop.identifier}
-              position={[pop.latitude, pop.longitude]}
-              eventHandlers={{
-                mouseover: (event) => event.target.openPopup(),
-                mouseout: (event) => event.target.closePopup(),
-                click: (event) => {
-                  setShowPopModal(true);
-                  setSelectedPopId(pop.id);
-                },
-              }}
-            >
-              <Popup>{pop.name}</Popup>
-            </Marker>
-          );
-        })}
-        {showPopModal && (
-          <PopModal
-            popId={selectedPopId}
-            onClose={() => setShowPopModal(false)}
-          />
-        )}
-        {clients?.map((client) => {
-          return (
-            <Marker
-              icon={ClientIcon}
-              key={client.identifier}
-              position={[client.latitude, client.longitude]}
-              eventHandlers={{
-                mouseover: (event) => event.target.openPopup(),
-                mouseout: (event) => event.target.closePopup(),
-                click: (event) => {
-                  setShowClientModal(true);
-                  setSelectedClientId(client.id);
-                },
-              }}
-            >
-              <Popup>{client.name}</Popup>
-            </Marker>
-          );
-        })}
-        {showClientModal && (
-          <ClientModal
-            clientId={selectedClientId}
-            onClose={() => setShowClientModal(false)}
-          />
-        )}
-        {junctions?.map((junction) => {
-          return (
-            <Marker
-              icon={JunctionIcon}
-              key={junction.identifier}
-              position={[junction.latitude, junction.longitude]}
-              eventHandlers={{
-                mouseover: (event) => event.target.openPopup(),
-                mouseout: (event) => event.target.closePopup(),
-                click: (event) => {
-                  setShowJunctionModal(true);
-                  setSelectedJunctionId(junction.id);
-                },
-              }}
-            >
-              <Popup>{junction.name}</Popup>
-            </Marker>
-          );
-        })}
-        {showJunctionModal && (
-          <JunctionModal
-            junctionId={selectedJunctionId}
-            onClose={() => setShowJunctionModal(false)}
-          />
-        )}
-        {gpons?.map((gpon) => {
-          return (
-            <Marker
-              icon={GponIcon}
-              key={gpon.identifier}
-              position={[gpon.latitude, gpon.longitude]}
-              eventHandlers={{
-                mouseover: (event) => event.target.openPopup(),
-                mouseout: (event) => event.target.closePopup(),
-                click: (event) => {
-                  setShowGponModal(true);
-                  setSelectedGponId(gpon.id);
-                },
-              }}
-            >
-              <Popup>{gpon.name}</Popup>
-            </Marker>
-          );
-        })}
-        {showGponModal && (
-          <GponModal
-            gponId={selectedGponId}
-            onClose={() => setShowGponModal(false)}
-          />
-        )}
-        {cables?.map((cable) => (
-          <Polyline
-            key={cable.identifier}
-            pathOptions={{ color: "green", weight: 6 }}
-            positions={cable.polyline}
-          >
-            <Popup>{cable.identifier}</Popup>
-          </Polyline>
-        ))}
+        {!drawing && <LocationMarker />}
+        <Pops />
+        <Clients />
+        <Junctions />
+        <Gpons />
+        <Cables />
+        <HighlightPath />
       </MapContainer>
     </>
   );

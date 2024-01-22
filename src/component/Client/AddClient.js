@@ -1,6 +1,8 @@
-import React, { useState, useContext } from "react";
-import MapContext from "../../store/map-context";
+import React, { useState } from "react";
 import { createClient } from "../../services";
+import { useDispatch, useSelector } from "react-redux";
+import { mapActions } from "../../store/map/reducer";
+import { updateClients } from "../../store/map/actions";
 import {
   Grid,
   Header,
@@ -13,8 +15,10 @@ import {
 } from "semantic-ui-react";
 
 const AddClient = ({ show, hide }) => {
-  console.log("add client");
-  const { latlang, setlatlang, updateClients } = useContext(MapContext);
+  console.log("add junction");
+  const dispatch = useDispatch();
+  const latlang = useSelector((state) => state.map.latlang);
+
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
@@ -42,8 +46,8 @@ const AddClient = ({ show, hide }) => {
 
       const response = await createClient(data);
       if (response.status === 201) {
-        setlatlang(null);
-        updateClients();
+        dispatch(mapActions.updateLatLang(null));
+        dispatch(updateClients());
       }
     } catch (error) {
       console.log(error);

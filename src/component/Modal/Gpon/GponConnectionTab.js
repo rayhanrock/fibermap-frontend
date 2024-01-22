@@ -46,6 +46,7 @@ const GponConnectionTab = ({ gponId }) => {
       return { data: null, status: null, error };
     }
   };
+
   const onConnect = async () => {
     if (!connection.left || !connection.right) {
       return;

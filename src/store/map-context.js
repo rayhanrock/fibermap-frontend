@@ -19,6 +19,9 @@ const defaultValues = {
   drawLine: null,
   setDrawLine: () => {},
 
+  highlightPath: null,
+  setHighlightPath: () => {},
+
   pops: null,
   updatePops: () => {},
   clients: null,
@@ -34,7 +37,7 @@ const defaultValues = {
 
 const MapContext = createContext(defaultValues);
 
-export const MapContextProvider = (props) => {
+export const MapContextProvider = ({ children }) => {
   const [latlang, setlatlang] = useState(defaultValues.latlang);
   const [drawLine, setDrawLine] = useState(defaultValues.drawLine);
   const [pops, setPops] = useState(defaultValues.pops);
@@ -42,6 +45,10 @@ export const MapContextProvider = (props) => {
   const [junctions, setJunctions] = useState(defaultValues.junctions);
   const [gpons, setGpons] = useState(defaultValues.gpons);
   const [cables, setCables] = useState(defaultValues.cables);
+
+  const [highlightPath, setHighlightPath] = useState(
+    defaultValues.highlightPath
+  );
 
   const updatePops = useCallback(async () => {
     try {
@@ -107,6 +114,8 @@ export const MapContextProvider = (props) => {
       setlatlang,
       drawLine,
       setDrawLine,
+      highlightPath,
+      setHighlightPath,
       pops,
       updatePops,
       clients,
@@ -118,13 +127,11 @@ export const MapContextProvider = (props) => {
       cables,
       updateCables,
     }),
-    [latlang, drawLine, pops, clients, junctions, gpons, cables]
+    [latlang, drawLine, highlightPath, pops, clients, junctions, gpons, cables]
   );
 
   return (
-    <MapContext.Provider value={contextValue}>
-      {props.children}
-    </MapContext.Provider>
+    <MapContext.Provider value={contextValue}>{children}</MapContext.Provider>
   );
 };
 

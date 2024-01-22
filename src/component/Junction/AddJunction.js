@@ -1,6 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { createJunction } from "../../services";
-import MapContext from "../../store/map-context";
+import { useDispatch, useSelector } from "react-redux";
+import { mapActions } from "../../store/map/reducer";
+import { updateJunctions } from "../../store/map/actions";
 import {
   Grid,
   Header,
@@ -14,7 +16,9 @@ import {
 
 const AddJunction = ({ show, hide }) => {
   console.log("add junction");
-  const { latlang, setlatlang, updateJunctions } = useContext(MapContext);
+  const dispatch = useDispatch();
+  const latlang = useSelector((state) => state.map.latlang);
+
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -40,8 +44,8 @@ const AddJunction = ({ show, hide }) => {
 
       const response = await createJunction(data);
       if (response.status === 201) {
-        setlatlang(null);
-        updateJunctions();
+        dispatch(mapActions.updateLatLang(null));
+        dispatch(updateJunctions());
       }
     } catch (error) {
       console.log(error);

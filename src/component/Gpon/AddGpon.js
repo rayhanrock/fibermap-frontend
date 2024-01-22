@@ -1,6 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { createGpon } from "../../services";
-import MapContext from "../../store/map-context";
+import { useDispatch, useSelector } from "react-redux";
+import { mapActions } from "../../store/map/reducer";
+import { updateGpons } from "../../store/map/actions";
 import {
   Grid,
   Header,
@@ -22,8 +24,9 @@ const splitterOptions = [
 ];
 
 const AddGpon = ({ show, hide }) => {
+  const latlang = useSelector((state) => state.map.latlang);
+  const dispatch = useDispatch();
   const [splitter, setSplitter] = useState(2);
-  const { latlang, setlatlang, updateGpons } = useContext(MapContext);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -53,8 +56,8 @@ const AddGpon = ({ show, hide }) => {
 
       const response = await createGpon(data);
       if (response.status === 201) {
-        setlatlang(null);
-        updateGpons();
+        dispatch(mapActions.updateLatLang(null));
+        dispatch(updateGpons());
       }
     } catch (error) {
       console.log(error);

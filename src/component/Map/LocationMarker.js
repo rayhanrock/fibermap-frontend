@@ -1,17 +1,20 @@
-import { useState, useContext } from "react";
-import { Popup, Marker, useMapEvents } from "react-leaflet";
-import MapContext from "../../store/map-context";
+import { Marker, useMapEvents } from "react-leaflet";
+import { useDispatch, useSelector } from "react-redux";
+import { mapActions } from "../../store/map/reducer";
 function LocationMarker() {
-  const context = useContext(MapContext);
+  console.log("LocationMarker");
+
+  const latlang = useSelector((state) => state.map.latlang);
+  const dispatch = useDispatch();
 
   useMapEvents({
     click(e) {
-      context.setlatlang(e.latlng);
+      dispatch(
+        mapActions.updateLatLang({ lat: e.latlng.lat, lng: e.latlng.lng })
+      );
     },
   });
-  return context.latlang === null ? null : (
-    <Marker position={context.latlang}></Marker>
-  );
+  return latlang === null ? null : <Marker position={latlang}></Marker>;
 }
 
 export default LocationMarker;

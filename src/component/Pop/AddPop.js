@@ -1,6 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { createPop } from "../../services";
-import MapContext from "../../store/map-context";
+import { useDispatch, useSelector } from "react-redux";
+import { mapActions } from "../../store/map/reducer";
+import { updatePops } from "../../store/map/actions";
 import {
   Grid,
   Header,
@@ -14,7 +16,8 @@ import {
 
 const AddPop = ({ show, hide }) => {
   console.log("add pop");
-  const { latlang, setlatlang, updatePops } = useContext(MapContext);
+  const dispatch = useDispatch();
+  const latlang = useSelector((state) => state.map.latlang);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -40,8 +43,8 @@ const AddPop = ({ show, hide }) => {
 
       const response = await createPop(data);
       if (response.status === 201) {
-        setlatlang(null);
-        updatePops();
+        dispatch(mapActions.updateLatLang(null));
+        dispatch(updatePops());
       }
     } catch (error) {
       console.log(error);

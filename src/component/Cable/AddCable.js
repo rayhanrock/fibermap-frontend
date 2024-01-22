@@ -1,7 +1,8 @@
-import React, { useState, useContext } from "react";
-import MapContext from "../../store/map-context";
+import React, { useState } from "react";
 import { createCable } from "../../services";
-
+import { useDispatch, useSelector } from "react-redux";
+import { mapActions } from "../../store/map/reducer";
+import { updateCables } from "../../store/map/actions";
 import {
   Grid,
   Header,
@@ -30,9 +31,10 @@ const coreOptions = [
   { key: "7", text: "48", value: "48" },
 ];
 
-const AddCable = ({ visible, hide }) => {
+const AddCable = ({ visible }) => {
   console.log("add cable visible");
-  const { drawLine, updateCables, setDrawLine } = useContext(MapContext);
+  const dispatch = useDispatch();
+  const drawLine = useSelector((state) => state.map.drawLine);
   const [id, setId] = useState(null);
 
   const [cableType, setCableType] = useState(null);
@@ -65,8 +67,8 @@ const AddCable = ({ visible, hide }) => {
 
       const response = await createCable(data);
       if (response.status === 201) {
-        // setDrawLine(null);
-        updateCables();
+        dispatch(mapActions.setDrawLine(null));
+        dispatch(updateCables());
         console.log(response);
       }
     } catch (error) {
@@ -100,7 +102,12 @@ const AddCable = ({ visible, hide }) => {
         <Grid.Row>
           <Grid.Column>
             <Header as="h3" dividing>
-              <Icon size="tiny" link name="close" onClick={() => hide()} />
+              <Icon
+                size="tiny"
+                link
+                name="close"
+                onClick={() => dispatch(mapActions.setDrawLine(null))}
+              />
 
               <Header.Content>Create Cable</Header.Content>
             </Header>
@@ -202,4 +209,4 @@ const AddCable = ({ visible, hide }) => {
   );
 };
 
-export default AddCable;
+export default React.memo(AddCable);

@@ -1,10 +1,13 @@
-import React, { useState, useContext } from "react";
-import MapContext from "../../store/map-context";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { mapActions } from "../../store/map/reducer";
 import { List, Button, Input, Icon, Grid } from "semantic-ui-react";
 import AddJunction from "./AddJunction";
+
 const Junction = () => {
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
-  const { setDrawLine } = useContext(MapContext);
+
   const hideAddJunction = () => {
     setVisible(false);
   };
@@ -98,7 +101,7 @@ const Junction = () => {
             fluid
             secondary
             onClick={() => {
-              setDrawLine(null);
+              dispatch(mapActions.setDrawLine(null));
               setVisible(true);
             }}
           >
