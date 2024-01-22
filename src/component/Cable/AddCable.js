@@ -35,17 +35,17 @@ const AddCable = ({ visible }) => {
   console.log("add cable visible");
   const dispatch = useDispatch();
   const drawLine = useSelector((state) => state.map.drawLine);
-  const [id, setId] = useState(null);
+  const [id, setId] = useState("");
 
-  const [cableType, setCableType] = useState(null);
-  const [core, setCore] = useState(null);
-  const [startFrom, setStartFrom] = useState(null);
-  const [startingPoint, setStartingPoint] = useState(null);
-  const [endFrom, setEndFrom] = useState(null);
-  const [endingPoint, setEndingPoint] = useState(null);
-  const [length, setLength] = useState(null);
-  const [note, setNote] = useState(null);
-  const [description, setDescription] = useState(null);
+  const [cableType, setCableType] = useState("");
+  const [core, setCore] = useState("");
+  const [startFrom, setStartFrom] = useState("");
+  const [startingPoint, setStartingPoint] = useState("");
+  const [endFrom, setEndFrom] = useState("");
+  const [endingPoint, setEndingPoint] = useState("");
+  const [length, setLength] = useState("");
+  const [note, setNote] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();

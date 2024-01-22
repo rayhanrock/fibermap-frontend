@@ -1,11 +1,11 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import PathConnection from "../PathConnection";
 import { getClientConnectedPaths } from "../../../services";
 import { Button } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
 import { mapActions } from "../../../store/map/reducer";
 
-const ClientDetailsTab = ({ clientId }) => {
+const ClientDetailsTab = ({ clientId, modalClose }) => {
   const dispatch = useDispatch();
   const [connectionPaths, setConnectionPaths] = useState(null);
 
@@ -27,6 +27,7 @@ const ClientDetailsTab = ({ clientId }) => {
 
   const handleHighlightPath = (paths) => {
     dispatch(mapActions.setHighlightPath(paths));
+    modalClose();
   };
   return (
     <>

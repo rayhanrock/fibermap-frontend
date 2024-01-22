@@ -19,7 +19,7 @@ const ClientModal = ({ clientId, onClose }) => {
       menuItem: "Details",
       pane: (
         <TabPane attached={false} as={Segment} basic>
-          <ClientDetailsTab clientId={clientId} />
+          <ClientDetailsTab clientId={clientId} modalClose={onClose} />
         </TabPane>
       ),
     },

@@ -1,4 +1,4 @@
-import { Popup, FeatureGroup, LayersControl, Polyline } from "react-leaflet";
+import { Popup, FeatureGroup, Polyline } from "react-leaflet";
 import { useSelector, useDispatch } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
 const HighlightPath = () => {
@@ -14,7 +14,6 @@ const HighlightPath = () => {
             onClick={(e) => {
               dispatch(mapActions.setHighlightPath(null));
             }}
-            className=""
             style={{
               position: "absolute",
               zIndex: 1000,

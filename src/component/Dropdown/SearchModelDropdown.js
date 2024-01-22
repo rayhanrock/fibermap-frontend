@@ -1,9 +1,13 @@
-import { useState, useContext, useEffect } from "react";
-import MapContext from "../../store/map-context";
+import React, { useState, useEffect } from "react";
 import { Dropdown } from "semantic-ui-react";
+import { useSelector } from "react-redux";
 
 const SearchModelDropdown = ({ getValue, optionsType }) => {
-  const { clients, pops, junctions, gpons } = useContext(MapContext);
+  const clients = useSelector((state) => state.map.clients);
+  const pops = useSelector((state) => state.map.pops);
+  const junctions = useSelector((state) => state.map.junctions);
+  const gpons = useSelector((state) => state.map.gpons);
+
   const [value, setValue] = useState(null);
   const optionSelection = {
     CLIENT: clients,
@@ -16,11 +20,15 @@ const SearchModelDropdown = ({ getValue, optionsType }) => {
     setValue(null);
   }, [optionsType]);
 
-  const options = optionSelection[optionsType]?.map((item) => ({
-    key: item.id,
-    text: item.name,
-    value: item.id,
-  }));
+  const options = optionSelection[optionsType]
+    ? optionSelection[optionsType].map((item) => {
+        return {
+          key: item.id,
+          text: item.name,
+          value: item.id,
+        };
+      })
+    : [];
 
   console.log("options", options);
   const handleChange = (e, { value }) => {
@@ -42,4 +50,4 @@ const SearchModelDropdown = ({ getValue, optionsType }) => {
   );
 };
 
-export default SearchModelDropdown;
+export default React.memo(SearchModelDropdown);

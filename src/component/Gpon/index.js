@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
 import { List, Button, Input, Icon, Grid } from "semantic-ui-react";
