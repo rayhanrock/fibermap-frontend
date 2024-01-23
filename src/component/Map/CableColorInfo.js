@@ -1,6 +1,6 @@
 const parentStyle = {
   position: "absolute",
-  zIndex: 1000,
+  zIndex: 700,
   right: "60px",
   marginTop: "10px",
   border: "1px solid red",
