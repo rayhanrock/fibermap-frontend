@@ -1,5 +1,6 @@
 import React from "react";
 import PathConstants from "./pathConstants";
+import { MapContextProvider } from "../contexts/map-context";
 
 const Dashboard = React.lazy(() => import("../pages/Dashboad"));
 const NetworkPoint = React.lazy(() => import("../pages/NetworkPoint"));
@@ -9,7 +10,11 @@ const routes = [
   { path: PathConstants.DASHBOARD, element: <Dashboard /> },
   {
     path: PathConstants.NETWORK_POINT,
-    element: <NetworkPoint />,
+    element: (
+      <MapContextProvider>
+        <NetworkPoint />
+      </MapContextProvider>
+    ),
   },
   { path: PathConstants.PLANING, element: <Planing /> },
 ];

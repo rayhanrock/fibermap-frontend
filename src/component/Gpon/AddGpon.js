@@ -14,6 +14,9 @@ import {
   Dropdown,
   Message,
 } from "semantic-ui-react";
+import handleError from "../../utility/handleError";
+import { toast } from "react-toastify";
+import isEmptyStirng from "../../utility/isEmptyStirng";
 const splitterOptions = [
   { key: 1, text: "2", value: 2 },
   { key: 2, text: "4", value: 4 },
@@ -23,7 +26,7 @@ const splitterOptions = [
   { key: 6, text: "32", value: 32 },
 ];
 
-const AddGpon = ({ show, hide }) => {
+const AddGpon = ({ show, setShow }) => {
   const latlang = useSelector((state) => state.map.latlang);
   const dispatch = useDispatch();
   const [splitter, setSplitter] = useState(2);
@@ -38,33 +41,47 @@ const AddGpon = ({ show, hide }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isEmptyStirng(id)) {
+      toast.error("Please enter Identifier");
+      return;
+    } else if (isEmptyStirng(name)) {
+      toast.error("Please enter gpon name");
+      return;
+    } else if (isEmptyStirng(address)) {
+      toast.error("Please enter address");
+      return;
+    } else if (latlang === null) {
+      toast.error("Click on map to select location");
+      return;
+    }
 
-    try {
-      const data = {
-        identifier: id,
-        name: name,
-        splitter: splitter,
-        marker: {
-          type: "GPON",
-          latitude: latlang.lat,
-          longitude: latlang.lng,
-          address: address,
-          notes: note,
-          description: description,
-        },
-      };
-
-      const response = await createGpon(data);
-      if (response.status === 201) {
-        dispatch(mapActions.updateLatLang(null));
-        dispatch(updateGpons());
-      }
-    } catch (error) {
-      console.log(error);
+    const data = {
+      identifier: id,
+      name: name,
+      splitter: splitter,
+      marker: {
+        type: "GPON",
+        latitude: latlang.lat,
+        longitude: latlang.lng,
+        address: address,
+        notes: note,
+        description: description,
+      },
+    };
+    console.log(data);
+    const response = await createGpon(data);
+    if (response.status === 201) {
+      dispatch(mapActions.updateLatLang(null));
+      dispatch(updateGpons());
+      setShow(false);
+      toast.success("Gpon created successfully");
+      handleReset();
+    }
+    if (response.error) {
+      handleError(response.error);
     }
   };
-  const handleReset = (e) => {
-    e.preventDefault();
+  const handleReset = () => {
     setId("");
     setName("");
     setAddress("");
@@ -88,7 +105,12 @@ const AddGpon = ({ show, hide }) => {
         <Grid.Row>
           <Grid.Column>
             <Header as="h3" dividing>
-              <Icon size="tiny" link name="close" onClick={() => hide()} />
+              <Icon
+                size="tiny"
+                link
+                name="close"
+                onClick={() => setShow(false)}
+              />
 
               <Header.Content>Create Gpon</Header.Content>
             </Header>
@@ -97,7 +119,7 @@ const AddGpon = ({ show, hide }) => {
         <Grid.Row>
           <Grid.Column>
             <Message info>Please click on the map to get coordinate </Message>
-            <Form onSubmit={handleSubmit} onReset={handleReset}>
+            <Form onSubmit={handleSubmit} onReset={handleReset} noValidate>
               <Form.Field required>
                 <label>ID</label>
                 <input
@@ -109,7 +131,7 @@ const AddGpon = ({ show, hide }) => {
               <Form.Field required>
                 <label>Name</label>
                 <input
-                  placeholder="Client name"
+                  placeholder="Gpon name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />

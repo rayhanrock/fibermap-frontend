@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { createClient } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
@@ -13,9 +13,12 @@ import {
   Form,
   Message,
 } from "semantic-ui-react";
+import { toast } from "react-toastify";
+import handleError from "../../utility/handleError";
+import isEmptyStirng from "../../utility/isEmptyStirng";
 
-const AddClient = ({ show, hide }) => {
-  console.log("add junction");
+const AddClient = ({ show, setShow }) => {
+  console.log("add client");
   const dispatch = useDispatch();
   const latlang = useSelector((state) => state.map.latlang);
 
@@ -29,32 +32,50 @@ const AddClient = ({ show, hide }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const data = {
-        identifier: id,
-        name: name,
-        marker: {
-          type: "CLIENT",
-          latitude: latlang.lat,
-          longitude: latlang.lng,
-          address: address,
-          notes: note,
-          description: description,
-        },
-        mobile_number: mobile,
-      };
+    if (isEmptyStirng(id)) {
+      toast.error("Please enter Identifier");
+      return;
+    } else if (isEmptyStirng(name)) {
+      toast.error("Please enter client name");
+      return;
+    } else if (isEmptyStirng(mobile)) {
+      toast.error("Please enter mobile number");
+      return;
+    } else if (isEmptyStirng(address)) {
+      toast.error("Please enter address");
+      return;
+    } else if (latlang === null) {
+      toast.error("Click on map to select location");
+      return;
+    }
 
-      const response = await createClient(data);
-      if (response.status === 201) {
-        dispatch(mapActions.updateLatLang(null));
-        dispatch(updateClients());
-      }
-    } catch (error) {
-      console.log(error);
+    const data = {
+      identifier: id,
+      name: name,
+      marker: {
+        type: "CLIENT",
+        latitude: latlang?.lat,
+        longitude: latlang?.lng,
+        address: address,
+        notes: note,
+        description: description,
+      },
+      mobile_number: mobile,
+    };
+
+    const response = await createClient(data);
+    if (response.status === 201) {
+      dispatch(mapActions.updateLatLang(null));
+      dispatch(updateClients());
+      setShow(false);
+      toast.success("Client created successfully");
+      handleReset();
+    }
+    if (response.error) {
+      handleError(response.error);
     }
   };
-  const handleReset = (e) => {
-    e.preventDefault();
+  const handleReset = () => {
     setId("");
     setName("");
     setMobile("");
@@ -80,7 +101,12 @@ const AddClient = ({ show, hide }) => {
         <Grid.Row>
           <Grid.Column>
             <Header as="h3" dividing>
-              <Icon size="tiny" link name="close" onClick={() => hide()} />
+              <Icon
+                size="tiny"
+                link
+                name="close"
+                onClick={() => setShow(false)}
+              />
 
               <Header.Content>Create Client</Header.Content>
             </Header>
@@ -89,7 +115,7 @@ const AddClient = ({ show, hide }) => {
         <Grid.Row>
           <Grid.Column>
             <Message info>Please click on the map to get coordinate </Message>
-            <Form onSubmit={handleSubmit} onReset={handleReset}>
+            <Form onSubmit={handleSubmit} onReset={handleReset} noValidate>
               <Form.Field required>
                 <label>ID</label>
                 <input

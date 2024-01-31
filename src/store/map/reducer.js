@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const mapSlice = createSlice({
   name: "map",
   initialState: {
+    modelLatlang: null,
     latlang: null,
     drawLine: null,
     pops: null,
@@ -13,6 +14,9 @@ const mapSlice = createSlice({
     highlightPath: null,
   },
   reducers: {
+    setModelLatlang: (state, action) => {
+      state.modelLatlang = action.payload;
+    },
     updateLatLang: (state, action) => {
       state.latlang = action.payload;
     },

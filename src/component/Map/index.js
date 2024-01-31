@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
 import {
@@ -26,6 +26,8 @@ import "leaflet/dist/leaflet.css";
 import "./map.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import CableColorInfo from "./CableColorInfo";
+import { useMapContext } from "../../contexts/map-context";
+import ModelFinderMarker from "./ModelFinderMarker";
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -38,9 +40,8 @@ L.Icon.Default.mergeOptions({
 });
 
 const NetworkMap = () => {
-  console.log("map");
   const [center, setCenter] = useState({ lat: 23.8041, lng: 90.4152 });
-
+  const { setMap } = useMapContext();
   const dispatch = useDispatch();
   const drawLine = useSelector((state) => state.map.drawLine);
 
@@ -56,12 +57,13 @@ const NetworkMap = () => {
     <>
       <AddCable visible={drawLine !== null} />
 
-      <MapContainer center={center} zoom={13}>
-        <CableColorInfo />
+      <MapContainer center={center} zoom={13} ref={setMap}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <CableColorInfo />
+        <ModelFinderMarker />
         <Draw />
         <Pops />
         <Clients />

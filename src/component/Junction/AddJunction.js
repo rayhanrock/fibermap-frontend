@@ -13,8 +13,11 @@ import {
   Form,
   Message,
 } from "semantic-ui-react";
+import isEmptyStirng from "../../utility/isEmptyStirng";
+import handleError from "../../utility/handleError";
+import { toast } from "react-toastify";
 
-const AddJunction = ({ show, hide }) => {
+const AddJunction = ({ show, setShow }) => {
   console.log("add junction");
   const dispatch = useDispatch();
   const latlang = useSelector((state) => state.map.latlang);
@@ -28,31 +31,47 @@ const AddJunction = ({ show, hide }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const data = {
-        identifier: id,
-        name: name,
-        marker: {
-          type: "JUNCTION",
-          latitude: latlang.lat,
-          longitude: latlang.lng,
-          address: address,
-          notes: note,
-          description: description,
-        },
-      };
+    if (isEmptyStirng(id)) {
+      toast.error("Please enter Identifier");
+      return;
+    } else if (isEmptyStirng(name)) {
+      toast.error("Please enter junction name");
+      return;
+    } else if (isEmptyStirng(address)) {
+      toast.error("Please enter address");
+      return;
+    } else if (latlang === null) {
+      toast.error("Click on map to select location");
+      return;
+    }
 
-      const response = await createJunction(data);
-      if (response.status === 201) {
-        dispatch(mapActions.updateLatLang(null));
-        dispatch(updateJunctions());
-      }
-    } catch (error) {
-      console.log(error);
+    const data = {
+      identifier: id,
+      name: name,
+      marker: {
+        type: "JUNCTION",
+        latitude: latlang.lat,
+        longitude: latlang.lng,
+        address: address,
+        notes: note,
+        description: description,
+      },
+    };
+
+    const response = await createJunction(data);
+    if (response.status === 201) {
+      dispatch(mapActions.updateLatLang(null));
+      dispatch(updateJunctions());
+      setShow(false);
+
+      toast.success("Junction Created successfully");
+      handleReset();
+    }
+    if (response.error) {
+      handleError(response.error);
     }
   };
-  const handleReset = (e) => {
-    e.preventDefault();
+  const handleReset = () => {
     setId("");
     setName("");
     setAddress("");
@@ -76,7 +95,12 @@ const AddJunction = ({ show, hide }) => {
         <Grid.Row>
           <Grid.Column>
             <Header as="h3" dividing>
-              <Icon size="tiny" link name="close" onClick={() => hide()} />
+              <Icon
+                size="tiny"
+                link
+                name="close"
+                onClick={() => setShow(false)}
+              />
 
               <Header.Content>Create Junction</Header.Content>
             </Header>
@@ -85,7 +109,7 @@ const AddJunction = ({ show, hide }) => {
         <Grid.Row>
           <Grid.Column>
             <Message info>Please click on the map to get coordinate </Message>
-            <Form onSubmit={handleSubmit} onReset={handleReset}>
+            <Form onSubmit={handleSubmit} onReset={handleReset} noValidate>
               <Form.Field required>
                 <label>ID</label>
                 <input

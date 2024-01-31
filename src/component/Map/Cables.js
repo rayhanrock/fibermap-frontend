@@ -20,8 +20,9 @@ const Cables = () => {
         <Polyline
           key={cable.identifier}
           pathOptions={{
-            color: coreColorMap[cable.number_of_cores],
+            // color: coreColorMap[cable.number_of_cores],
             weight: 6,
+            color: "green",
           }}
           positions={cable.polyline}
         >

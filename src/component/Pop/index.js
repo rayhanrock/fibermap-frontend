@@ -1,96 +1,69 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
+import { useMapContext } from "../../contexts/map-context";
 
-import { List, Button, Input, Icon, Grid } from "semantic-ui-react";
+import { List, Button, Input, Grid, Icon } from "semantic-ui-react";
 import AddPop from "./AddPop";
 const Pop = () => {
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
-  const hideAddPop = () => {
-    setVisible(false);
-  };
+  const pops = useSelector((state) => state.map.pops);
+  const { map } = useMapContext();
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredPops = pops?.filter((pop) =>
+    pop.identifier.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <Grid>
-      <AddPop show={visible} hide={hideAddPop} />
+      <AddPop show={visible} setShow={setVisible} />
       <Grid.Row style={{ marginTop: "20px" }}>
         <Grid.Column>
           <Input
             fluid
-            icon={<Icon name="search" inverted circular link />}
             placeholder="Search..."
+            value={searchTerm}
+            icon={
+              <Icon
+                name="close"
+                size="small"
+                link
+                onClick={() => setSearchTerm("")}
+              />
+            }
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
         <Grid.Column>
           <List divided relaxed style={{ overflow: "auto", maxHeight: "45vh" }}>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop A</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop B</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop C</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop A</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop B</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop C</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop B</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop C</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop A</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop B</List.Header>
-              </List.Content>
-            </List.Item>
-            <List.Item>
-              <List.Icon name="github" size="large" verticalAlign="middle" />
-              <List.Content>
-                <List.Header>Pop C</List.Header>
-              </List.Content>
-            </List.Item>
+            {filteredPops?.map((pop) => (
+              <List.Item
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  dispatch(
+                    mapActions.setModelLatlang({
+                      lat: pop.latitude,
+                      lng: pop.longitude,
+                    })
+                  );
+                  map.flyTo([pop.latitude, pop.longitude], 13);
+                }}
+              >
+                <List.Icon
+                  name="building"
+                  size="large"
+                  verticalAlign="middle"
+                />
+                <List.Content>
+                  <List.Header>{pop.identifier}</List.Header>
+                </List.Content>
+              </List.Item>
+            ))}
           </List>
         </Grid.Column>
       </Grid.Row>
