@@ -8,6 +8,7 @@ const Gpons = () => {
   const gpons = useSelector((state) => state.map.gpons);
 
   const [selectedGponId, setSelectedGponId] = useState(null);
+  const [selectedGponType, setSelectedGponType] = useState("");
   const [showGponModal, setShowGponModal] = useState(false);
 
   const showGpons = useMemo(
@@ -24,6 +25,7 @@ const Gpons = () => {
               click: (event) => {
                 setShowGponModal(true);
                 setSelectedGponId(gpon.id);
+                setSelectedGponType(gpon.name);
               },
             }}
           >
@@ -38,6 +40,7 @@ const Gpons = () => {
       {showGponModal && (
         <GponModal
           gponId={selectedGponId}
+          gponType={selectedGponType}
           onClose={() => setShowGponModal(false)}
         />
       )}

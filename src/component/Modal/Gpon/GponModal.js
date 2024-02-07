@@ -1,3 +1,4 @@
+import { useState } from "react";
 import GponDetailsTab from "./GponDetailsTab";
 import GponConnectionTab from "./GponConnectionTab";
 import {
@@ -13,7 +14,7 @@ import {
   Segment,
 } from "semantic-ui-react";
 
-const GponModal = ({ gponId, onClose }) => {
+const GponModal = ({ gponId, gponType, onClose }) => {
   const panes = [
     {
       menuItem: "Details",
@@ -34,7 +35,7 @@ const GponModal = ({ gponId, onClose }) => {
   ];
   return (
     <Modal open onClose={onClose} size="large">
-      <ModalHeader>Gpon Details</ModalHeader>
+      <ModalHeader>{gponType} Details</ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
           <Tab

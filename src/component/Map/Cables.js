@@ -8,8 +8,7 @@ const coreColorMap = {
   8: "#000000", //black
   12: "#800080", //purple
   24: "#FFA500", //orange
-  36: "#FFFF00", //yellow
-  48: "#008000", //green
+  36: "#FFFF00", //yellow 
 };
 
 const Cables = () => {

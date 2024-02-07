@@ -8,8 +8,8 @@ import Gpon from "./Gpon";
 const options = [
   { key: 1, text: "Pop", value: 1 },
   { key: 2, text: "Client", value: 2 },
-  { key: 3, text: "Junction", value: 3 },
-  { key: 4, text: "Gpon", value: 4 },
+  // { key: 3, text: "Junction", value: 3 },
+  { key: 4, text: "TJ Box", value: 4 },
 ];
 
 const Models = () => {

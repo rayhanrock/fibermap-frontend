@@ -74,7 +74,7 @@ const Gpon = () => {
               setVisible(true);
             }}
           >
-            Create new Gpon
+            Create new TJ Box
           </Button>
         </Grid.Column>
       </Grid.Row>

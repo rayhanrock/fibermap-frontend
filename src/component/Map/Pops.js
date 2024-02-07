@@ -7,6 +7,7 @@ const Pops = () => {
   console.log("Pops iun mapp");
   const pops = useSelector((state) => state.map.pops);
   const [selectedPopId, setSelectedPopId] = useState(null);
+  const [selectedPopType, setSelectedPopType] = useState("");
   const [showPopModal, setShowPopModal] = useState(false);
 
   const showPops = useMemo(
@@ -23,6 +24,7 @@ const Pops = () => {
               click: (event) => {
                 setShowPopModal(true);
                 setSelectedPopId(pop.id);
+                setSelectedPopType(pop.pop_type);
               },
             }}
           >
@@ -37,6 +39,7 @@ const Pops = () => {
       {showPopModal && (
         <PopModal
           popId={selectedPopId}
+          popType={selectedPopType}
           onClose={() => setShowPopModal(false)}
         />
       )}

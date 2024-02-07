@@ -13,7 +13,7 @@ import {
   Segment,
 } from "semantic-ui-react";
 
-const PopModal = ({ popId, onClose }) => {
+const PopModal = ({ popId, popType, onClose }) => {
   const panes = [
     {
       menuItem: "Details",
@@ -35,7 +35,7 @@ const PopModal = ({ popId, onClose }) => {
 
   return (
     <Modal open onClose={onClose} size="large">
-      <ModalHeader>Pop Details</ModalHeader>
+      <ModalHeader>{popType} Details</ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
           <Tab
