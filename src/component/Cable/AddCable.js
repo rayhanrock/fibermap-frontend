@@ -15,6 +15,9 @@ import {
 } from "semantic-ui-react";
 import ModelDropDown from "../Dropdown/ModelDropDown";
 import SearchModelDropdown from "../Dropdown/SearchModelDropdown";
+import isEmptyStirng from "../../utility/isEmptyStirng";
+import { toast } from "react-toastify";
+import handleError from "../../utility/handleError";
 
 const cableOptions = [
   { key: "1", text: "Line", value: "LINE" },
@@ -49,7 +52,31 @@ const AddCable = ({ visible }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (isEmptyStirng(id)) {
+      toast.error("Please enter Identifier");
+      return;
+    } else if (isEmptyStirng(cableType)) {
+      toast.error("Please select cable type");
+      return;
+    } else if (core === "") {
+      toast.error("Please select cable core");
+      return;
+    } else if (isEmptyStirng(startFrom)) {
+      toast.error("Please select start from");
+      return;
+    } else if (!startingPoint) {
+      toast.error("Please select starting point");
+      return;
+    } else if (isEmptyStirng(endFrom)) {
+      toast.error("Please select end from");
+      return;
+    } else if (!endingPoint) {
+      toast.error("Please select ending point");
+      return;
+    } else if (isEmptyStirng(length)) {
+      toast.error("Please enter cable length in meters");
+      return;
+    }
     try {
       const data = {
         identifier: id,
@@ -69,14 +96,17 @@ const AddCable = ({ visible }) => {
       if (response.status === 201) {
         dispatch(mapActions.setDrawLine(null));
         dispatch(updateCables());
-        console.log(response);
+        toast.success("Cable created successfully");
+        handleReset();
+      }
+      if (response.error) {
+        handleError(response.error);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  const handleReset = (e) => {
-    e.preventDefault();
+  const handleReset = () => {
     setId("");
     setCableType("");
     setCore("");
