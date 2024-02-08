@@ -17,15 +17,15 @@ const PopModal = ({ popId, popType, onClose }) => {
   const panes = [
     {
       menuItem: "Details",
-      pane: (
+      render: () => (
         <TabPane attached={false} as={Segment} basic>
-          <PopDetailsTab popId={popId} />
+          <PopDetailsTab popId={popId} modalClose={onClose} />
         </TabPane>
       ),
     },
     {
       menuItem: "Connection",
-      pane: (
+      render: () => (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
           <PopConnectionTab popId={popId} />
         </TabPane>
@@ -38,11 +38,7 @@ const PopModal = ({ popId, popType, onClose }) => {
       <ModalHeader>{popType} Details</ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
-          <Tab
-            renderActiveOnly={false}
-            menu={{ secondary: true, pointing: true }}
-            panes={panes}
-          />
+          <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
         </ModalDescription>
       </ModalContent>
       <ModalActions>

@@ -66,7 +66,7 @@ const AddGpon = ({ show, setShow }) => {
       name: name,
       splitter: splitter,
       marker: {
-        type: "GPON",
+        type: "TJ_BOX",
         latitude: latlang.lat,
         longitude: latlang.lng,
         address: address,
