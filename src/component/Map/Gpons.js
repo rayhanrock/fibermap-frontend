@@ -3,6 +3,7 @@ import { Popup, Marker, useMap } from "react-leaflet";
 import { GponIcon } from "./MarkerIcons";
 import GponModal from "../Modal/Gpon/GponModal";
 import { useSelector } from "react-redux";
+import { List, ListItem } from "semantic-ui-react";
 const Gpons = () => {
   console.log("Gpons iun mapp");
   const gpons = useSelector((state) => state.map.gpons);
@@ -17,7 +18,7 @@ const Gpons = () => {
         return (
           <Marker
             icon={GponIcon}
-            key={gpon.identifier}
+            key={gpon.id}
             position={[gpon.latitude, gpon.longitude]}
             eventHandlers={{
               mouseover: (event) => event.target.openPopup(),
@@ -30,7 +31,19 @@ const Gpons = () => {
               },
             }}
           >
-            <Popup>{gpon.name}</Popup>
+            <Popup>
+              <List>
+                <ListItem>
+                  <b>ID:</b> {gpon.identifier}
+                </ListItem>
+                <ListItem>
+                  <b>Type:</b> {gpon.name} (1X{gpon.splitter})
+                </ListItem>
+                <ListItem>
+                  <b>Address:</b> {gpon.address}
+                </ListItem>
+              </List>
+            </Popup>
           </Marker>
         );
       }),

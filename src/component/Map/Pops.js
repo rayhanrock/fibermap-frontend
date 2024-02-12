@@ -3,6 +3,7 @@ import { Popup, Marker, useMap } from "react-leaflet";
 import { PopIcon } from "./MarkerIcons";
 import PopModal from "../Modal/POP/PopModal";
 import { useSelector } from "react-redux";
+import { List, ListItem } from "semantic-ui-react";
 const Pops = () => {
   console.log("Pops iun mapp");
   const pops = useSelector((state) => state.map.pops);
@@ -18,7 +19,7 @@ const Pops = () => {
         return (
           <Marker
             icon={PopIcon}
-            key={pop.identifier}
+            key={pop.id}
             position={[pop.latitude, pop.longitude]}
             eventHandlers={{
               mouseover: (event) => event.target.openPopup(),
@@ -32,7 +33,22 @@ const Pops = () => {
               },
             }}
           >
-            <Popup>{pop.name}</Popup>
+            <Popup>
+              <List>
+                <ListItem>
+                  <b>ID:</b> {pop.identifier}`
+                </ListItem>
+                <ListItem>
+                  <b>Name:</b> {pop.name}`
+                </ListItem>
+                <ListItem>
+                  <b>Type:</b> {pop.pop_type}`
+                </ListItem>
+                <ListItem>
+                  <b>Address:</b> {pop.address}`
+                </ListItem>
+              </List>
+            </Popup>
           </Marker>
         );
       }),

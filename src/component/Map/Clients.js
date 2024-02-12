@@ -3,6 +3,7 @@ import { Popup, Marker, useMap } from "react-leaflet";
 import { ClientIcon } from "./MarkerIcons";
 import ClientModal from "../Modal/Client/ClientModal";
 import { useSelector } from "react-redux";
+import { Header, List, ListItem } from "semantic-ui-react";
 const Clients = () => {
   console.log("Clients iun mapp");
   const clients = useSelector((state) => state.map.clients);
@@ -15,7 +16,7 @@ const Clients = () => {
         return (
           <Marker
             icon={ClientIcon}
-            key={client.identifier}
+            key={client.id}
             position={[client.latitude, client.longitude]}
             eventHandlers={{
               mouseover: (event) => event.target.openPopup(),
@@ -27,7 +28,19 @@ const Clients = () => {
               },
             }}
           >
-            <Popup>{client.name}</Popup>
+            <Popup>
+              <List>
+                <ListItem>
+                  <b>ID:</b> {client.identifier}
+                </ListItem>
+                <ListItem>
+                  <b>Name:</b> {client.name}
+                </ListItem>
+                <ListItem>
+                  <b>Address:</b> {client.address}
+                </ListItem>
+              </List>
+            </Popup>
           </Marker>
         );
       }),

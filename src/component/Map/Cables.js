@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Popup, Polyline } from "react-leaflet";
 import { useSelector } from "react-redux";
+import { List, ListItem } from "semantic-ui-react";
 
 const coreColorMap = {
   2: "#0000FF", //blue
@@ -8,7 +9,7 @@ const coreColorMap = {
   8: "#000000", //black
   12: "#800080", //purple
   24: "#FFA500", //orange
-  36: "#FFFF00", //yellow 
+  36: "#FFFF00", //yellow
 };
 
 const Cables = () => {
@@ -17,16 +18,38 @@ const Cables = () => {
     <>
       {cables?.map((cable) => (
         <Polyline
-          key={cable.identifier}
+          key={cable.id}
           pathOptions={{
             // color: coreColorMap[cable.number_of_cores],
             weight: 6,
             color: "green",
           }}
           positions={cable.polyline}
+          eventHandlers={{
+            mouseover: (event) => event.target.openPopup(),
+            mouseout: (event) => event.target.closePopup(),
+            click: (event) => {
+              console.log("clicked cable");
+            },
+          }}
         >
           {console.log("rendering...")}
-          <Popup>{cable.identifier}</Popup>
+          <Popup>
+            <List>
+              <ListItem>
+                <b>ID:</b> {cable.identifier}
+              </ListItem>
+              <ListItem>
+                <b>Core:</b> {cable.number_of_cores}
+              </ListItem>
+              <ListItem>
+                <b>Type:</b> {cable.type}
+              </ListItem>
+              <ListItem>
+                <b>Length:</b> {cable.length} (meter)
+              </ListItem>
+            </List>
+          </Popup>
         </Polyline>
       ))}
     </>
