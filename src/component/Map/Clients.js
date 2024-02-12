@@ -21,7 +21,7 @@ const Clients = () => {
               mouseover: (event) => event.target.openPopup(),
               mouseout: (event) => event.target.closePopup(),
               click: (event) => {
-                map.flyTo([client.latitude, client.longitude], 13);
+                map.flyTo([client.latitude, client.longitude]);
                 setShowClientModal(true);
                 setSelectedClientId(client.id);
               },
