@@ -205,7 +205,7 @@ const GponConnectionTab = ({ gponId }) => {
               </Segment>
             </GridColumn>
             <GridColumn width={11}>
-              <Message attached header="core details" />
+              <Message attached header="Splitter core details" />
               <Segment attached textAlign="center">
                 {cableDetails.input_cable.cores.map((core) => (
                   <p key={core.id}>
@@ -253,11 +253,15 @@ const GponConnectionTab = ({ gponId }) => {
         </Segment>
       )}
 
-      <Message header="Gpon Out" color="teal" style={{ textAlign: "center" }} />
+      <Message
+        header={`${cableDetails?.type} Out`}
+        color="teal"
+        style={{ textAlign: "center" }}
+      />
       <Grid columns={2}>
         <GridRow>
           <GridColumn width={5}>
-            <Message attached header="Gpon Configuration" />
+            <Message attached header={`${cableDetails?.type} Configuration`} />
             <Segment attached>
               <p>
                 <b> {`Type : 1X${cableDetails?.out.number_of_splitter}`}</b>
@@ -265,7 +269,7 @@ const GponConnectionTab = ({ gponId }) => {
             </Segment>
           </GridColumn>
           <GridColumn width={11}>
-            <Message attached header="core details" />
+            <Message attached header="Splitter core details" />
             <Segment attached textAlign="center">
               {cableDetails?.out.output_cores?.map((core) => (
                 <p
@@ -397,7 +401,7 @@ const GponConnectionTab = ({ gponId }) => {
               </Segment>
             </GridColumn>
             <GridColumn width={11}>
-              <Message attached header="core details" />
+              <Message attached header="Splitter core details" />
               <Segment attached textAlign="center">
                 {cable.cores?.map((core) => (
                   <p

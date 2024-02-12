@@ -76,16 +76,7 @@ const CableColorInfo = () => {
         ></div>
         <span style={{ marginLeft: "5px" }}>36 core</span>
       </div>
-      <div style={childStyle}>
-        <div
-          style={{
-            width: "15px",
-            height: "15px",
-            backgroundColor: "#008000",
-          }}
-        ></div>
-        <span style={{ marginLeft: "5px" }}>48 core</span>
-      </div>
+      
     </div>
   );
 };

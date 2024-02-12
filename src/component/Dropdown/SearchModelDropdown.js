@@ -13,7 +13,7 @@ const SearchModelDropdown = ({ getValue, optionsType }) => {
     CLIENT: clients,
     POP: pops,
     JUNCTION: junctions,
-    GPON: gpons,
+    TJ_BOX: gpons,
   };
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const SearchModelDropdown = ({ getValue, optionsType }) => {
     ? optionSelection[optionsType].map((item) => {
         return {
           key: item.id,
-          text: item.name,
+          text: item.identifier,
           value: item.id,
         };
       })

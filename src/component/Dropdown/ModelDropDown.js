@@ -4,8 +4,8 @@ import { useState } from "react";
 const options = [
   { key: 1, text: "Pop", value: "POP" },
   { key: 2, text: "Client", value: "CLIENT" },
-  { key: 3, text: "Junction", value: "JUNCTION" },
-  { key: 4, text: "Gpon", value: "GPON" },
+  // { key: 3, text: "Junction", value: "JUNCTION" },
+  { key: 4, text: "Tj Box", value: "TJ_BOX" },
 ];
 
 const ModelDropDown = ({ getValue }) => {

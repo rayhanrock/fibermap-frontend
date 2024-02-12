@@ -17,7 +17,7 @@ const ClientModal = ({ clientId, onClose }) => {
   const panes = [
     {
       menuItem: "Details",
-      pane: (
+      render: () => (
         <TabPane attached={false} as={Segment} basic>
           <ClientDetailsTab clientId={clientId} modalClose={onClose} />
         </TabPane>
@@ -25,7 +25,7 @@ const ClientModal = ({ clientId, onClose }) => {
     },
     {
       menuItem: "Connection",
-      pane: (
+      render: () => (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
           <ClientConnectionTab clientId={clientId} />
         </TabPane>
@@ -38,11 +38,7 @@ const ClientModal = ({ clientId, onClose }) => {
       <ModalHeader>Client Details</ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
-          <Tab
-            renderActiveOnly={false}
-            menu={{ secondary: true, pointing: true }}
-            panes={panes}
-          />
+          <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
         </ModalDescription>
       </ModalContent>
       <ModalActions>
