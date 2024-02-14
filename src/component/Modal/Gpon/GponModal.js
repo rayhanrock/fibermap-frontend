@@ -1,4 +1,3 @@
-import { useState } from "react";
 import GponDetailsTab from "./GponDetailsTab";
 import GponConnectionTab from "./GponConnectionTab";
 import {
@@ -14,16 +13,8 @@ import {
   Segment,
 } from "semantic-ui-react";
 
-const GponModal = ({ gponId, gponType, onClose }) => {
+const GponModal = ({ gponId, onClose }) => {
   const panes = [
-    {
-      menuItem: "Details",
-      pane: (
-        <TabPane attached={false}>
-          <GponDetailsTab gponId={gponId} />
-        </TabPane>
-      ),
-    },
     {
       menuItem: "Connection",
       pane: (
@@ -32,10 +23,18 @@ const GponModal = ({ gponId, gponType, onClose }) => {
         </TabPane>
       ),
     },
+    {
+      menuItem: "Details",
+      pane: (
+        <TabPane attached={false} basic style={{ padding: 0 }}>
+          <GponDetailsTab gponId={gponId} modalClose={onClose} />
+        </TabPane>
+      ),
+    },
   ];
   return (
     <Modal open onClose={onClose} size="large">
-      <ModalHeader>{gponType} Details</ModalHeader>
+      <ModalHeader>TJ Box Details</ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
           <Tab

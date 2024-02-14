@@ -12,13 +12,14 @@ import {
   Tab,
   Segment,
 } from "semantic-ui-react";
+import PopEdit from "./PopEdit";
 
 const PopModal = ({ popId, popType, onClose }) => {
   const panes = [
     {
-      menuItem: "Details",
+      menuItem: "Paths",
       render: () => (
-        <TabPane attached={false} as={Segment} basic>
+        <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
           <PopDetailsTab popId={popId} modalClose={onClose} />
         </TabPane>
       ),
@@ -28,6 +29,14 @@ const PopModal = ({ popId, popType, onClose }) => {
       render: () => (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
           <PopConnectionTab popId={popId} />
+        </TabPane>
+      ),
+    },
+    {
+      menuItem: "Details",
+      render: () => (
+        <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
+          <PopEdit popId={popId} modalClose={onClose} />
         </TabPane>
       ),
     },

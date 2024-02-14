@@ -147,123 +147,129 @@ const PopConnectionTab = ({ popId }) => {
           </Button>
         </Segment>
       )}
-      <Grid columns={2}>
-        {cableDetails?.map((cable, index) => (
-          <GridRow key={index}>
-            <GridColumn width={5}>
-              <Message attached header="cable details" />
-              <Segment attached>
-                <p>
-                  <b>CABLE ID : </b> {cable.identifier}
-                </p>
-                <p>
-                  <b>Total Core : </b>
-                  {cable.number_of_cores}
-                </p>
-                <p>
-                  <b>Cable length : </b>
-                  {cable.length}
-                </p>
-              </Segment>
-            </GridColumn>
-            <GridColumn width={11}>
-              <Message attached header="core details" />
-              <Segment attached textAlign="center">
-                {cable.cores?.map((core) => (
-                  <p
-                    key={core.id}
-                    onClick={() => highlightConnectedCore(cable.id, core.id)}
-                    style={
-                      highlight.includes(core.id)
-                        ? { backgroundColor: "#1EA1A1" }
-                        : null
-                    }
-                  >
-                    <span
+      {cableDetails && cableDetails.length > 0 ? (
+        <Grid columns={2}>
+          {cableDetails?.map((cable, index) => (
+            <GridRow key={index}>
+              <GridColumn width={5}>
+                <Message attached header="cable details" />
+                <Segment attached>
+                  <p>
+                    <b>CABLE ID : </b> {cable.identifier}
+                  </p>
+                  <p>
+                    <b>Total Core : </b>
+                    {cable.number_of_cores}
+                  </p>
+                  <p>
+                    <b>Cable length : </b>
+                    {cable.length}
+                  </p>
+                </Segment>
+              </GridColumn>
+              <GridColumn width={11}>
+                <Message attached header="core details" />
+                <Segment attached textAlign="center">
+                  {cable.cores?.map((core) => (
+                    <p
                       key={core.id}
+                      onClick={() => highlightConnectedCore(cable.id, core.id)}
                       style={
-                        (connection.left &&
-                          connection.left.coreId === core.id) ||
-                        (connection.right &&
-                          connection.right.coreId === core.id)
-                          ? { display: "block", backgroundColor: "#90EE90" }
-                          : {}
+                        highlight.includes(core.id)
+                          ? { backgroundColor: "#1EA1A1" }
+                          : null
                       }
                     >
-                      <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
-                      {!core.assigned && !core.connected_to && (
-                        <>
-                          {" "}
-                          <Button basic compact color={core.color}>
-                            Unused
-                          </Button>{" "}
-                          <Button
-                            compact
-                            color="blue"
-                            disabled={disableButtonList.includes(core.id)}
-                            onClick={() => {
-                              onSelect({
-                                cableId: cable.id,
-                                cableIdentifier: cable.identifier,
-                                coreId: core.id,
-                                color: core.color,
-                              });
-                            }}
-                          >
-                            Select
-                          </Button>{" "}
-                          <Button
-                            compact
-                            color="blue"
-                            disabled={disableButtonList.includes(core.id)}
-                            onClick={() =>
-                              handleAssign(core.id, { assigned: true })
-                            }
-                          >
-                            Assign
-                          </Button>
-                        </>
-                      )}
-                      {core.connected_to && (
-                        <>
-                          <Button basic compact color={core.color}>
-                            Connected
-                          </Button>
-                          <Button
-                            compact
-                            color="red"
-                            onClick={() => {
-                              onRemove(core.id, core.connected_to.id);
-                            }}
-                          >
-                            Disconnect
-                          </Button>
-                        </>
-                      )}
-                      {core.assigned && (
-                        <>
-                          <Button basic compact color={core.color}>
-                            Used
-                          </Button>
-                          <Button
-                            compact
-                            color="red"
-                            onClick={() =>
-                              handleAssign(core.id, { assigned: false })
-                            }
-                          >
-                            Withdraw
-                          </Button>
-                        </>
-                      )}
-                    </span>
-                  </p>
-                ))}
-              </Segment>
-            </GridColumn>
-          </GridRow>
-        ))}
-      </Grid>
+                      <span
+                        key={core.id}
+                        style={
+                          (connection.left &&
+                            connection.left.coreId === core.id) ||
+                          (connection.right &&
+                            connection.right.coreId === core.id)
+                            ? { display: "block", backgroundColor: "#90EE90" }
+                            : {}
+                        }
+                      >
+                        <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
+                        {!core.assigned && !core.connected_to && (
+                          <>
+                            {" "}
+                            <Button basic compact color={core.color}>
+                              Unused
+                            </Button>{" "}
+                            <Button
+                              compact
+                              color="blue"
+                              disabled={disableButtonList.includes(core.id)}
+                              onClick={() => {
+                                onSelect({
+                                  cableId: cable.id,
+                                  cableIdentifier: cable.identifier,
+                                  coreId: core.id,
+                                  color: core.color,
+                                });
+                              }}
+                            >
+                              Select
+                            </Button>{" "}
+                            <Button
+                              compact
+                              color="blue"
+                              disabled={disableButtonList.includes(core.id)}
+                              onClick={() =>
+                                handleAssign(core.id, { assigned: true })
+                              }
+                            >
+                              Assign
+                            </Button>
+                          </>
+                        )}
+                        {core.connected_to && (
+                          <>
+                            <Button basic compact color={core.color}>
+                              Connected
+                            </Button>
+                            <Button
+                              compact
+                              color="red"
+                              onClick={() => {
+                                onRemove(core.id, core.connected_to.id);
+                              }}
+                            >
+                              Disconnect
+                            </Button>
+                          </>
+                        )}
+                        {core.assigned && (
+                          <>
+                            <Button basic compact color={core.color}>
+                              Used
+                            </Button>
+                            <Button
+                              compact
+                              color="red"
+                              onClick={() =>
+                                handleAssign(core.id, { assigned: false })
+                              }
+                            >
+                              Withdraw
+                            </Button>
+                          </>
+                        )}
+                      </span>
+                    </p>
+                  ))}
+                </Segment>
+              </GridColumn>
+            </GridRow>
+          ))}
+        </Grid>
+      ) : (
+        <Segment textAlign="center" secondary attached basic>
+          No data to show
+        </Segment>
+      )}
     </>
   );
 };

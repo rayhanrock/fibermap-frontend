@@ -1,42 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { Button, Confirm, Dropdown, Form } from "semantic-ui-react";
-import {
-  deleteClient,
-  deleteGpon,
-  getGpon,
-  updateGpon,
-} from "../../../services";
+import { Button, Confirm, Form } from "semantic-ui-react";
+import { deleteClient, getClient, updateClient } from "../../../services";
 import handleError from "../../../utility/handleError";
-import { updateCables, updateGpons } from "../../../store/map/actions";
+import { updateCables, updateClients } from "../../../store/map/actions";
 import { useDispatch } from "react-redux";
 
-const gponTypeOptions = [
-  { key: 1, text: "Epon", value: "Epon" },
-  { key: 2, text: "Gpon", value: "Gpon" },
-];
-
-const GponDetailsTab = ({ gponId, modalClose }) => {
+const ClientEdit = ({ clientId, modalClose }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
+  const nameInputRef = useRef();
   const addressInputRef = useRef();
   const notesInputRef = useRef();
   const descriptionInputRef = useRef();
-  const [gponType, setGponType] = useState("");
+  const mobileInputRef = useRef();
 
   const [confirmSubmit, setConfirmSubmit] = useState(false);
 
   useEffect(() => {
-    getGponDetails(gponId);
+    getClientDetails(clientId);
   }, []);
 
-  const getGponDetails = async (id) => {
-    const { data, status, error } = await getGpon(id);
+  const getClientDetails = async (id) => {
+    const { data, status, error } = await getClient(id);
     if (status === 200) {
+      nameInputRef.current.value = data.name;
       addressInputRef.current.value = data.marker.address;
       notesInputRef.current.value = data.marker.notes;
       descriptionInputRef.current.value = data.marker.description;
-      setGponType(data.name);
+      mobileInputRef.current.value = data.mobile_number;
     }
     if (error) {
       handleError(error);
@@ -45,23 +37,24 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
 
   const handleEditClick = () => {
     setIsEditing(true);
-    addressInputRef.current.focus();
-    toast.info("You can now edit the  details.");
+    nameInputRef.current.focus();
+    toast.info("You can now edit the client details.");
   };
 
   const handleSave = async () => {
     const payload = {
-      name: gponType,
+      name: nameInputRef.current.value,
+      mobile_number: mobileInputRef.current.value,
       marker: {
         address: addressInputRef.current.value,
         notes: notesInputRef.current.value,
         description: descriptionInputRef.current.value,
       },
     };
-    const response = await updateGpon(gponId, payload);
+    const response = await updateClient(clientId, payload);
     if (response.status === 200) {
-      toast.success("TJ Box updated successfully.");
-      dispatch(updateGpons());
+      toast.success("Client details updated successfully.");
+      dispatch(updateClients());
     }
     if (response.error) {
       handleError(response.error);
@@ -70,12 +63,12 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
   };
 
   const handleDelete = async () => {
-    const response = await deleteGpon(gponId);
+    const response = await deleteClient(clientId);
     if (response.status === 204) {
       modalClose();
-      toast.success("Tj Box deleted successfully.");
+      toast.success("Client deleted successfully.");
 
-      dispatch(updateGpons());
+      dispatch(updateClients());
       dispatch(updateCables());
     }
     if (response.error) {
@@ -94,33 +87,36 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
     <Form>
       <Form.Group widths="equal">
         <Form.Field>
-          <label>Type</label>
-          <Dropdown
-            fluid
-            options={gponTypeOptions}
-            selection
-            value={gponType}
-            onChange={(e, { value }) => {
-              console.log(value);
-              setGponType(value);
-            }}
-            disabled={!isEditing}
-          />
+          <label>Client Name</label>
+          <input name="name" readOnly={!isEditing} ref={nameInputRef} />
         </Form.Field>
         <Form.Field>
-          <label>Address</label>
-          <input ref={addressInputRef} readOnly={!isEditing} />
+          <label>Mobile number</label>
+          <input name="mobile" readOnly={!isEditing} ref={mobileInputRef} />
         </Form.Field>
       </Form.Group>
-
+      <Form.Field>
+        <label>Address</label>
+        <input name="address" ref={addressInputRef} readOnly={!isEditing} />
+      </Form.Field>
       <Form.Field>
         <label>Notes</label>
-        <textarea readOnly={!isEditing} ref={notesInputRef} rows={3} />
+        <textarea
+          name="notes"
+          readOnly={!isEditing}
+          ref={notesInputRef}
+          rows={3}
+        />
       </Form.Field>
       <Form.Field>
         <label>Description</label>
 
-        <textarea ref={descriptionInputRef} readOnly={!isEditing} rows={3} />
+        <textarea
+          name="description"
+          ref={descriptionInputRef}
+          readOnly={!isEditing}
+          rows={3}
+        />
       </Form.Field>
       <Form.Group widths="equal">
         {isEditing ? (
@@ -147,4 +143,4 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
     </Form>
   );
 };
-export default GponDetailsTab;
+export default ClientEdit;

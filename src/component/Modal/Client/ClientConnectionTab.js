@@ -42,69 +42,77 @@ const ClientConnectionTab = ({ clientId }) => {
   };
 
   return (
-    <Grid columns={2}>
-      {cableDetails?.map((cable, index) => (
-        <GridRow key={index}>
-          <GridColumn width={5}>
-            <Message attached header="cable details" />
-            <Segment attached>
-              <p>
-                <b>CABLE ID : </b> {cable.identifier}
-              </p>
-              <p>
-                <b>Total Core : </b>
-                {cable.number_of_cores}
-              </p>
-              <p>
-                <b>CABLE length : </b>
-                {cable.length}
-              </p>
-            </Segment>
-          </GridColumn>
-          <GridColumn width={11}>
-            <Message attached header="core details" />
-            <Segment attached textAlign="center">
-              {cable.cores?.map((core) => (
-                <p key={core.id}>
-                  <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
-                  {core.assigned ? (
-                    <>
-                      <Button basic compact color={core.color}>
-                        Used
-                      </Button>
-                      <Button
-                        compact
-                        color="red"
-                        onClick={() =>
-                          handleAssign(core.id, { assigned: false })
-                        }
-                      >
-                        Remove
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button basic compact color={core.color}>
-                        Unused
-                      </Button>
-                      <Button
-                        compact
-                        color="blue"
-                        onClick={() =>
-                          handleAssign(core.id, { assigned: true })
-                        }
-                      >
-                        Assign
-                      </Button>
-                    </>
-                  )}
-                </p>
-              ))}
-            </Segment>
-          </GridColumn>
-        </GridRow>
-      ))}
-    </Grid>
+    <>
+      {cableDetails && cableDetails.length > 0 ? (
+        <Grid columns={2}>
+          {cableDetails?.map((cable, index) => (
+            <GridRow key={index}>
+              <GridColumn width={5}>
+                <Message attached header="cable details" />
+                <Segment attached>
+                  <p>
+                    <b>CABLE ID : </b> {cable.identifier}
+                  </p>
+                  <p>
+                    <b>Total Core : </b>
+                    {cable.number_of_cores}
+                  </p>
+                  <p>
+                    <b>CABLE length : </b>
+                    {cable.length}
+                  </p>
+                </Segment>
+              </GridColumn>
+              <GridColumn width={11}>
+                <Message attached header="core details" />
+                <Segment attached textAlign="center">
+                  {cable.cores?.map((core) => (
+                    <p key={core.id}>
+                      <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
+                      {core.assigned ? (
+                        <>
+                          <Button basic compact color={core.color}>
+                            Used
+                          </Button>
+                          <Button
+                            compact
+                            color="red"
+                            onClick={() =>
+                              handleAssign(core.id, { assigned: false })
+                            }
+                          >
+                            Remove
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button basic compact color={core.color}>
+                            Unused
+                          </Button>
+                          <Button
+                            compact
+                            color="blue"
+                            onClick={() =>
+                              handleAssign(core.id, { assigned: true })
+                            }
+                          >
+                            Assign
+                          </Button>
+                        </>
+                      )}
+                    </p>
+                  ))}
+                </Segment>
+              </GridColumn>
+            </GridRow>
+          ))}
+        </Grid>
+      ) : (
+        <Segment textAlign="center" secondary attached basic>
+          No Cables
+        </Segment>
+      )}
+    </>
   );
 };
 

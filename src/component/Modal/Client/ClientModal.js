@@ -12,13 +12,14 @@ import {
   Tab,
   Segment,
 } from "semantic-ui-react";
+import ClientEdit from "./ClientEdit";
 
 const ClientModal = ({ clientId, onClose }) => {
   const panes = [
     {
-      menuItem: "Details",
+      menuItem: "Paths",
       render: () => (
-        <TabPane attached={false} as={Segment} basic>
+        <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
           <ClientDetailsTab clientId={clientId} modalClose={onClose} />
         </TabPane>
       ),
@@ -28,6 +29,14 @@ const ClientModal = ({ clientId, onClose }) => {
       render: () => (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
           <ClientConnectionTab clientId={clientId} />
+        </TabPane>
+      ),
+    },
+    {
+      menuItem: "Details",
+      render: () => (
+        <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
+          <ClientEdit clientId={clientId} modalClose={onClose} />
         </TabPane>
       ),
     },

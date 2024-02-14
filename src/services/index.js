@@ -20,6 +20,31 @@ export async function getPops(params = {}) {
     return { data: null, status: null, error };
   }
 }
+export async function getPop(id) {
+  try {
+    const { data, status } = await api.get(`pop/${id}/update/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function updatePop(id, payload = {}) {
+  try {
+    const { data, status } = await api.put(`pop/${id}/update/`, payload);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function deletePop(id) {
+  try {
+    const { data, status } = await api.delete(`pop/${id}/delete/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
 export async function createClient(params = {}) {
   try {
     const { data, status } = await api.post("/client/create/", params);
@@ -34,6 +59,30 @@ export async function getClients(params = {}) {
     const { data, status } = await api.get("/client/", {
       params,
     });
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function getClient(id) {
+  try {
+    const { data, status } = await api.get(`client/${id}/update/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function updateClient(id, payload = {}) {
+  try {
+    const { data, status } = await api.put(`client/${id}/update/`, payload);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function deleteClient(id) {
+  try {
+    const { data, status } = await api.delete(`client/${id}/delete/`);
     return { data, status, error: null };
   } catch (error) {
     return { data: null, status: null, error };
@@ -74,6 +123,31 @@ export async function getGpons(params = {}) {
     const { data, status } = await api.get("/gpon/", {
       params,
     });
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function getGpon(id) {
+  try {
+    const { data, status } = await api.get(`gpon/${id}/update/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function updateGpon(id, payload = {}) {
+  try {
+    const { data, status } = await api.put(`gpon/${id}/update/`, payload);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function deleteGpon(id) {
+  try {
+    const { data, status } = await api.delete(`gpon/${id}/delete/`);
     return { data, status, error: null };
   } catch (error) {
     return { data: null, status: null, error };
