@@ -1,5 +1,14 @@
 import api from "../boot/axios";
 
+export async function fetchDashboardData() {
+  try {
+    const { data, status } = await api.get("dashboard/");
+
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
 export async function createPop(params = {}) {
   try {
     const { data, status } = await api.post("/pop/create/", params);
