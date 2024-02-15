@@ -21,7 +21,7 @@ export const authLogin = (username, password) => {
     }
 
     if (response.error) {
-      dispatch(authActions.authFailure());
+      dispatch(authActions.authLogout());
       handleError(response.error);
     }
   };

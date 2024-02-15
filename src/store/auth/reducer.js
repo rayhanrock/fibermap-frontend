@@ -16,6 +16,7 @@ const authSlice = createSlice({
     },
     authLogout(state) {
       state.token = null;
+      state.loading = false;
       localStorage.removeItem("token");
       localStorage.removeItem("expirationDate");
     },
