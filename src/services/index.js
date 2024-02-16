@@ -302,3 +302,28 @@ export async function disconnectCores(payload = {}) {
     return { data: null, status: null, error };
   }
 }
+
+export async function getCableDetails(id) {
+  try {
+    const { data, status } = await api.get(`cable/${id}/update/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function updateCableDetails(id, payload = {}) {
+  try {
+    const { data, status } = await api.put(`cable/${id}/update/`, payload);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function deleteCable(id) {
+  try {
+    const { data, status } = await api.delete(`cable/${id}/delete/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}

@@ -58,13 +58,13 @@ const PopEdit = ({ popId, modalClose }) => {
     };
     const response = await updatePop(popId, payload);
     if (response.status === 200) {
+      setIsEditing(false);
       toast.success("Pop details updated successfully.");
       dispatch(updatePops());
     }
     if (response.error) {
       handleError(response.error);
     }
-    setIsEditing(false);
   };
   const handleDelete = async () => {
     const response = await deletePop(popId);

@@ -1,8 +1,8 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Popup, Polyline } from "react-leaflet";
 import { useSelector } from "react-redux";
 import { List, ListItem } from "semantic-ui-react";
-
+import CableModal from "../Modal/Cable/CableModal";
 const coreColorMap = {
   2: "#0000FF", //blue
   4: "#FF0000", //red
@@ -14,8 +14,17 @@ const coreColorMap = {
 
 const Cables = () => {
   const cables = useSelector((state) => state.map.cables);
+  const [showCableModal, setShowCableModal] = useState(false);
+  const [selectedCableId, setSelectedCableId] = useState(null);
+
   return (
     <>
+      {showCableModal && (
+        <CableModal
+          cableId={selectedCableId}
+          onClose={() => setShowCableModal(false)}
+        />
+      )}
       {cables?.map((cable) => (
         <Polyline
           key={cable.id}
@@ -29,7 +38,8 @@ const Cables = () => {
             mouseover: (event) => event.target.openPopup(),
             mouseout: (event) => event.target.closePopup(),
             click: (event) => {
-              console.log("clicked cable");
+              setShowCableModal(true);
+              setSelectedCableId(cable.id);
             },
           }}
         >

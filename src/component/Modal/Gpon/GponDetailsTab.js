@@ -60,13 +60,14 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
     };
     const response = await updateGpon(gponId, payload);
     if (response.status === 200) {
+      setIsEditing(false);
+
       toast.success("TJ Box updated successfully.");
       dispatch(updateGpons());
     }
     if (response.error) {
       handleError(response.error);
     }
-    setIsEditing(false);
   };
 
   const handleDelete = async () => {
