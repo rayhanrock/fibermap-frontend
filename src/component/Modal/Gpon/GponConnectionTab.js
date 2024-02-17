@@ -18,6 +18,7 @@ import {
   SegmentGroup,
   Header,
 } from "semantic-ui-react";
+import handleError from "../../../utility/handleError";
 
 const GponConnectionTab = ({ gponId }) => {
   const [cableDetails, setCableDetails] = useState(null);
@@ -86,26 +87,25 @@ const GponConnectionTab = ({ gponId }) => {
     const payload = {
       cable_id: cableId,
     };
-    try {
-      const { status } = await addGponInputCable(gponId, payload);
-      if (status === 200) {
-        onReset();
-        getCoreDetails(gponId);
-      }
-    } catch (error) {
-      return { data: null, status: null, error };
+
+    const { status, error } = await addGponInputCable(gponId, payload);
+    if (status === 200) {
+      onReset();
+      getCoreDetails(gponId);
+    }
+    if (error) {
+      handleError(error);
     }
   };
 
   const removeInputCable = async () => {
-    try {
-      const { status } = await removeGponInputCable(gponId);
-      if (status === 200) {
-        onReset();
-        getCoreDetails(gponId);
-      }
-    } catch (error) {
-      return { data: null, status: null, error };
+    const { status, error } = await removeGponInputCable(gponId);
+    if (status === 200) {
+      onReset();
+      getCoreDetails(gponId);
+    }
+    if (error) {
+      handleError(error);
     }
   };
 
@@ -374,106 +374,113 @@ const GponConnectionTab = ({ gponId }) => {
         color="teal"
         style={{ textAlign: "center" }}
       />
-      <Grid columns={2}>
-        {cableDetails?.output_cables.map((cable, index) => (
-          <GridRow key={index}>
-            <GridColumn width={5}>
-              <Message attached header="cable details" />
-              <Segment attached>
-                <p>
-                  <b>CABLE ID : </b> {cable.identifier}
-                </p>
-                <p>
-                  <b>Total Core : </b>
-                  {cable.number_of_cores}
-                </p>
-                <p>
-                  <b>Cable length : </b>
-                  {cable.length}
-                </p>
-                <Button
-                  onClick={() => addAsInputCable(cable.id)}
-                  primary
-                  compact
-                >
-                  Add as input cable
-                </Button>
-              </Segment>
-            </GridColumn>
-            <GridColumn width={11}>
-              <Message attached header="Splitter core details" />
-              <Segment attached textAlign="center">
-                {cable.cores?.map((core) => (
-                  <p
-                    key={core.id}
-                    onClick={() => highlightConnectedCore(core)}
-                    style={
-                      highlight.includes(core.id)
-                        ? { backgroundColor: "#1EA1A1" }
-                        : null
-                    }
+      {cableDetails?.output_cables.length > 0 ? (
+        <Grid columns={2}>
+          {cableDetails?.output_cables.map((cable, index) => (
+            <GridRow key={index}>
+              <GridColumn width={5}>
+                <Message attached header="cable details" />
+                <Segment attached>
+                  <p>
+                    <b>CABLE ID : </b> {cable.identifier}
+                  </p>
+                  <p>
+                    <b>Total Core : </b>
+                    {cable.number_of_cores}
+                  </p>
+                  <p>
+                    <b>Cable length : </b>
+                    {cable.length}
+                  </p>
+                  <Button
+                    onClick={() => addAsInputCable(cable.id)}
+                    primary
+                    compact
                   >
-                    <span
+                    Add as input cable
+                  </Button>
+                </Segment>
+              </GridColumn>
+              <GridColumn width={11}>
+                <Message attached header="Splitter core details" />
+                <Segment attached textAlign="center">
+                  {cable.cores?.map((core) => (
+                    <p
                       key={core.id}
+                      onClick={() => highlightConnectedCore(core)}
                       style={
-                        (connection.left &&
-                          connection.left.coreId === core.id) ||
-                        (connection.right &&
-                          connection.right.coreId === core.id)
-                          ? { display: "block", backgroundColor: "#90EE90" }
-                          : {}
+                        highlight.includes(core.id)
+                          ? { backgroundColor: "#1EA1A1" }
+                          : null
                       }
                     >
-                      <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
-                      {core.connected_to !== null ? (
-                        <>
-                          <Button basic compact color={core.color}>
-                            Connected
-                          </Button>
-                          <Button
-                            compact
-                            color="red"
-                            onClick={() => {
-                              onRemove(core.id, core.connected_to.id);
-                            }}
-                          >
-                            Remove
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button basic compact color={core.color}>
-                            Unused
-                          </Button>
-                          <Button
-                            compact
-                            color="blue"
-                            disabled={disableButtonList.includes(core.id)}
-                            onClick={() => {
-                              onSelect({
-                                cableId: cable.id,
-                                cableIdentifier: cable.identifier,
-                                coreId: core.id,
-                                color: core.color,
-                              });
-                            }}
-                          >
-                            Select
-                          </Button>
-                        </>
-                      )}
-                      &nbsp; &nbsp; Connected with -
-                      <b>
-                        {core.last_point.type} - ({core.last_point.identifier})
-                      </b>
-                    </span>
-                  </p>
-                ))}
-              </Segment>
-            </GridColumn>
-          </GridRow>
-        ))}
-      </Grid>
+                      <span
+                        key={core.id}
+                        style={
+                          (connection.left &&
+                            connection.left.coreId === core.id) ||
+                          (connection.right &&
+                            connection.right.coreId === core.id)
+                            ? { display: "block", backgroundColor: "#90EE90" }
+                            : {}
+                        }
+                      >
+                        <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
+                        {core.connected_to !== null ? (
+                          <>
+                            <Button basic compact color={core.color}>
+                              Connected
+                            </Button>
+                            <Button
+                              compact
+                              color="red"
+                              onClick={() => {
+                                onRemove(core.id, core.connected_to.id);
+                              }}
+                            >
+                              Remove
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button basic compact color={core.color}>
+                              Unused
+                            </Button>
+                            <Button
+                              compact
+                              color="blue"
+                              disabled={disableButtonList.includes(core.id)}
+                              onClick={() => {
+                                onSelect({
+                                  cableId: cable.id,
+                                  cableIdentifier: cable.identifier,
+                                  coreId: core.id,
+                                  color: core.color,
+                                });
+                              }}
+                            >
+                              Select
+                            </Button>
+                          </>
+                        )}
+                        &nbsp; &nbsp; Connected with -
+                        <b>
+                          {core.last_point.type} - ({core.last_point.identifier}
+                          )
+                        </b>
+                      </span>
+                    </p>
+                  ))}
+                </Segment>
+              </GridColumn>
+            </GridRow>
+          ))}
+        </Grid>
+      ) : (
+        <Segment textAlign="center" secondary attached>
+          No data to show
+        </Segment>
+      )}
     </>
   );
 };
