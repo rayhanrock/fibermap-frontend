@@ -68,7 +68,7 @@ const NetworkMap = () => {
         <Pops />
         <Clients />
         <Junctions />
-        <Gpons />
+        {/* <Gpons /> */}
         <Cables />
         <HighlightPath />
       </MapContainer>

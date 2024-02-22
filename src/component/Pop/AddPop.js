@@ -47,6 +47,7 @@ const AddPop = ({ show, setShow }) => {
     const data = {
       identifier: id,
       name: name,
+      pop_type: "Switch",
       marker: {
         type: "POP",
         latitude: latlang.lat,

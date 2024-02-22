@@ -14,6 +14,7 @@ import {
 
 const JunctionConnectionTab = ({ junctionId }) => {
   const [cableDetails, setCableDetails] = useState(null);
+  const [splitterDetails, setSplitterDetails] = useState(null);
   console.log("hukkkkaa", cableDetails);
   const [connection, setConnection] = useState({
     left: null,
@@ -21,6 +22,7 @@ const JunctionConnectionTab = ({ junctionId }) => {
   });
   const [highlight, setHighlight] = useState([]);
   const [disableButtonList, setDisableButtonList] = useState([]);
+  console.log(splitterDetails);
   // const [connection, setConnection] = useState({
   //   left: { cableIdentifier: null, coreId: null, color: null },
   //   right: { cableIdentifier: null, coreId: null, color: null },
@@ -33,7 +35,9 @@ const JunctionConnectionTab = ({ junctionId }) => {
     try {
       const { data, status } = await getJunctionCoreDetails(id);
       if (status === 200) {
-        setCableDetails(data);
+        console.log("data", data);
+        setCableDetails(data.cables);
+        setSplitterDetails(data.splitters);
       }
     } catch (error) {
       return { data: null, status: null, error };
@@ -74,7 +78,7 @@ const JunctionConnectionTab = ({ junctionId }) => {
     }
   };
 
-  const onSelect = async (data) => {
+  const onSelect = async (data, splitterCores = null) => {
     if (connection.left && connection.right) {
       return;
     }
@@ -83,9 +87,14 @@ const JunctionConnectionTab = ({ junctionId }) => {
     } else {
       setConnection((prev) => ({ ...prev, right: data }));
     }
-    const cable = cableDetails.find((cable) => cable.id === data.cableId);
-    const core = cable.cores.map((core) => core.id);
-    setDisableButtonList((prev) => [...prev, ...core]);
+    if (splitterCores) {
+      const cores = splitterCores.map((core) => core.id);
+      setDisableButtonList((prev) => [...prev, ...cores]);
+    } else {
+      const cable = cableDetails.find((cable) => cable.id === data.cableId);
+      const core = cable.cores.map((core) => core.id);
+      setDisableButtonList((prev) => [...prev, ...core]);
+    }
   };
   const onReset = () => {
     setDisableButtonList([]);
@@ -96,13 +105,9 @@ const JunctionConnectionTab = ({ junctionId }) => {
     });
   };
 
-  const highlightConnectedCore = async (cableId, coreId) => {
-    const cable = cableDetails.find((cable) => cable.id === cableId);
-    const core = cable.cores.find((core) => core.id === coreId);
-
+  const highlightConnectedCore = async (core) => {
     if (!core.connected_to) return;
-
-    setHighlight([core.connected_to.id, coreId]);
+    setHighlight([core.connected_to.id, core.id]);
   };
 
   return (
@@ -160,7 +165,7 @@ const JunctionConnectionTab = ({ junctionId }) => {
                 {cable.cores?.map((core) => (
                   <p
                     key={core.id}
-                    onClick={() => highlightConnectedCore(cable.id, core.id)}
+                    onClick={() => highlightConnectedCore(core)}
                     style={
                       highlight.includes(core.id)
                         ? { backgroundColor: "#1EA1A1" }
@@ -228,6 +233,99 @@ const JunctionConnectionTab = ({ junctionId }) => {
           </GridRow>
         ))}
       </Grid>
+      {splitterDetails &&
+        splitterDetails.length > 0 &&
+        splitterDetails.map((splitter) => (
+          <>
+            <Message
+              header="Gpon Out"
+              color="teal"
+              style={{ textAlign: "center" }}
+            />
+            <Grid columns={2}>
+              <GridRow>
+                <GridColumn width={5}>
+                  <Message attached header="Gpon Configuration" />
+                  <Segment attached>
+                    <p>
+                      <b> {`Type : 1X${splitter.number_of_splitter}`}</b>
+                    </p>
+                  </Segment>
+                </GridColumn>
+                <GridColumn width={11}>
+                  <Message attached header="core details" />
+                  <Segment attached textAlign="center">
+                    {splitter.output_cores?.map((core) => (
+                      <p
+                        key={core.id}
+                        onClick={() => highlightConnectedCore(core)}
+                        style={
+                          highlight.includes(core.id)
+                            ? { backgroundColor: "#1EA1A1" }
+                            : null
+                        }
+                      >
+                        <span
+                          key={core.id}
+                          style={
+                            (connection.left &&
+                              connection.left.coreId === core.id) ||
+                            (connection.right &&
+                              connection.right.coreId === core.id)
+                              ? { display: "block", backgroundColor: "#90EE90" }
+                              : {}
+                          }
+                        >
+                          <b>Output : {core.core_number}</b> &nbsp; &nbsp;
+                          {core.connected_to !== null ? (
+                            <>
+                              <Button basic compact color="grey">
+                                Connected
+                              </Button>
+                              <Button
+                                compact
+                                color="red"
+                                onClick={() => {
+                                  onRemove(core.id, core.connected_to.id);
+                                }}
+                              >
+                                Remove
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button basic compact color="grey">
+                                Unused
+                              </Button>
+                              <Button
+                                compact
+                                color="blue"
+                                disabled={disableButtonList.includes(core.id)}
+                                onClick={() => {
+                                  onSelect(
+                                    {
+                                      cableId: null,
+                                      cableIdentifier: null,
+                                      coreId: core.id,
+                                      color: null,
+                                    },
+                                    splitter.output_cores
+                                  );
+                                }}
+                              >
+                                Select
+                              </Button>
+                            </>
+                          )}
+                        </span>
+                      </p>
+                    ))}
+                  </Segment>
+                </GridColumn>
+              </GridRow>
+            </Grid>
+          </>
+        ))}
     </>
   );
 };
