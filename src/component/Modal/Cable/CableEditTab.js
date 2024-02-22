@@ -2,41 +2,46 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Button, Confirm, Dropdown, Form } from "semantic-ui-react";
 import {
+  deleteCable,
   deleteClient,
-  deleteGpon,
-  getGpon,
-  updateGpon,
+  getCableDetails,
+  getClient,
+  updateCableDetails,
+  updateClient,
 } from "../../../services";
 import handleError from "../../../utility/handleError";
-import { updateCables, updateGpons } from "../../../store/map/actions";
+import { updateCables, updateClients } from "../../../store/map/actions";
 import { useDispatch } from "react-redux";
 
-const gponTypeOptions = [
-  { key: 1, text: "Epon", value: "Epon" },
-  { key: 2, text: "Gpon", value: "Gpon" },
+const cableTypeOptions = [
+  { key: 1, text: "Line", value: "LINE" },
+  { key: 2, text: "Unerground", value: "UNDERGROUND" },
+  { key: 3, text: "Wireless", value: "WIRELESS" },
 ];
 
-const GponDetailsTab = ({ gponId, modalClose }) => {
+const CableEditTab = ({ cableId, modalClose }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const addressInputRef = useRef();
+  const idInputRef = useRef();
+  const lengthInputRef = useRef();
   const notesInputRef = useRef();
   const descriptionInputRef = useRef();
-  const [gponType, setGponType] = useState("");
+  const [cableType, setCableType] = useState("");
 
   const [confirmSubmit, setConfirmSubmit] = useState(false);
 
   useEffect(() => {
-    getGponDetails(gponId);
+    getCable();
   }, []);
 
-  const getGponDetails = async (id) => {
-    const { data, status, error } = await getGpon(id);
+  const getCable = async () => {
+    const { data, status, error } = await getCableDetails(cableId);
     if (status === 200) {
-      addressInputRef.current.value = data.marker.address;
-      notesInputRef.current.value = data.marker.notes;
-      descriptionInputRef.current.value = data.marker.description;
-      setGponType(data.name);
+      idInputRef.current.value = data.identifier;
+      lengthInputRef.current.value = data.length;
+      notesInputRef.current.value = data.notes;
+      descriptionInputRef.current.value = data.description;
+      setCableType(data.type);
     }
     if (error) {
       handleError(error);
@@ -45,25 +50,23 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
 
   const handleEditClick = () => {
     setIsEditing(true);
-    addressInputRef.current.focus();
-    toast.info("You can now edit the  details.");
+    idInputRef.current.focus();
+    toast.info("You can now edit the cable details.");
   };
 
   const handleSave = async () => {
     const payload = {
-      name: gponType,
-      marker: {
-        address: addressInputRef.current.value,
-        notes: notesInputRef.current.value,
-        description: descriptionInputRef.current.value,
-      },
+      identifier: idInputRef.current.value,
+      type: cableType,
+      length: lengthInputRef.current.value,
+      notes: notesInputRef.current.value,
+      description: descriptionInputRef.current.value,
     };
-    const response = await updateGpon(gponId, payload);
+    const response = await updateCableDetails(cableId, payload);
     if (response.status === 200) {
       setIsEditing(false);
-
-      toast.success("TJ Box updated successfully.");
-      dispatch(updateGpons());
+      toast.success("Cable details updated successfully.");
+      dispatch(updateCables());
     }
     if (response.error) {
       handleError(response.error);
@@ -71,12 +74,11 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
   };
 
   const handleDelete = async () => {
-    const response = await deleteGpon(gponId);
+    const response = await deleteCable(cableId);
     if (response.status === 204) {
       modalClose();
-      toast.success("Tj Box deleted successfully.");
+      toast.success("Cable deleted successfully.");
 
-      dispatch(updateGpons());
       dispatch(updateCables());
     }
     if (response.error) {
@@ -95,33 +97,45 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
     <Form>
       <Form.Group widths="equal">
         <Form.Field>
+          <label>ID</label>
+          <input readOnly={!isEditing} ref={idInputRef} />
+        </Form.Field>
+        <Form.Field>
           <label>Type</label>
           <Dropdown
             fluid
-            options={gponTypeOptions}
+            options={cableTypeOptions}
             selection
-            value={gponType}
+            value={cableType}
             onChange={(e, { value }) => {
-              console.log(value);
-              setGponType(value);
+              setCableType(value);
             }}
             disabled={!isEditing}
           />
         </Form.Field>
-        <Form.Field>
-          <label>Address</label>
-          <input ref={addressInputRef} readOnly={!isEditing} />
-        </Form.Field>
       </Form.Group>
-
+      <Form.Field>
+        <label>Length</label>
+        <input ref={lengthInputRef} readOnly={!isEditing} />
+      </Form.Field>
       <Form.Field>
         <label>Notes</label>
-        <textarea readOnly={!isEditing} ref={notesInputRef} rows={3} />
+        <textarea
+          name="notes"
+          readOnly={!isEditing}
+          ref={notesInputRef}
+          rows={3}
+        />
       </Form.Field>
       <Form.Field>
         <label>Description</label>
 
-        <textarea ref={descriptionInputRef} readOnly={!isEditing} rows={3} />
+        <textarea
+          name="description"
+          ref={descriptionInputRef}
+          readOnly={!isEditing}
+          rows={3}
+        />
       </Form.Field>
       <Form.Group widths="equal">
         {isEditing ? (
@@ -148,4 +162,4 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
     </Form>
   );
 };
-export default GponDetailsTab;
+export default CableEditTab;

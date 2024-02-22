@@ -11,11 +11,17 @@ import {
   Button,
   Icon,
   Form,
+  Dropdown,
   Message,
 } from "semantic-ui-react";
 import { toast } from "react-toastify";
 import handleError from "../../utility/handleError";
 import isEmptyStirng from "../../utility/isEmptyStirng";
+
+const popTypeOptions = [
+  { key: 1, text: "OLT", value: "OLT" },
+  { key: 2, text: "Switch", value: "Switch" },
+];
 
 const AddPop = ({ show, setShow }) => {
   console.log("add pop");
@@ -26,6 +32,7 @@ const AddPop = ({ show, setShow }) => {
   const [address, setAddress] = useState("");
   const [note, setNote] = useState("");
   const [description, setDescription] = useState("");
+  const [popType, setPopType] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,12 +49,16 @@ const AddPop = ({ show, setShow }) => {
     } else if (latlang === null) {
       toast.error("Click on map to select location");
       return;
+    } else if (isEmptyStirng(popType)) {
+      toast.error("Please select pop type");
+      return;
     }
 
     const data = {
       identifier: id,
       name: name,
-      pop_type: "Switch",
+      pop_type: popType,
+
       marker: {
         type: "POP",
         latitude: latlang.lat,
@@ -77,6 +88,7 @@ const AddPop = ({ show, setShow }) => {
     setAddress("");
     setNote("");
     setDescription("");
+    setPopType("");
   };
   return (
     <Sidebar
@@ -124,6 +136,19 @@ const AddPop = ({ show, setShow }) => {
                   placeholder="Pop name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                />
+              </Form.Field>
+              <Form.Field required>
+                <label>Type</label>
+                <Dropdown
+                  fluid
+                  options={popTypeOptions}
+                  selection
+                  value={popType}
+                  onChange={(e, { value }) => {
+                    console.log(value);
+                    setPopType(value);
+                  }}
                 />
               </Form.Field>
 

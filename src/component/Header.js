@@ -1,49 +1,56 @@
-import React, { Component } from "react";
+import React from "react";
 import { Menu } from "semantic-ui-react";
 import PathConstants from "../routes/pathConstants";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../store/auth/reducer";
+const Header = () => {
+  const [activeItem, setActiveItem] = React.useState("dashboard");
 
-export default class MenuExampleSecondaryPointing extends Component {
-  state = { activeItem: "home" };
+  const handleItemClick = (e, { name }) => setActiveItem(name);
+  const dispatch = useDispatch();
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
-
-  render() {
-    const { activeItem } = this.state;
-
-    return (
-      <>
-        <Menu pointing secondary>
+  return (
+    <>
+      <Menu pointing secondary>
+        <Menu.Item
+          name="dashboard"
+          active={activeItem === "dashboard"}
+          onClick={handleItemClick}
+          to={PathConstants.DASHBOARD}
+          as={Link}
+        />
+        <Menu.Item
+          name="network-point"
+          active={activeItem === "network-point"}
+          onClick={handleItemClick}
+          to={PathConstants.NETWORK_POINT}
+          as={Link}
+        />
+        <Menu.Item
+          name="planing"
+          active={activeItem === "planing"}
+          onClick={handleItemClick}
+          to={PathConstants.PLANING}
+          as={Link}
+        />
+        <Menu.Item
+          name="Create User"
+          active={activeItem === "Create User"}
+          onClick={handleItemClick}
+          to={PathConstants.CREATE_USER}
+          as={Link}
+        />
+        <Menu.Menu position="right">
           <Menu.Item
-            name="dashboard"
-            active={activeItem === "dashboard"}
-            onClick={this.handleItemClick}
-            to={PathConstants.DASHBOARD}
-            as={Link}
+            name="logout"
+            active={activeItem === "logout"}
+            onClick={() => dispatch(authActions.authLogout())}
           />
-          <Menu.Item
-            name="network-point"
-            active={activeItem === "network-point"}
-            onClick={this.handleItemClick}
-            to={PathConstants.NETWORK_POINT}
-            as={Link}
-          />
-          <Menu.Item
-            name="planing"
-            active={activeItem === "planing"}
-            onClick={this.handleItemClick}
-            to={PathConstants.PLANING}
-            as={Link}
-          />
-          <Menu.Menu position="right">
-            <Menu.Item
-              name="logout"
-              active={activeItem === "logout"}
-              onClick={this.handleItemClick}
-            />
-          </Menu.Menu>
-        </Menu>
-      </>
-    );
-  }
-}
+        </Menu.Menu>
+      </Menu>
+    </>
+  );
+};
+
+export default Header;

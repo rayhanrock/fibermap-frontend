@@ -16,14 +16,6 @@ import {
 const GponModal = ({ gponId, onClose }) => {
   const panes = [
     {
-      menuItem: "Details",
-      pane: (
-        <TabPane attached={false}>
-          <GponDetailsTab gponId={gponId} />
-        </TabPane>
-      ),
-    },
-    {
       menuItem: "Connection",
       pane: (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
@@ -31,10 +23,18 @@ const GponModal = ({ gponId, onClose }) => {
         </TabPane>
       ),
     },
+    {
+      menuItem: "Details",
+      pane: (
+        <TabPane attached={false} basic style={{ padding: 0 }}>
+          <GponDetailsTab gponId={gponId} modalClose={onClose} />
+        </TabPane>
+      ),
+    },
   ];
   return (
     <Modal open onClose={onClose} size="large">
-      <ModalHeader>Gpon Details</ModalHeader>
+      <ModalHeader>TJ Box Details</ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
           <Tab

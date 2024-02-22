@@ -26,6 +26,11 @@ const splitterOptions = [
   { key: 6, text: "32", value: 32 },
 ];
 
+const tjBoxType = [
+  { key: 1, text: "Gpon", value: "Gpon" },
+  { key: 2, text: "Epon", value: "Epon" },
+];
+
 const AddGpon = ({ show, setShow }) => {
   const latlang = useSelector((state) => state.map.latlang);
   const dispatch = useDispatch();
@@ -40,6 +45,7 @@ const AddGpon = ({ show, setShow }) => {
     setSplitter(value);
   };
   const handleSubmit = async (e) => {
+    console.log(id, name, address);
     e.preventDefault();
     if (isEmptyStirng(id)) {
       toast.error("Please enter Identifier");
@@ -60,7 +66,7 @@ const AddGpon = ({ show, setShow }) => {
       name: name,
       splitter: splitter,
       marker: {
-        type: "GPON",
+        type: "TJ_BOX",
         latitude: latlang.lat,
         longitude: latlang.lng,
         address: address,
@@ -129,12 +135,22 @@ const AddGpon = ({ show, setShow }) => {
                 />
               </Form.Field>
               <Form.Field required>
-                <label>Name</label>
-                <input
+                <label>Type</label>
+                <Dropdown
+                  fluid
+                  options={tjBoxType}
+                  selection
+                  value={name}
+                  onChange={(e, { value }) => {
+                    console.log(value);
+                    setName(value);
+                  }}
+                />
+                {/* <input
                   placeholder="Gpon name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                />
+                /> */}
               </Form.Field>
               <Form.Field required>
                 <label>Splitter</label>

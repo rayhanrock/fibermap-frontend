@@ -1,5 +1,5 @@
 import { Icon } from "leaflet";
-import houseIcon from "../../assets/icons/house.png";
+import peopleIcon from "../../assets/icons/user.png";
 import popIcon from "../../assets/icons/office.png";
 import junctionIcon from "../../assets/icons/junction.png";
 import gponIcon from "../../assets/icons/gpon.png";
@@ -11,7 +11,7 @@ export const PopIcon = new Icon({
 });
 
 export const ClientIcon = new Icon({
-  iconUrl: houseIcon,
+  iconUrl: peopleIcon,
   iconSize: [28, 28],
 });
 

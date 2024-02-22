@@ -12,22 +12,31 @@ import {
   Tab,
   Segment,
 } from "semantic-ui-react";
+import PopEdit from "./PopEdit";
 
-const PopModal = ({ popId, onClose }) => {
+const PopModal = ({ popId, popType, onClose }) => {
   const panes = [
     {
-      menuItem: "Details",
-      pane: (
-        <TabPane attached={false} as={Segment} basic>
-          <PopDetailsTab popId={popId} />
+      menuItem: "Paths",
+      render: () => (
+        <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
+          <PopDetailsTab popId={popId} modalClose={onClose} />
         </TabPane>
       ),
     },
     {
       menuItem: "Connection",
-      pane: (
+      render: () => (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
           <PopConnectionTab popId={popId} />
+        </TabPane>
+      ),
+    },
+    {
+      menuItem: "Details",
+      render: () => (
+        <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
+          <PopEdit popId={popId} modalClose={onClose} />
         </TabPane>
       ),
     },
@@ -35,14 +44,10 @@ const PopModal = ({ popId, onClose }) => {
 
   return (
     <Modal open onClose={onClose} size="large">
-      <ModalHeader>Pop Details</ModalHeader>
+      <ModalHeader>{popType} Details</ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
-          <Tab
-            renderActiveOnly={false}
-            menu={{ secondary: true, pointing: true }}
-            panes={panes}
-          />
+          <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
         </ModalDescription>
       </ModalContent>
       <ModalActions>

@@ -1,5 +1,3 @@
-import ClientConnectionTab from "./ClientConnectionTab";
-import ClientDetailsTab from "./ClientDetailsTab";
 import {
   ModalHeader,
   ModalDescription,
@@ -12,39 +10,33 @@ import {
   Tab,
   Segment,
 } from "semantic-ui-react";
-import ClientEdit from "./ClientEdit";
-
-const ClientModal = ({ clientId, onClose }) => {
+import CableEditTab from "./CableEditTab";
+import CableDetailsTab from "./CableDetailsTab";
+import { useEffect, useState } from "react";
+import { getCableDetails } from "../../../services";
+import handleError from "../../../utility/handleError";
+const CableModal = ({ cableId, onClose }) => {
   const panes = [
-    {
-      menuItem: "Paths",
-      render: () => (
-        <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
-          <ClientDetailsTab clientId={clientId} modalClose={onClose} />
-        </TabPane>
-      ),
-    },
-    {
-      menuItem: "Connection",
-      render: () => (
-        <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
-          <ClientConnectionTab clientId={clientId} />
-        </TabPane>
-      ),
-    },
     {
       menuItem: "Details",
       render: () => (
+        <TabPane as={Segment}>
+          <CableDetailsTab cableId={cableId} />
+        </TabPane>
+      ),
+    },
+    {
+      menuItem: "Edit",
+      render: () => (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
-          <ClientEdit clientId={clientId} modalClose={onClose} />
+          <CableEditTab cableId={cableId} modalClose={onClose} />
         </TabPane>
       ),
     },
   ];
-
   return (
     <Modal open onClose={onClose} size="large">
-      <ModalHeader>Client Details</ModalHeader>
+      <ModalHeader>Cable </ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
           <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
@@ -59,4 +51,4 @@ const ClientModal = ({ clientId, onClose }) => {
   );
 };
 
-export default ClientModal;
+export default CableModal;

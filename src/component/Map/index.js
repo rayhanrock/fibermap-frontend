@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
+
 import {
   updatePops,
   updateClients,
@@ -28,6 +29,7 @@ import "leaflet-draw/dist/leaflet.draw.css";
 import CableColorInfo from "./CableColorInfo";
 import { useMapContext } from "../../contexts/map-context";
 import ModelFinderMarker from "./ModelFinderMarker";
+import SearchLocation from "./SearchLocation";
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -40,7 +42,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const NetworkMap = () => {
-  const [center, setCenter] = useState({ lat: 23.8041, lng: 90.4152 });
+  const [center, setCenter] = useState({ lat: 22.8724, lng: 91.0973 });
   const { setMap } = useMapContext();
   const dispatch = useDispatch();
   const drawLine = useSelector((state) => state.map.drawLine);
@@ -60,8 +62,19 @@ const NetworkMap = () => {
       <MapContainer center={center} zoom={13} ref={setMap}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+          subdomains={["mt0", "mt1", "mt2", "mt3"]}
         />
+        {/* <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+          subdomains={["mt0", "mt1", "mt2", "mt3"]}
+        /> */}
+        {/* <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+          subdomains={["mt0", "mt1", "mt2", "mt3"]}
+        /> */}
         <CableColorInfo />
         <ModelFinderMarker />
         <Draw />
@@ -71,6 +84,7 @@ const NetworkMap = () => {
         {/* <Gpons /> */}
         <Cables />
         <HighlightPath />
+        <SearchLocation />
       </MapContainer>
     </>
   );

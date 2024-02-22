@@ -18,7 +18,7 @@ const HighlightPath = () => {
               position: "absolute",
               zIndex: 1000,
               marginLeft: "10px",
-              marginTop: "75px",
+              marginTop: "120px",
               width: "34px",
               height: "31px",
               border: "2px solid rgba(0,0,0,0.2)",
@@ -41,7 +41,7 @@ const HighlightPath = () => {
         )}
         {highlightPath?.map((cable) => (
           <Polyline
-            key={cable.identifier}
+            key={cable.cable_id}
             pathOptions={{ color: cable.color, weight: 6 }}
             positions={cable.cable_line}
           >
