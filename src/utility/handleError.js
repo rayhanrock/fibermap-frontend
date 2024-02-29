@@ -26,8 +26,9 @@ const handleError = (error) => {
       }
     });
   };
-  if (error.request) {
-    toast.error("Internal Server Error");
+  const error_status = [500, 404];
+  if (error.request && error_status.includes(error.request.status)) {
+    toast.error("Something went wrong. Please try again later.");
   } else if (error.response && error.response.data) {
     showError(error.response.data);
   } else {
