@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { createPop } from "../../services";
+import React, { memo, useState } from "react";
+import { createReseller } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
-import { updatePops } from "../../store/map/actions";
+import { updateResellers } from "../../store/map/actions";
 import {
   Grid,
   Header,
@@ -11,28 +11,23 @@ import {
   Button,
   Icon,
   Form,
-  Dropdown,
   Message,
 } from "semantic-ui-react";
 import { toast } from "react-toastify";
 import handleError from "../../utility/handleError";
 import isEmptyStirng from "../../utility/isEmptyStirng";
 
-const popTypeOptions = [
-  { key: 1, text: "OLT", value: "OLT" },
-  { key: 2, text: "Switch", value: "Switch" },
-];
-
-const AddPop = ({ show, setShow }) => {
-  console.log("add pop");
+const AddReseller = ({ show, setShow }) => {
+  console.log("add AddReseller");
   const dispatch = useDispatch();
   const latlang = useSelector((state) => state.map.latlang);
+
   const [id, setId] = useState("");
   const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
   const [address, setAddress] = useState("");
   const [note, setNote] = useState("");
   const [description, setDescription] = useState("");
-  const [popType, setPopType] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +36,10 @@ const AddPop = ({ show, setShow }) => {
       toast.error("Please enter Identifier");
       return;
     } else if (isEmptyStirng(name)) {
-      toast.error("Please enter pop name");
+      toast.error("Please enter reseller name");
+      return;
+    } else if (isEmptyStirng(mobile)) {
+      toast.error("Please enter mobile number");
       return;
     } else if (isEmptyStirng(address)) {
       toast.error("Please enter address");
@@ -49,48 +47,43 @@ const AddPop = ({ show, setShow }) => {
     } else if (latlang === null) {
       toast.error("Click on map to select location");
       return;
-    } else if (isEmptyStirng(popType)) {
-      toast.error("Please select pop type");
-      return;
     }
 
     const data = {
       identifier: id,
       name: name,
-      pop_type: popType,
-
       marker: {
-        type: "POP",
-        latitude: latlang.lat,
-        longitude: latlang.lng,
+        type: "RESELLER",
+        latitude: latlang?.lat,
+        longitude: latlang?.lng,
         address: address,
         notes: note,
         description: description,
       },
+      mobile_number: mobile,
     };
 
-    const response = await createPop(data);
+    const response = await createReseller(data);
     if (response.status === 201) {
       dispatch(mapActions.updateLatLang(null));
-      dispatch(updatePops());
+      dispatch(updateResellers());
       setShow(false);
-
-      toast.success("Pop Created successfully");
+      toast.success("Reseller created successfully");
       handleReset();
     }
     if (response.error) {
-      console.log("error", response.error);
       handleError(response.error);
     }
   };
   const handleReset = () => {
     setId("");
     setName("");
+    setMobile("");
     setAddress("");
     setNote("");
     setDescription("");
-    setPopType("");
   };
+
   return (
     <Sidebar
       as={Segment}
@@ -115,7 +108,7 @@ const AddPop = ({ show, setShow }) => {
                 onClick={() => setShow(false)}
               />
 
-              <Header.Content>Create Pop</Header.Content>
+              <Header.Content>Create Reseller</Header.Content>
             </Header>
           </Grid.Column>
         </Grid.Row>
@@ -134,32 +127,26 @@ const AddPop = ({ show, setShow }) => {
               <Form.Field required>
                 <label>Name</label>
                 <input
-                  placeholder="Pop name"
+                  placeholder="Reseller name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
               </Form.Field>
               <Form.Field required>
-                <label>Type</label>
-                <Dropdown
-                  fluid
-                  options={popTypeOptions}
-                  selection
-                  value={popType}
-                  onChange={(e, { value }) => {
-                    console.log(value);
-                    setPopType(value);
-                  }}
+                <label>Mobile Number</label>
+                <input
+                  placeholder="01734567890"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
                 />
               </Form.Field>
-
               <Form.Field required>
                 <label>Latitude</label>
-                <input disabled value={latlang ? latlang.lat : ""} />
+                <input value={latlang ? latlang.lat : ""} disabled />
               </Form.Field>
               <Form.Field required>
                 <label>Longitude</label>
-                <input disabled value={latlang ? latlang.lng : ""} />
+                <input value={latlang ? latlang.lng : ""} disabled />
               </Form.Field>
               <Form.TextArea
                 required
@@ -192,4 +179,4 @@ const AddPop = ({ show, setShow }) => {
   );
 };
 
-export default AddPop;
+export default AddReseller;

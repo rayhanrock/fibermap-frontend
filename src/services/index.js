@@ -98,20 +98,125 @@ export async function deleteClient(id) {
   }
 }
 
-export async function createJunction(params = {}) {
+export async function getClientCoreDetails(id) {
   try {
-    const { data, status } = await api.post("/junction/create/", params);
+    const { data, status } = await api.get(`client-details/${id}/cores/`, {});
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function getClientConnectedPaths(id = 0) {
+  try {
+    const { data, status } = await api.get(`client/${id}/paths/`, {});
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function createReseller(params = {}) {
+  try {
+    const { data, status } = await api.post("/reseller/create/", params);
 
     return { data, status, error: null };
   } catch (error) {
     return { data: null, status: null, error };
   }
 }
-export async function getJunctions(params = {}) {
+export async function getResellers(params = {}) {
   try {
-    const { data, status } = await api.get("/junction/", {
+    const { data, status } = await api.get("/reseller/", {
       params,
     });
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function getReseller(id) {
+  try {
+    const { data, status } = await api.get(`reseller/${id}/update/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function updateReseller(id, payload = {}) {
+  try {
+    const { data, status } = await api.put(`reseller/${id}/update/`, payload);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function deleteReseller(id) {
+  try {
+    const { data, status } = await api.delete(`reseller/${id}/delete/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function getResellerCoreDetails(id) {
+  try {
+    const { data, status } = await api.get(`reseller-details/${id}/cores/`, {});
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function getResellerConnectedPaths(id = 0) {
+  try {
+    const { data, status } = await api.get(`reseller/${id}/paths/`, {});
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function createTJBox(params = {}) {
+  try {
+    const { data, status } = await api.post("/tjbox/create/", params);
+
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function getTJBoxs(params = {}) {
+  try {
+    const { data, status } = await api.get("/tjbox/", {
+      params,
+    });
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function getTJBox(id) {
+  try {
+    const { data, status } = await api.get(`tjbox/${id}/update/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+export async function updateTJBox(id, payload = {}) {
+  try {
+    const { data, status } = await api.put(`tjbox/${id}/update/`, payload);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function deleteTJBox(id) {
+  try {
+    const { data, status } = await api.delete(`tjbox/${id}/delete/`);
     return { data, status, error: null };
   } catch (error) {
     return { data: null, status: null, error };
@@ -182,24 +287,6 @@ export async function getCables(params = {}) {
   }
 }
 
-export async function getClientCoreDetails(id) {
-  try {
-    const { data, status } = await api.get(`client-details/${id}/cores/`, {});
-    return { data, status, error: null };
-  } catch (error) {
-    return { data: null, status: null, error };
-  }
-}
-
-export async function getClientConnectedPaths(id = 0) {
-  try {
-    const { data, status } = await api.get(`client/${id}/paths/`, {});
-    return { data, status, error: null };
-  } catch (error) {
-    return { data: null, status: null, error };
-  }
-}
-
 export async function updateCoreAssignStatus(id = 0, payload = {}) {
   try {
     const { data, status } = await api.patch(
@@ -212,9 +299,9 @@ export async function updateCoreAssignStatus(id = 0, payload = {}) {
   }
 }
 
-export async function getJunctionCoreDetails(id) {
+export async function getTJBoxCoreDetails(id) {
   try {
-    const { data, status } = await api.get(`junction-details/${id}/cores/`, {});
+    const { data, status } = await api.get(`tjbox-details/${id}/cores/`, {});
     return { data, status, error: null };
   } catch (error) {
     return { data: null, status: null, error };
@@ -322,6 +409,15 @@ export async function updateCableDetails(id, payload = {}) {
 export async function deleteCable(id) {
   try {
     const { data, status } = await api.delete(`cable/${id}/delete/`);
+    return { data, status, error: null };
+  } catch (error) {
+    return { data: null, status: null, error };
+  }
+}
+
+export async function cableCut(id = 0, payload = {}) {
+  try {
+    const { data, status } = await api.post(`cable/${id}/cut/`, payload);
     return { data, status, error: null };
   } catch (error) {
     return { data: null, status: null, error };

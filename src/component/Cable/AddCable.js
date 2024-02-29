@@ -27,11 +27,11 @@ const cableOptions = [
 const coreOptions = [
   { key: "1", text: "2", value: "2" },
   { key: "2", text: "4", value: "4" },
+  { key: "6", text: "6", value: "6" },
   { key: "3", text: "8", value: "8" },
   { key: "4", text: "12", value: "12" },
   { key: "5", text: "24", value: "24" },
-  { key: "6", text: "36", value: "36" },
-  // { key: "7", text: "48", value: "48" },
+  { key: "7", text: "48", value: "48" },
 ];
 
 const AddCable = ({ visible }) => {

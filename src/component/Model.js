@@ -3,13 +3,13 @@ import { Dropdown } from "semantic-ui-react";
 import { useState } from "react";
 import Pop from "./Pop";
 import Client from "./Client";
-import Junction from "./Junction";
-import Gpon from "./Gpon";
+import TJBox from "./TJBox";
+import Reseller from "./Reseller";
 const options = [
   { key: 1, text: "Pop", value: 1 },
   { key: 2, text: "Client", value: 2 },
-  // { key: 3, text: "Junction", value: 3 },
-  { key: 4, text: "TJ Box", value: 4 },
+  { key: 3, text: "Tj Box", value: 3 },
+  { key: 4, text: "Reseller", value: 4 },
 ];
 
 const Models = () => {
@@ -23,8 +23,8 @@ const Models = () => {
   const componentMapping = {
     1: Pop,
     2: Client,
-    3: Junction,
-    4: Gpon,
+    3: TJBox,
+    4: Reseller,
   };
   const SelectedComponent = componentMapping[value];
 

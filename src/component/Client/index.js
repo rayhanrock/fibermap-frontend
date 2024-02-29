@@ -43,6 +43,7 @@ const Client = () => {
           <List divided relaxed style={{ overflow: "auto", maxHeight: "45vh" }}>
             {filteredClients?.map((client) => (
               <List.Item
+                key={client.identifier + client.id}
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   dispatch(
@@ -51,7 +52,7 @@ const Client = () => {
                       lng: client.longitude,
                     })
                   );
-                  map.flyTo([client.latitude, client.longitude], 13);
+                  map.flyTo([client.latitude, client.longitude]);
                 }}
               >
                 <List.Icon name="home" size="large" verticalAlign="middle" />

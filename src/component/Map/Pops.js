@@ -36,16 +36,16 @@ const Pops = () => {
             <Popup>
               <List>
                 <ListItem>
-                  <b>ID:</b> {pop.identifier}`
+                  <b>ID:</b> {pop.identifier}
                 </ListItem>
                 <ListItem>
-                  <b>Name:</b> {pop.name}`
+                  <b>Name:</b> {pop.name}
                 </ListItem>
                 <ListItem>
-                  <b>Type:</b> {pop.pop_type}`
+                  <b>Type:</b> {pop.pop_type}
                 </ListItem>
                 <ListItem>
-                  <b>Address:</b> {pop.address}`
+                  <b>Address:</b> {pop.address}
                 </ListItem>
               </List>
             </Popup>

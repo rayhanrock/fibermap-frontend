@@ -18,7 +18,7 @@ const splitterOptions = [
   { key: 5, text: "16", value: 16 },
   { key: 6, text: "32", value: 32 },
 ];
-const JunctionCreateSplitterTab = ({ junctionId }) => {
+const TJBoxCreateSplitterTab = ({ tjboxId }) => {
   const [id, setId] = useState("");
   const [splitter, setSplitter] = useState(2);
 
@@ -36,7 +36,7 @@ const JunctionCreateSplitterTab = ({ junctionId }) => {
       identifier: id,
       name: splitterType,
       splitter: splitter,
-      junction: junctionId,
+      tj_box: tjboxId,
     };
 
     console.log(data);
@@ -100,4 +100,4 @@ const JunctionCreateSplitterTab = ({ junctionId }) => {
   );
 };
 
-export default JunctionCreateSplitterTab;
+export default TJBoxCreateSplitterTab;

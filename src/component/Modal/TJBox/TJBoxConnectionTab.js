@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getJunctionCoreDetails } from "../../../services";
+import { getTJBoxCoreDetails } from "../../../services";
 import { connectCores, disconnectCores } from "../../../services";
 import {
   Grid,
@@ -12,28 +12,27 @@ import {
   Header,
 } from "semantic-ui-react";
 
-const JunctionConnectionTab = ({ junctionId }) => {
+const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
   const [cableDetails, setCableDetails] = useState(null);
   const [splitterDetails, setSplitterDetails] = useState(null);
-  console.log("hukkkkaa", cableDetails);
   const [connection, setConnection] = useState({
     left: null,
     right: null,
   });
   const [highlight, setHighlight] = useState([]);
   const [disableButtonList, setDisableButtonList] = useState([]);
-  console.log(splitterDetails);
   // const [connection, setConnection] = useState({
   //   left: { cableIdentifier: null, coreId: null, color: null },
   //   right: { cableIdentifier: null, coreId: null, color: null },
   // });
   useEffect(() => {
-    getCoreDetails(junctionId);
+    getCoreDetails(tjboxId);
   }, []);
 
   const getCoreDetails = async (id) => {
+    setLoading(true);
     try {
-      const { data, status } = await getJunctionCoreDetails(id);
+      const { data, status } = await getTJBoxCoreDetails(id);
       if (status === 200) {
         console.log("data", data);
         setCableDetails(data.cables);
@@ -42,6 +41,7 @@ const JunctionConnectionTab = ({ junctionId }) => {
     } catch (error) {
       return { data: null, status: null, error };
     }
+    setLoading(false);
   };
   const onConnect = async () => {
     if (!connection.left || !connection.right) {
@@ -54,7 +54,7 @@ const JunctionConnectionTab = ({ junctionId }) => {
     try {
       const { status } = await connectCores(payload);
       if (status === 201) {
-        getCoreDetails(junctionId);
+        getCoreDetails(tjboxId);
         onReset();
       }
     } catch (error) {
@@ -71,7 +71,7 @@ const JunctionConnectionTab = ({ junctionId }) => {
       const { status } = await disconnectCores(payload);
       if (status === 204) {
         onReset();
-        getCoreDetails(junctionId);
+        getCoreDetails(tjboxId);
       }
     } catch (error) {
       return { data: null, status: null, error };
@@ -88,7 +88,12 @@ const JunctionConnectionTab = ({ junctionId }) => {
       setConnection((prev) => ({ ...prev, right: data }));
     }
     if (splitterCores) {
-      const cores = splitterCores.map((core) => core.id);
+      const cores = [];
+      splitterDetails.forEach((splitter) => {
+        splitter.output_cores.forEach((core) => {
+          cores.push(core.id);
+        });
+      });
       setDisableButtonList((prev) => [...prev, ...cores]);
     } else {
       const cable = cableDetails.find((cable) => cable.id === data.cableId);
@@ -238,14 +243,17 @@ const JunctionConnectionTab = ({ junctionId }) => {
         splitterDetails.map((splitter) => (
           <>
             <Message
-              header="Gpon Out"
+              header={`${splitter.splitter_type} Splitter`}
               color="teal"
               style={{ textAlign: "center" }}
             />
             <Grid columns={2}>
               <GridRow>
                 <GridColumn width={5}>
-                  <Message attached header="Gpon Configuration" />
+                  <Message
+                    attached
+                    header={`${splitter.splitter_type} Configuration`}
+                  />
                   <Segment attached>
                     <p>
                       <b> {`Type : 1X${splitter.number_of_splitter}`}</b>
@@ -255,7 +263,7 @@ const JunctionConnectionTab = ({ junctionId }) => {
                 <GridColumn width={11}>
                   <Message attached header="core details" />
                   <Segment attached textAlign="center">
-                    {splitter.output_cores?.map((core) => (
+                    {splitter.output_cores?.map((core, index) => (
                       <p
                         key={core.id}
                         onClick={() => highlightConnectedCore(core)}
@@ -276,7 +284,27 @@ const JunctionConnectionTab = ({ junctionId }) => {
                               : {}
                           }
                         >
-                          <b>Output : {core.core_number}</b> &nbsp; &nbsp;
+                          {index === 0 ? (
+                            <Header
+                              as="h4"
+                              style={{
+                                display: "inline",
+                                marginRight: "1rem",
+                                backgroundColor: "#1EA1A1",
+                                padding: ".4rem 1.5rem",
+                              }}
+                            >
+                              Input core :
+                            </Header>
+                          ) : (
+                            <Header
+                              as="h4"
+                              style={{ display: "inline", marginRight: "1rem" }}
+                            >
+                              Output : {core.core_number}
+                            </Header>
+                          )}
+
                           {core.connected_to !== null ? (
                             <>
                               <Button basic compact color="grey">
@@ -326,8 +354,14 @@ const JunctionConnectionTab = ({ junctionId }) => {
             </Grid>
           </>
         ))}
+
+      {cableDetails?.length === 0 && splitterDetails?.length === 0 && (
+        <Segment textAlign="center" secondary>
+          No cble or splitter Found
+        </Segment>
+      )}
     </>
   );
 };
 
-export default JunctionConnectionTab;
+export default TJBoxConnectionTab;

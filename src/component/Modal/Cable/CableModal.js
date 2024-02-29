@@ -12,10 +12,8 @@ import {
 } from "semantic-ui-react";
 import CableEditTab from "./CableEditTab";
 import CableDetailsTab from "./CableDetailsTab";
-import { useEffect, useState } from "react";
-import { getCableDetails } from "../../../services";
-import handleError from "../../../utility/handleError";
-const CableModal = ({ cableId, onClose }) => {
+import CableCut from "./CableCut";
+const CableModal = ({ cableId, polyline, numberOfCores, onClose }) => {
   const panes = [
     {
       menuItem: "Details",
@@ -33,11 +31,24 @@ const CableModal = ({ cableId, onClose }) => {
         </TabPane>
       ),
     },
+    {
+      menuItem: "Cable Cut",
+      render: () => (
+        <TabPane attached={false} as={Segment}>
+          <CableCut
+            cableId={cableId}
+            polyline={polyline}
+            numberOfCores={numberOfCores}
+            modalClose={onClose}
+          />
+        </TabPane>
+      ),
+    },
   ];
   return (
     <Modal open onClose={onClose} size="large">
       <ModalHeader>Cable </ModalHeader>
-      <ModalContent scrolling>
+      <ModalContent>
         <ModalDescription>
           <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
         </ModalDescription>

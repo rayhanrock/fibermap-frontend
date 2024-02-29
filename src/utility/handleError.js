@@ -20,15 +20,15 @@ const handleError = (error) => {
               );
               return;
             }
-
+            console.log("fdfd", value);
             showError(value);
           }
         }
       }
     });
   };
-
-  if (error.request && error.request.data) {
+  if (error.request && error.request.status === 500) {
+    toast.error("Internal Server Error");
   } else if (error.response && error.response.data) {
     showError(error.response.data);
   } else {

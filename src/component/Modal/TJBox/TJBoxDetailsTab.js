@@ -2,84 +2,80 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { Button, Confirm, Dropdown, Form } from "semantic-ui-react";
 import {
-  deleteCable,
-  deleteClient,
-  getCableDetails,
-  getClient,
-  updateCableDetails,
-  updateClient,
+  getPop,
+  updatePop,
+  deletePop,
+  getTJBox,
+  updateTJBox,
+  deleteTJBox,
 } from "../../../services";
 import handleError from "../../../utility/handleError";
-import { updateCables, updateClients } from "../../../store/map/actions";
+import {
+  updateCables,
+  updateTJBoxs,
+  updatePops,
+} from "../../../store/map/actions";
 import { useDispatch } from "react-redux";
 
-const cableTypeOptions = [
-  { key: 1, text: "Line", value: "LINE" },
-  { key: 2, text: "Unerground", value: "UNDERGROUND" },
-  { key: 3, text: "Wireless", value: "WIRELESS" },
-];
-
-const CableEditTab = ({ cableId, modalClose }) => {
+const TJBoxDetailsTab = ({ tjboxId, modalClose }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const idInputRef = useRef();
-  const lengthInputRef = useRef();
+  const nameInputRef = useRef();
+  const addressInputRef = useRef();
   const notesInputRef = useRef();
   const descriptionInputRef = useRef();
-  const [cableType, setCableType] = useState("");
 
   const [confirmSubmit, setConfirmSubmit] = useState(false);
 
   useEffect(() => {
-    getCable();
+    getTJBoxDetails(tjboxId);
   }, []);
 
-  const getCable = async () => {
-    const { data, status, error } = await getCableDetails(cableId);
+  const getTJBoxDetails = async (id) => {
+    const { data, status, error } = await getTJBox(id);
     if (status === 200) {
-      idInputRef.current.value = data.identifier;
-      lengthInputRef.current.value = data.length;
-      notesInputRef.current.value = data.notes;
-      descriptionInputRef.current.value = data.description;
-      setCableType(data.type);
+      nameInputRef.current.value = data.name;
+      addressInputRef.current.value = data.marker.address;
+      notesInputRef.current.value = data.marker.notes;
+      descriptionInputRef.current.value = data.marker.description;
     }
     if (error) {
-      console.log("error", error);
       handleError(error);
     }
   };
 
   const handleEditClick = () => {
     setIsEditing(true);
-    idInputRef.current.focus();
-    toast.info("You can now edit the cable details.");
+    nameInputRef.current.focus();
+    toast.info("You can now edit the Tj Box details.");
   };
 
   const handleSave = async () => {
     const payload = {
-      identifier: idInputRef.current.value,
-      type: cableType,
-      length: lengthInputRef.current.value,
-      notes: notesInputRef.current.value,
-      description: descriptionInputRef.current.value,
+      name: nameInputRef.current.value,
+      marker: {
+        address: addressInputRef.current.value,
+        notes: notesInputRef.current.value,
+        description: descriptionInputRef.current.value,
+      },
     };
-    const response = await updateCableDetails(cableId, payload);
+    const response = await updateTJBox(tjboxId, payload);
     if (response.status === 200) {
       setIsEditing(false);
-      toast.success("Cable details updated successfully.");
-      dispatch(updateCables());
+      toast.success("TJ Box details updated successfully.");
+      dispatch(updatePops());
     }
     if (response.error) {
       handleError(response.error);
     }
   };
-
   const handleDelete = async () => {
-    const response = await deleteCable(cableId);
+    const response = await deleteTJBox(tjboxId);
     if (response.status === 204) {
       modalClose();
-      toast.success("Cable deleted successfully.");
+      toast.success("TJ Box deleted successfully.");
 
+      dispatch(updateTJBoxs());
       dispatch(updateCables());
     }
     if (response.error) {
@@ -98,26 +94,13 @@ const CableEditTab = ({ cableId, modalClose }) => {
     <Form>
       <Form.Group widths="equal">
         <Form.Field>
-          <label>ID</label>
-          <input readOnly={!isEditing} ref={idInputRef} />
-        </Form.Field>
-        <Form.Field>
-          <label>Type</label>
-          <Dropdown
-            fluid
-            options={cableTypeOptions}
-            selection
-            value={cableType}
-            onChange={(e, { value }) => {
-              setCableType(value);
-            }}
-            disabled={!isEditing}
-          />
+          <label>TJ Box Name</label>
+          <input name="name" readOnly={!isEditing} ref={nameInputRef} />
         </Form.Field>
       </Form.Group>
       <Form.Field>
-        <label>Length</label>
-        <input ref={lengthInputRef} readOnly={!isEditing} />
+        <label>Address</label>
+        <input name="address" ref={addressInputRef} readOnly={!isEditing} />
       </Form.Field>
       <Form.Field>
         <label>Notes</label>
@@ -152,6 +135,7 @@ const CableEditTab = ({ cableId, modalClose }) => {
           Delete
         </Button>
       </Form.Group>
+
       <Confirm
         className="secondary"
         open={confirmSubmit}
@@ -163,4 +147,4 @@ const CableEditTab = ({ cableId, modalClose }) => {
     </Form>
   );
 };
-export default CableEditTab;
+export default TJBoxDetailsTab;

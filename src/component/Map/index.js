@@ -1,25 +1,25 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { mapActions } from "../../store/map/reducer";
 
 import {
   updatePops,
   updateClients,
-  updateJunctions,
+  updateTJBoxs,
   updateGpons,
   updateCables,
+  updateResellers,
 } from "../../store/map/actions";
 import AddCable from "../Cable/AddCable";
 import Draw from "./Draw";
 
 import Cables from "./Cables";
 import Pops from "./Pops";
-import Junctions from "./Junctions";
+import TJBoxs from "./TJBoxs";
 import Clients from "./Clients";
 import Gpons from "./Gpons";
 import HighlightPath from "./HighlightPath";
 
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, LayersControl } from "react-leaflet";
 
 import L from "leaflet";
 
@@ -30,6 +30,7 @@ import CableColorInfo from "./CableColorInfo";
 import { useMapContext } from "../../contexts/map-context";
 import ModelFinderMarker from "./ModelFinderMarker";
 import SearchLocation from "./SearchLocation";
+import Resellers from "./Resellers";
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -42,6 +43,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const NetworkMap = () => {
+  const { BaseLayer } = LayersControl;
   const [center, setCenter] = useState({ lat: 22.8724, lng: 91.0973 });
   const { setMap } = useMapContext();
   const dispatch = useDispatch();
@@ -50,9 +52,10 @@ const NetworkMap = () => {
   useEffect(() => {
     dispatch(updatePops());
     dispatch(updateClients());
-    dispatch(updateJunctions());
+    dispatch(updateTJBoxs());
     dispatch(updateGpons());
     dispatch(updateCables());
+    dispatch(updateResellers());
   }, [dispatch]);
 
   return (
@@ -60,27 +63,28 @@ const NetworkMap = () => {
       <AddCable visible={drawLine !== null} />
 
       <MapContainer center={center} zoom={13} ref={setMap}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
-          subdomains={["mt0", "mt1", "mt2", "mt3"]}
-        />
-        {/* <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
-          subdomains={["mt0", "mt1", "mt2", "mt3"]}
-        /> */}
-        {/* <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
-          subdomains={["mt0", "mt1", "mt2", "mt3"]}
-        /> */}
+        <LayersControl position="topright">
+          <BaseLayer checked name="Satellite View">
+            <TileLayer
+              url="https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+              subdomains={["mt0", "mt1", "mt2", "mt3"]}
+            />
+          </BaseLayer>
+          <BaseLayer name="Street View">
+            <TileLayer
+              url="https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+              subdomains={["mt0", "mt1", "mt2", "mt3"]}
+            />
+          </BaseLayer>
+        </LayersControl>
+
         <CableColorInfo />
         <ModelFinderMarker />
         <Draw />
         <Pops />
         <Clients />
-        <Junctions />
+        <TJBoxs />
+        <Resellers />
         {/* <Gpons /> */}
         <Cables />
         <HighlightPath />

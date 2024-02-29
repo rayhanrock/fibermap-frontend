@@ -1,8 +1,9 @@
 import { Icon } from "leaflet";
 import peopleIcon from "../../assets/icons/user.png";
 import popIcon from "../../assets/icons/office.png";
-import junctionIcon from "../../assets/icons/junction.png";
+import tjBoxIcon from "../../assets/icons/junction.png";
 import gponIcon from "../../assets/icons/gpon.png";
+import resellerIcon from "../../assets/icons/reseller.png";
 import locationIcon from "../../assets/icons/location.png";
 
 export const PopIcon = new Icon({
@@ -15,8 +16,8 @@ export const ClientIcon = new Icon({
   iconSize: [28, 28],
 });
 
-export const JunctionIcon = new Icon({
-  iconUrl: junctionIcon,
+export const TJBoxIcon = new Icon({
+  iconUrl: tjBoxIcon,
   iconSize: [28, 28],
 });
 
@@ -29,4 +30,9 @@ export const RedMarkerIcon = new Icon({
   iconUrl: locationIcon,
   iconSize: [30, 30],
   iconAnchor: [15, 28],
+});
+
+export const ResellerIcon = new Icon({
+  iconUrl: resellerIcon,
+  iconSize: [28, 28],
 });

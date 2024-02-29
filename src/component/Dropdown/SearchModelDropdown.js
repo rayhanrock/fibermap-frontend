@@ -5,15 +5,15 @@ import { useSelector } from "react-redux";
 const SearchModelDropdown = ({ getValue, optionsType }) => {
   const clients = useSelector((state) => state.map.clients);
   const pops = useSelector((state) => state.map.pops);
-  const junctions = useSelector((state) => state.map.junctions);
-  const gpons = useSelector((state) => state.map.gpons);
+  const tjboxs = useSelector((state) => state.map.tjboxs);
+  const resellers = useSelector((state) => state.map.resellers);
 
   const [value, setValue] = useState(null);
   const optionSelection = {
     CLIENT: clients,
     POP: pops,
-    JUNCTION: junctions,
-    TJ_BOX: gpons,
+    TJ_BOX: tjboxs,
+    RESELLER: resellers,
   };
 
   useEffect(() => {

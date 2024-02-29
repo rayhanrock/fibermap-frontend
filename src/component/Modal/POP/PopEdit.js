@@ -15,6 +15,7 @@ const PopEdit = ({ popId, modalClose }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const nameInputRef = useRef();
+  const [prevName, setPrevName] = useState("");
   const addressInputRef = useRef();
   const notesInputRef = useRef();
   const descriptionInputRef = useRef();
@@ -33,7 +34,9 @@ const PopEdit = ({ popId, modalClose }) => {
       addressInputRef.current.value = data.marker.address;
       notesInputRef.current.value = data.marker.notes;
       descriptionInputRef.current.value = data.marker.description;
+
       setPopType(data.pop_type);
+      setPrevName(data.name);
     }
     if (error) {
       handleError(error);
@@ -61,6 +64,11 @@ const PopEdit = ({ popId, modalClose }) => {
       setIsEditing(false);
       toast.success("Pop details updated successfully.");
       dispatch(updatePops());
+      if (response.data.name !== prevName) {
+        setPrevName(response.data.name);
+        console.log("updating cable");
+        dispatch(updateCables());
+      }
     }
     if (response.error) {
       handleError(response.error);

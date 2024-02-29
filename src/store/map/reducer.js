@@ -8,7 +8,8 @@ const mapSlice = createSlice({
     drawLine: null,
     pops: null,
     clients: null,
-    junctions: null,
+    resellers: null,
+    tjboxs: null,
     gpons: null,
     cables: null,
     highlightPath: null,
@@ -30,8 +31,11 @@ const mapSlice = createSlice({
     setClients: (state, action) => {
       state.clients = action.payload;
     },
-    setJunctions: (state, action) => {
-      state.junctions = action.payload;
+    setResellers: (state, action) => {
+      state.resellers = action.payload;
+    },
+    setTJBoxs: (state, action) => {
+      state.tjboxs = action.payload;
     },
     setGpons: (state, action) => {
       state.gpons = action.payload;

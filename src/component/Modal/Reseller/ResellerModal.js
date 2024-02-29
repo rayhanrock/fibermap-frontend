@@ -1,6 +1,3 @@
-import JunctionConnectionTab from "./JunctionConnectionTab";
-import JunctionCreateSplitterTab from "./JunctionCreateSplitterTab";
-import JunctionDetailsTab from "./JunctionDetailsTab";
 import {
   ModalHeader,
   ModalDescription,
@@ -13,30 +10,33 @@ import {
   Tab,
   Segment,
 } from "semantic-ui-react";
+import ResellerDetailsTab from "./ResellerDetailsTab";
+import ResellerConnectionTab from "./ResellerConnectionTab";
+import ResellerEdit from "./ResellerEdit";
 
-const JunctionModal = ({ junctionId, onClose }) => {
+const ResellerModal = ({ resellerId, onClose }) => {
   const panes = [
     {
-      menuItem: "Details",
-      pane: (
-        <TabPane attached={false}>
-          <JunctionDetailsTab junctionId={junctionId} />
+      menuItem: "Paths",
+      render: () => (
+        <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
+          <ResellerDetailsTab resellerId={resellerId} modalClose={onClose} />
         </TabPane>
       ),
     },
     {
       menuItem: "Connection",
-      pane: (
+      render: () => (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
-          <JunctionConnectionTab junctionId={junctionId} />
+          <ResellerConnectionTab resellerId={resellerId} />
         </TabPane>
       ),
     },
     {
-      menuItem: "Create Splitter",
-      pane: (
+      menuItem: "Details",
+      render: () => (
         <TabPane attached={false} as={Segment} basic style={{ padding: 0 }}>
-          <JunctionCreateSplitterTab junctionId={junctionId} />
+          <ResellerEdit resellerId={resellerId} modalClose={onClose} />
         </TabPane>
       ),
     },
@@ -44,14 +44,10 @@ const JunctionModal = ({ junctionId, onClose }) => {
 
   return (
     <Modal open onClose={onClose} size="large">
-      <ModalHeader>Junction Details</ModalHeader>
+      <ModalHeader>Reseller Details</ModalHeader>
       <ModalContent scrolling>
         <ModalDescription>
-          <Tab
-            renderActiveOnly={false}
-            menu={{ secondary: true, pointing: true }}
-            panes={panes}
-          />
+          <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
         </ModalDescription>
       </ModalContent>
       <ModalActions>
@@ -63,4 +59,4 @@ const JunctionModal = ({ junctionId, onClose }) => {
   );
 };
 
-export default JunctionModal;
+export default ResellerModal;

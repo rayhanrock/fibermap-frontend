@@ -1,25 +1,25 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
+import { List, Button, Input, Icon, Grid } from "semantic-ui-react";
 import { useMapContext } from "../../contexts/map-context";
+import AddReseller from "./AddReseller";
 
-import { List, Button, Input, Grid, Icon } from "semantic-ui-react";
-import AddPop from "./AddPop";
-const Pop = () => {
+const Reseller = () => {
   const dispatch = useDispatch();
-  const [visible, setVisible] = useState(false);
-  const pops = useSelector((state) => state.map.pops);
+  const resellers = useSelector((state) => state.map.resellers);
   const { map } = useMapContext();
+  const [visible, setVisible] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredPops = pops?.filter((pop) =>
-    pop.identifier.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredResellers = resellers?.filter((reseller) =>
+    reseller.identifier.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <Grid>
-      <AddPop show={visible} setShow={setVisible} />
+      <AddReseller show={visible} setShow={setVisible} />
       <Grid.Row style={{ marginTop: "20px" }}>
         <Grid.Column>
           <Input
@@ -41,27 +41,23 @@ const Pop = () => {
       <Grid.Row>
         <Grid.Column>
           <List divided relaxed style={{ overflow: "auto", maxHeight: "45vh" }}>
-            {filteredPops?.map((pop) => (
+            {filteredResellers?.map((reseller) => (
               <List.Item
-                key={pop.identifier + pop.id}
+                key={reseller.identifier + reseller.id}
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   dispatch(
                     mapActions.setModelLatlang({
-                      lat: pop.latitude,
-                      lng: pop.longitude,
+                      lat: reseller.latitude,
+                      lng: reseller.longitude,
                     })
                   );
-                  map.flyTo([pop.latitude, pop.longitude]);
+                  map.flyTo([reseller.latitude, reseller.longitude]);
                 }}
               >
-                <List.Icon
-                  name="building"
-                  size="large"
-                  verticalAlign="middle"
-                />
+                <List.Icon name="home" size="large" verticalAlign="middle" />
                 <List.Content>
-                  <List.Header>{pop.identifier}</List.Header>
+                  <List.Header>{reseller.identifier}</List.Header>
                 </List.Content>
               </List.Item>
             ))}
@@ -78,7 +74,7 @@ const Pop = () => {
               setVisible(true);
             }}
           >
-            Create new Pop
+            Create new Reseller
           </Button>
         </Grid.Column>
       </Grid.Row>
@@ -86,4 +82,4 @@ const Pop = () => {
   );
 };
 
-export default Pop;
+export default Reseller;

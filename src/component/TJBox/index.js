@@ -2,24 +2,24 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
 import { List, Button, Input, Icon, Grid } from "semantic-ui-react";
-import AddJunction from "./AddJunction";
 import { useMapContext } from "../../contexts/map-context";
+import AddTJBox from "./AddTJBox";
 
-const Junction = () => {
+const TJBox = () => {
   const dispatch = useDispatch();
-  const junctions = useSelector((state) => state.map.junctions);
+  const tjboxs = useSelector((state) => state.map.tjboxs);
   const { map } = useMapContext();
 
   const [visible, setVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredJunctions = junctions?.filter((junction) =>
-    junction.identifier.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTJBoxs = tjboxs?.filter((tjbox) =>
+    tjbox.identifier.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <Grid>
-      <AddJunction show={visible} setShow={setVisible} />
+      <AddTJBox show={visible} setShow={setVisible} />
       <Grid.Row style={{ marginTop: "20px" }}>
         <Grid.Column>
           <Input
@@ -41,17 +41,18 @@ const Junction = () => {
       <Grid.Row>
         <Grid.Column>
           <List divided relaxed style={{ overflow: "auto", maxHeight: "45vh" }}>
-            {filteredJunctions?.map((junction) => (
+            {filteredTJBoxs?.map((tjbox) => (
               <List.Item
+                key={tjbox.identifier + tjbox.id}
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   dispatch(
                     mapActions.setModelLatlang({
-                      lat: junction.latitude,
-                      lng: junction.longitude,
+                      lat: tjbox.latitude,
+                      lng: tjbox.longitude,
                     })
                   );
-                  map.flyTo([junction.latitude, junction.longitude], 13);
+                  map.flyTo([tjbox.latitude, tjbox.longitude]);
                 }}
               >
                 <List.Icon
@@ -60,7 +61,7 @@ const Junction = () => {
                   verticalAlign="middle"
                 />
                 <List.Content>
-                  <List.Header>{junction.identifier}</List.Header>
+                  <List.Header>{tjbox.identifier}</List.Header>
                 </List.Content>
               </List.Item>
             ))}
@@ -77,7 +78,7 @@ const Junction = () => {
               setVisible(true);
             }}
           >
-            Create new Junction
+            Create new TJ Box
           </Button>
         </Grid.Column>
       </Grid.Row>
@@ -85,4 +86,4 @@ const Junction = () => {
   );
 };
 
-export default Junction;
+export default TJBox;

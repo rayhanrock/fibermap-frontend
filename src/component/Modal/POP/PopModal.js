@@ -45,7 +45,7 @@ const PopModal = ({ popId, popType, onClose }) => {
   return (
     <Modal open onClose={onClose} size="large">
       <ModalHeader>{popType} Details</ModalHeader>
-      <ModalContent scrolling>
+      <ModalContent>
         <ModalDescription>
           <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
         </ModalDescription>

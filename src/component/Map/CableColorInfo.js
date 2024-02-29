@@ -44,7 +44,7 @@ const CableColorInfo = () => {
             backgroundColor: "#000000",
           }}
         ></div>
-        <span style={{ marginLeft: "5px" }}>8 core</span>
+        <span style={{ marginLeft: "5px" }}>6 core</span>
       </div>
       <div style={childStyle}>
         <div
@@ -54,7 +54,7 @@ const CableColorInfo = () => {
             backgroundColor: "#800080",
           }}
         ></div>
-        <span style={{ marginLeft: "5px" }}>12 core</span>
+        <span style={{ marginLeft: "5px" }}>8 core</span>
       </div>
       <div style={childStyle}>
         <div
@@ -64,7 +64,7 @@ const CableColorInfo = () => {
             backgroundColor: "#FFA500",
           }}
         ></div>
-        <span style={{ marginLeft: "5px" }}>24 core</span>
+        <span style={{ marginLeft: "5px" }}>12 core</span>
       </div>
       <div style={childStyle}>
         <div
@@ -74,9 +74,18 @@ const CableColorInfo = () => {
             backgroundColor: "#FFFF00",
           }}
         ></div>
-        <span style={{ marginLeft: "5px" }}>36 core</span>
+        <span style={{ marginLeft: "5px" }}>24 core</span>
       </div>
-      
+      <div style={childStyle}>
+        <div
+          style={{
+            width: "15px",
+            height: "15px",
+            backgroundColor: "#008000",
+          }}
+        ></div>
+        <span style={{ marginLeft: "5px" }}>48 core</span>
+      </div>
     </div>
   );
 };

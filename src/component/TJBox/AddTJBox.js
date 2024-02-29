@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { createJunction } from "../../services";
+import { createTJBox } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
-import { updateJunctions } from "../../store/map/actions";
+import { updateTJBoxs } from "../../store/map/actions";
 import {
   Grid,
   Header,
@@ -17,8 +17,8 @@ import isEmptyStirng from "../../utility/isEmptyStirng";
 import handleError from "../../utility/handleError";
 import { toast } from "react-toastify";
 
-const AddJunction = ({ show, setShow }) => {
-  console.log("add junction");
+const AddTJBox = ({ show, setShow }) => {
+  console.log("add TJ Box");
   const dispatch = useDispatch();
   const latlang = useSelector((state) => state.map.latlang);
 
@@ -35,7 +35,7 @@ const AddJunction = ({ show, setShow }) => {
       toast.error("Please enter Identifier");
       return;
     } else if (isEmptyStirng(name)) {
-      toast.error("Please enter junction name");
+      toast.error("Please enter TJ Box name");
       return;
     } else if (isEmptyStirng(address)) {
       toast.error("Please enter address");
@@ -49,7 +49,7 @@ const AddJunction = ({ show, setShow }) => {
       identifier: id,
       name: name,
       marker: {
-        type: "JUNCTION",
+        type: "TJ_BOX",
         latitude: latlang.lat,
         longitude: latlang.lng,
         address: address,
@@ -58,13 +58,13 @@ const AddJunction = ({ show, setShow }) => {
       },
     };
 
-    const response = await createJunction(data);
+    const response = await createTJBox(data);
     if (response.status === 201) {
       dispatch(mapActions.updateLatLang(null));
-      dispatch(updateJunctions());
+      dispatch(updateTJBoxs());
       setShow(false);
 
-      toast.success("Junction Created successfully");
+      toast.success("TJ Box Created successfully");
       handleReset();
     }
     if (response.error) {
@@ -102,7 +102,7 @@ const AddJunction = ({ show, setShow }) => {
                 onClick={() => setShow(false)}
               />
 
-              <Header.Content>Create Junction</Header.Content>
+              <Header.Content>Create Tj Box</Header.Content>
             </Header>
           </Grid.Column>
         </Grid.Row>
@@ -121,7 +121,7 @@ const AddJunction = ({ show, setShow }) => {
               <Form.Field required>
                 <label>Name</label>
                 <input
-                  placeholder="Junction name"
+                  placeholder="TJ Box name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -166,4 +166,4 @@ const AddJunction = ({ show, setShow }) => {
   );
 };
 
-export default AddJunction;
+export default AddTJBox;

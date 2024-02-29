@@ -1,9 +1,10 @@
 import {
   getClients,
-  getJunctions,
+  getTJBoxs,
   getGpons,
   getPops,
   getCables,
+  getResellers,
 } from "../../services";
 import { mapActions } from "./reducer";
 
@@ -31,13 +32,26 @@ export const updateClients = () => {
     }
   };
 };
-
-export const updateJunctions = () => {
+export const updateResellers = () => {
   return async (dispatch) => {
     try {
-      const { data, status } = await getJunctions();
+      const { data, status } = await getResellers();
       if (status === 200) {
-        dispatch(mapActions.setJunctions(data));
+        console.log("data", data);
+        dispatch(mapActions.setResellers(data));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const updateTJBoxs = () => {
+  return async (dispatch) => {
+    try {
+      const { data, status } = await getTJBoxs();
+      if (status === 200) {
+        dispatch(mapActions.setTJBoxs(data));
       }
     } catch (error) {
       console.error(error);
