@@ -14,9 +14,9 @@ import { updateCables, updateClients } from "../../../store/map/actions";
 import { useDispatch } from "react-redux";
 
 const cableTypeOptions = [
-  { key: 1, text: "Line", value: "LINE" },
-  { key: 2, text: "Unerground", value: "UNDERGROUND" },
-  { key: 3, text: "Wireless", value: "WIRELESS" },
+  { key: "1", text: "Fiber", value: "FIBER" },
+  { key: "2", text: "CAT 6", value: "CAT-6" },
+  { key: "3", text: "Main Line", value: "MAIN_LINE" },
 ];
 
 const CableEditTab = ({ cableId, modalClose }) => {

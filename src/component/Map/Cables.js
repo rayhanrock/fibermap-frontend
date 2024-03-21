@@ -36,7 +36,7 @@ const Cables = () => {
           key={cable.id}
           pathOptions={{
             color: coreColorMap[cable.number_of_cores],
-            weight: 5,
+            weight: 3,
             // color: "green",
           }}
           positions={cable.polyline}
@@ -52,7 +52,6 @@ const Cables = () => {
             },
           }}
         >
-          {console.log("rendering...")}
           <Popup>
             <List>
               <ListItem>

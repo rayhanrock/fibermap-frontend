@@ -20,9 +20,9 @@ import { toast } from "react-toastify";
 import handleError from "../../utility/handleError";
 
 const cableOptions = [
-  { key: "1", text: "Line", value: "LINE" },
-  { key: "2", text: "Underground", value: "UNDERGROUND" },
-  { key: "3", text: "Wireless", value: "WIRELESS" },
+  { key: "1", text: "Fiber", value: "FIBER" },
+  { key: "2", text: "CAT 6", value: "CAT-6" },
+  { key: "3", text: "Main Line", value: "MAIN_LINE" },
 ];
 const coreOptions = [
   { key: "1", text: "2", value: "2" },

@@ -14,34 +14,47 @@ const Clients = () => {
     () =>
       clients?.map((client) => {
         return (
-          <Marker
-            icon={ClientIcon}
-            key={client.id}
-            position={[client.latitude, client.longitude]}
-            eventHandlers={{
-              mouseover: (event) => event.target.openPopup(),
-              mouseout: (event) => event.target.closePopup(),
-              click: (event) => {
-                map.flyTo([client.latitude, client.longitude]);
-                setShowClientModal(true);
-                setSelectedClientId(client.id);
-              },
-            }}
+          <div
+          // style={{
+          //   padding: "5rem",
+          //   backgroundColor: "green",
+          //   width: "1rem",
+          //   height: "1rem",
+          // }}
+          //   key={client.id}
+          //   onMouseOver={() => {
+          //     alert(client.id);
+          //   }}
           >
-            <Popup>
-              <List>
-                <ListItem>
-                  <b>ID:</b> {client.identifier}
-                </ListItem>
-                <ListItem>
-                  <b>Name:</b> {client.name}
-                </ListItem>
-                <ListItem>
-                  <b>Address:</b> {client.address}
-                </ListItem>
-              </List>
-            </Popup>
-          </Marker>
+            <Marker
+              icon={ClientIcon}
+              key={client.id}
+              position={[client.latitude, client.longitude]}
+              eventHandlers={{
+                mouseover: (event) => event.target.openPopup(),
+                mouseout: (event) => event.target.closePopup(),
+                click: (event) => {
+                  map.flyTo([client.latitude, client.longitude]);
+                  setShowClientModal(true);
+                  setSelectedClientId(client.id);
+                },
+              }}
+            >
+              <Popup>
+                <List>
+                  <ListItem>
+                    <b>ID:</b> {client.identifier}
+                  </ListItem>
+                  <ListItem>
+                    <b>Name:</b> {client.name}
+                  </ListItem>
+                  <ListItem>
+                    <b>Address:</b> {client.address}
+                  </ListItem>
+                </List>
+              </Popup>
+            </Marker>
+          </div>
         );
       }),
     [clients]
