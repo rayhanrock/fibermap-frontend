@@ -42,24 +42,32 @@ export const authCheckState = () => {
     if (!token) {
       dispatch(authActions.authLogout());
     } else {
-      const expirationDate = new Date(localStorage.getItem("expirationDate"));
-
-      if (expirationDate <= new Date()) {
-        dispatch(authActions.authLogout());
-      } else {
-        const response = await verifyToken();
-        if (response.status === 200) {
-          dispatch(authActions.authSuccess(token));
-        }
-        if (response.error) {
-          dispatch(authActions.authLogout());
-          handleError(response.error);
-        }
-
-        dispatch(
-          checkAuthTimeOut((expirationDate - new Date().getTime()) / 1000)
-        );
+      const response = await verifyToken();
+      if (response.status === 200) {
+        dispatch(authActions.authSuccess(token));
       }
+      if (response.error) {
+        dispatch(authActions.authLogout());
+        handleError(response.error);
+      }
+      // const expirationDate = new Date(localStorage.getItem("expirationDate"));
+
+      // if (expirationDate <= new Date()) {
+      //   dispatch(authActions.authLogout());
+      // } else {
+      //   const response = await verifyToken();
+      //   if (response.status === 200) {
+      //     dispatch(authActions.authSuccess(token));
+      //   }
+      //   if (response.error) {
+      //     dispatch(authActions.authLogout());
+      //     handleError(response.error);
+      //   }
+
+      //   dispatch(
+      //     checkAuthTimeOut((expirationDate - new Date().getTime()) / 1000)
+      //   );
+      // }
     }
   };
 };

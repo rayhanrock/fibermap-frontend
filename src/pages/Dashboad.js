@@ -19,7 +19,6 @@ const Dashboard = () => {
     };
     fetchData();
   }, []);
-  console.log("dashboardData", dashboardData);
   return (
     <>
       <Grid columns="equal" padded textAlign="center">
@@ -29,6 +28,15 @@ const Dashboard = () => {
               size="small"
               label="Number of clients"
               value={dashboardData?.total_clients}
+            />
+          </Segment>
+        </GridColumn>
+        <GridColumn textAlign="center">
+          <Segment color="black">
+            <Statistic
+              size="small"
+              label="Number of Resellers"
+              value={dashboardData?.total_resellers}
             />
           </Segment>
         </GridColumn>
@@ -43,8 +51,8 @@ const Dashboard = () => {
           </Segment>
         </GridColumn>
       </Grid>
-      <Grid columns="equal" padded textAlign="center">
-        <GridColumn>
+      <Grid columns={3} padded>
+        <GridColumn textAlign="center">
           <Segment color="black">
             <Statistic
               size="small"
@@ -54,7 +62,7 @@ const Dashboard = () => {
           </Segment>
         </GridColumn>
 
-        <GridColumn>
+        <GridColumn textAlign="center">
           <Segment color="black">
             <Statistic
               size="small"

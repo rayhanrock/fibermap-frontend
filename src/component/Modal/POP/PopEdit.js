@@ -66,7 +66,6 @@ const PopEdit = ({ popId, modalClose }) => {
       dispatch(updatePops());
       if (response.data.name !== prevName) {
         setPrevName(response.data.name);
-        console.log("updating cable");
         dispatch(updateCables());
       }
     }
@@ -110,7 +109,6 @@ const PopEdit = ({ popId, modalClose }) => {
             selection
             value={popType}
             onChange={(e, { value }) => {
-              console.log(value);
               setPopType(value);
             }}
             disabled={!isEditing}

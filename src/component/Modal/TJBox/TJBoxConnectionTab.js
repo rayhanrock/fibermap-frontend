@@ -12,6 +12,8 @@ import {
   Header,
 } from "semantic-ui-react";
 
+import banglaColorMap from "../../../utility/banglaColorMap";
+
 const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
   const [cableDetails, setCableDetails] = useState(null);
   const [splitterDetails, setSplitterDetails] = useState(null);
@@ -34,7 +36,6 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
     try {
       const { data, status } = await getTJBoxCoreDetails(id);
       if (status === 200) {
-        console.log("data", data);
         setCableDetails(data.cables);
         setSplitterDetails(data.splitters);
       }
@@ -123,14 +124,24 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
             <Segment>
               <Header as="h4">
                 {connection.left &&
-                  `Cable : ${connection.left.cableIdentifier} | Core : ${connection.left.coreId} (${connection.left.color})`}
+                  connection.left.cableIdentifier &&
+                  `Cable ID: ${connection.left.cableIdentifier} | Core : ${
+                    banglaColorMap[connection.left.color]
+                  }`}
+                {connection.left &&
+                  !connection.left.cableIdentifier &&
+                  `Splitter core: ${connection.left.coreNumber}`}
               </Header>
             </Segment>
             <Segment>----- Connected with -----</Segment>
             <Segment secondary>
               <Header as="h4" disabled={connection.right ? false : true}>
                 {connection.right
-                  ? `Cable : ${connection.right.cableIdentifier} | Core : ${connection.right.coreId} (${connection.right.color})`
+                  ? connection.right.cableIdentifier
+                    ? `Cable ID: ${connection.right.cableIdentifier} | Core : ${
+                        banglaColorMap[connection.right.color]
+                      }`
+                    : `Splitter core: ${connection.right.coreNumber}`
                   : "SELECT ANOTHER TO CONNECT"}
               </Header>
             </Segment>
@@ -167,9 +178,9 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
             <GridColumn width={11}>
               <Message attached header="core details" />
               <Segment attached textAlign="center">
-                {cable.cores?.map((core) => (
+                {cable.cores?.map((core, index) => (
                   <p
-                    key={core.id}
+                    key={index}
                     onClick={() => highlightConnectedCore(core)}
                     style={
                       highlight.includes(core.id)
@@ -188,10 +199,10 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
                           : {}
                       }
                     >
-                      <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
+                      <b>CORE : {banglaColorMap[core.color]}</b> &nbsp; &nbsp;
                       {core.connected_to !== null ? (
                         <>
-                          <Button basic compact color={core.color}>
+                          <Button basic compact color="green">
                             Connected
                           </Button>
                           <Button
@@ -206,7 +217,7 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
                         </>
                       ) : (
                         <>
-                          <Button basic compact color={core.color}>
+                          <Button basic compact>
                             Unused
                           </Button>
                           <Button
@@ -240,12 +251,12 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
       </Grid>
       {splitterDetails &&
         splitterDetails.length > 0 &&
-        splitterDetails.map((splitter) => (
-          <>
+        splitterDetails.map((splitter, index) => (
+          <div key={index}>
             <Message
               header={`${splitter.splitter_type} Splitter`}
               color="teal"
-              style={{ textAlign: "center" }}
+              style={{ textAlign: "center", marginTop: "1rem" }}
             />
             <Grid columns={2}>
               <GridRow>
@@ -265,7 +276,7 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
                   <Segment attached textAlign="center">
                     {splitter.output_cores?.map((core, index) => (
                       <p
-                        key={core.id}
+                        key={index}
                         onClick={() => highlightConnectedCore(core)}
                         style={
                           highlight.includes(core.id)
@@ -285,24 +296,27 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
                           }
                         >
                           {index === 0 ? (
-                            <Header
-                              as="h4"
+                            <span
                               style={{
                                 display: "inline",
                                 marginRight: "1rem",
                                 backgroundColor: "#1EA1A1",
                                 padding: ".4rem 1.5rem",
+                                fontWeight: "bold",
                               }}
                             >
                               Input core :
-                            </Header>
+                            </span>
                           ) : (
-                            <Header
-                              as="h4"
-                              style={{ display: "inline", marginRight: "1rem" }}
+                            <span
+                              style={{
+                                display: "inline",
+                                marginRight: "1rem",
+                                fontWeight: "bold",
+                              }}
                             >
                               Output : {core.core_number}
-                            </Header>
+                            </span>
                           )}
 
                           {core.connected_to !== null ? (
@@ -335,6 +349,7 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
                                       cableId: null,
                                       cableIdentifier: null,
                                       coreId: core.id,
+                                      coreNumber: core.core_number,
                                       color: null,
                                     },
                                     splitter.output_cores
@@ -352,7 +367,7 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
                 </GridColumn>
               </GridRow>
             </Grid>
-          </>
+          </div>
         ))}
 
       {cableDetails?.length === 0 && splitterDetails?.length === 0 && (

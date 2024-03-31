@@ -46,12 +46,18 @@ const CreateUser = () => {
     <Grid centered>
       <Grid.Column mobile={12} tablet={10} computer={8}>
         <Header
-          style={{ marginTop: "15px", marginBottom: "30px" }}
+          style={{
+            marginTop: "15px",
+            paddingBottom: "13px",
+            marginBottom: "25px",
+
+            textAlign: "center",
+          }}
           textAlign="center"
           as="h2"
           dividing
         >
-          Hello !
+          Hi there !
           <Header.Subheader>Want to create a new account?</Header.Subheader>
         </Header>
         <Form onSubmit={handleSubmit}>

@@ -30,7 +30,6 @@ const SearchModelDropdown = ({ getValue, optionsType }) => {
       })
     : [];
 
-  console.log("options", options);
   const handleChange = (e, { value }) => {
     setValue(value);
     getValue(value);

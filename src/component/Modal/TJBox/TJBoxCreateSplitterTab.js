@@ -19,27 +19,21 @@ const splitterOptions = [
   { key: 6, text: "32", value: 32 },
 ];
 const TJBoxCreateSplitterTab = ({ tjboxId }) => {
-  const [id, setId] = useState("");
   const [splitter, setSplitter] = useState(2);
 
   const [splitterType, setSplitterType] = useState("");
   const handleCreateSplitter = async () => {
-    if (isEmptyStirng(id)) {
-      toast.error("Please enter ID");
-      return;
-    } else if (isEmptyStirng(splitterType)) {
+    if (isEmptyStirng(splitterType)) {
       toast.error("Please enter gpon type");
       return;
     }
 
     const data = {
-      identifier: id,
       name: splitterType,
       splitter: splitter,
       tj_box: tjboxId,
     };
 
-    console.log(data);
     const response = await createGpon(data);
     if (response.status === 201) {
       toast.success("Splitter created successfully");
@@ -51,20 +45,11 @@ const TJBoxCreateSplitterTab = ({ tjboxId }) => {
   };
 
   const handleReset = () => {
-    setId("");
     setSplitterType("");
     setSplitter(2);
   };
   return (
     <Form>
-      <Form.Field required>
-        <label>ID</label>
-        <input
-          placeholder="Must be unique"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-        />
-      </Form.Field>
       <Form.Field>
         <label>Type</label>
         <Dropdown
@@ -73,7 +58,6 @@ const TJBoxCreateSplitterTab = ({ tjboxId }) => {
           selection
           value={splitterType}
           onChange={(e, { value }) => {
-            console.log(value);
             setSplitterType(value);
           }}
         />

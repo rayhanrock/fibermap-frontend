@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { List, ListItem } from "semantic-ui-react";
 import ResellerModal from "../Modal/Reseller/ResellerModal";
 const Resellers = () => {
-  console.log("Resellers iun mapp");
   const resellers = useSelector((state) => state.map.resellers);
   const map = useMap();
   const [showResellerModal, setShowResellerModal] = useState(false);

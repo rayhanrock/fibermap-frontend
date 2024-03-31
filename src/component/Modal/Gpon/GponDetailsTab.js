@@ -102,7 +102,6 @@ const GponDetailsTab = ({ gponId, modalClose }) => {
             selection
             value={gponType}
             onChange={(e, { value }) => {
-              console.log(value);
               setGponType(value);
             }}
             disabled={!isEditing}

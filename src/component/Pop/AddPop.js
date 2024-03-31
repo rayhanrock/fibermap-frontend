@@ -24,7 +24,6 @@ const popTypeOptions = [
 ];
 
 const AddPop = ({ show, setShow }) => {
-  console.log("add pop");
   const dispatch = useDispatch();
   const latlang = useSelector((state) => state.map.latlang);
   const [id, setId] = useState("");
@@ -79,7 +78,6 @@ const AddPop = ({ show, setShow }) => {
       handleReset();
     }
     if (response.error) {
-      console.log("error", response.error);
       handleError(response.error);
     }
   };
@@ -147,7 +145,6 @@ const AddPop = ({ show, setShow }) => {
                   selection
                   value={popType}
                   onChange={(e, { value }) => {
-                    console.log(value);
                     setPopType(value);
                   }}
                 />

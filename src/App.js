@@ -4,11 +4,11 @@ import "react-toastify/dist/ReactToastify.css";
 import routes from "./routes";
 import Layout from "./layout/MainLayout";
 import Page404 from "./pages/Page404";
-import Login from "./pages/Login";
 import RequireAuth from "./HOC/RequireAuth";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { authCheckState } from "./store/auth/actions";
+import Login from "./pages/Login";
 
 function App() {
   const dispatch = useDispatch();

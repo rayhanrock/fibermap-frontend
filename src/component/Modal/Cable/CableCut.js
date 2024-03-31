@@ -44,7 +44,6 @@ const CableCut = ({ cableId, polyline, numberOfCores, modalClose }) => {
   const [name, setName] = useState("");
 
   const getSegment = (latlng, line) => {
-    console.log("getSegment", latlng, line);
     // get layerpoint of user click
     const latlngs = line._latlngs;
     let segments = [];
@@ -108,7 +107,6 @@ const CableCut = ({ cableId, polyline, numberOfCores, modalClose }) => {
       tjbox_name: name,
     };
     const reponse = await cableCut(cableId, payload);
-    console.log("payload", payload);
     if (reponse.status === 200) {
       handleReset();
       dispatch(updateCables());
@@ -164,9 +162,7 @@ const CableCut = ({ cableId, polyline, numberOfCores, modalClose }) => {
               eventHandlers={{
                 click: (event) => onPolylineClick(event),
               }}
-            >
-              {console.log("rendering...")}
-            </Polyline>
+            ></Polyline>
             {latlang && (
               <Marker icon={RedMarkerIcon} position={latlang}></Marker>
             )}

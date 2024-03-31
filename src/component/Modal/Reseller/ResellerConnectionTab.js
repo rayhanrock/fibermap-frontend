@@ -11,6 +11,7 @@ import {
   Message,
   Button,
 } from "semantic-ui-react";
+import banglaColorMap from "../../../utility/banglaColorMap";
 
 const ResellerConnectionTab = ({ resellerId }) => {
   const [cableDetails, setCableDetails] = useState(null);
@@ -68,10 +69,10 @@ const ResellerConnectionTab = ({ resellerId }) => {
                 <Segment attached textAlign="center">
                   {cable.cores?.map((core) => (
                     <p key={core.id}>
-                      <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
+                      <b>CORE : {banglaColorMap[core.color]}</b> &nbsp; &nbsp;
                       {core.assigned ? (
                         <>
-                          <Button basic compact color={core.color}>
+                          <Button basic compact color="green">
                             Used
                           </Button>
                           <Button
@@ -86,7 +87,7 @@ const ResellerConnectionTab = ({ resellerId }) => {
                         </>
                       ) : (
                         <>
-                          <Button basic compact color={core.color}>
+                          <Button basic compact>
                             Unused
                           </Button>
                           <Button

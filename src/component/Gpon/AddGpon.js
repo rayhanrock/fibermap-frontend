@@ -45,7 +45,6 @@ const AddGpon = ({ show, setShow }) => {
     setSplitter(value);
   };
   const handleSubmit = async (e) => {
-    console.log(id, name, address);
     e.preventDefault();
     if (isEmptyStirng(id)) {
       toast.error("Please enter Identifier");
@@ -74,7 +73,7 @@ const AddGpon = ({ show, setShow }) => {
         description: description,
       },
     };
-    console.log(data);
+
     const response = await createGpon(data);
     if (response.status === 201) {
       dispatch(mapActions.updateLatLang(null));
@@ -142,7 +141,6 @@ const AddGpon = ({ show, setShow }) => {
                   selection
                   value={name}
                   onChange={(e, { value }) => {
-                    console.log(value);
                     setName(value);
                   }}
                 />

@@ -22,7 +22,6 @@ const mapSlice = createSlice({
       state.latlang = action.payload;
     },
     setDrawLine: (state, action) => {
-      console.log("setDrawLine", action.payload);
       state.drawLine = action.payload;
     },
     setPops: (state, action) => {

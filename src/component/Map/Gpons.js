@@ -5,7 +5,6 @@ import GponModal from "../Modal/Gpon/GponModal";
 import { useSelector } from "react-redux";
 import { List, ListItem } from "semantic-ui-react";
 const Gpons = () => {
-  console.log("Gpons iun mapp");
   const gpons = useSelector((state) => state.map.gpons);
   const map = useMap();
   const [selectedGponId, setSelectedGponId] = useState(null);

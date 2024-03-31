@@ -5,7 +5,6 @@ import PopModal from "../Modal/POP/PopModal";
 import { useSelector } from "react-redux";
 import { List, ListItem } from "semantic-ui-react";
 const Pops = () => {
-  console.log("Pops iun mapp");
   const pops = useSelector((state) => state.map.pops);
   const map = useMap();
 

@@ -14,7 +14,6 @@ const drawOptions = {
   marker: false,
 };
 const Draw = () => {
-  console.log("Draw");
   const dispatch = useDispatch();
 
   const [drawing, setDrawing] = useState(false);

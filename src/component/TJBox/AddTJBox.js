@@ -18,7 +18,6 @@ import handleError from "../../utility/handleError";
 import { toast } from "react-toastify";
 
 const AddTJBox = ({ show, setShow }) => {
-  console.log("add TJ Box");
   const dispatch = useDispatch();
   const latlang = useSelector((state) => state.map.latlang);
 

@@ -37,7 +37,6 @@ export const updateResellers = () => {
     try {
       const { data, status } = await getResellers();
       if (status === 200) {
-        console.log("data", data);
         dispatch(mapActions.setResellers(data));
       }
     } catch (error) {

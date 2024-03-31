@@ -22,7 +22,6 @@ import handleError from "../../../utility/handleError";
 
 const GponConnectionTab = ({ gponId }) => {
   const [cableDetails, setCableDetails] = useState(null);
-  console.log("gpon", cableDetails);
   const [connection, setConnection] = useState({
     left: null,
     right: null,

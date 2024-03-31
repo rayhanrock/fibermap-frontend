@@ -44,7 +44,6 @@ const Cables = () => {
             mouseover: (event) => event.target.openPopup(),
             mouseout: (event) => event.target.closePopup(),
             click: (event) => {
-              console.log(event);
               setShowCableModal(true);
               setSelectedCableId(cable.id);
               setSelectedPolyline(cable.polyline);

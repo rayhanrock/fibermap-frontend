@@ -11,6 +11,7 @@ import {
   SegmentGroup,
   Header,
 } from "semantic-ui-react";
+import banglaColorMap from "../../../utility/banglaColorMap";
 
 const PopConnectionTab = ({ popId }) => {
   const [cableDetails, setCableDetails] = useState(null);
@@ -20,7 +21,6 @@ const PopConnectionTab = ({ popId }) => {
   });
   const [highlight, setHighlight] = useState([]);
   const [disableButtonList, setDisableButtonList] = useState([]);
-  console.log("cableDetails", cableDetails);
   // const [connection, setConnection] = useState({
   //   left: { cableIdentifier: null, coreId: null, color: null },
   //   right: { cableIdentifier: null, coreId: null, color: null },
@@ -98,7 +98,6 @@ const PopConnectionTab = ({ popId }) => {
     setDisableButtonList((prev) => [...prev, ...core]);
   };
 
-  console.log("disbalecore", disableButtonList);
   const onReset = () => {
     setDisableButtonList([]);
     setHighlight([]);
@@ -125,14 +124,18 @@ const PopConnectionTab = ({ popId }) => {
             <Segment>
               <Header as="h4">
                 {connection.left &&
-                  `Cable : ${connection.left.cableIdentifier} | Core : ${connection.left.coreId} (${connection.left.color})`}
+                  `Cable : ${connection.left.cableIdentifier} | Core :  (${
+                    banglaColorMap[connection.left.color]
+                  })`}
               </Header>
             </Segment>
             <Segment>----- Connected with -----</Segment>
             <Segment secondary>
               <Header as="h4" disabled={connection.right ? false : true}>
                 {connection.right
-                  ? `Cable : ${connection.right.cableIdentifier} | Core : ${connection.right.coreId} (${connection.right.color})`
+                  ? `Cable : ${connection.right.cableIdentifier} | Core : (${
+                      banglaColorMap[connection.right.color]
+                    })`
                   : "SELECT ANOTHER TO CONNECT"}
               </Header>
             </Segment>
@@ -191,11 +194,10 @@ const PopConnectionTab = ({ popId }) => {
                             : {}
                         }
                       >
-                        <b>CORE NUMBER : {core.core_number}</b> &nbsp; &nbsp;
+                        <b>CORE : {banglaColorMap[core.color]}</b> &nbsp; &nbsp;
                         {!core.assigned && !core.connected_to && (
                           <>
-                            {" "}
-                            <Button basic compact color={core.color}>
+                            <Button basic compact>
                               Unused
                             </Button>{" "}
                             <Button
@@ -227,7 +229,7 @@ const PopConnectionTab = ({ popId }) => {
                         )}
                         {core.connected_to && (
                           <>
-                            <Button basic compact color={core.color}>
+                            <Button basic compact color="green">
                               Connected
                             </Button>
                             <Button
@@ -243,7 +245,7 @@ const PopConnectionTab = ({ popId }) => {
                         )}
                         {core.assigned && (
                           <>
-                            <Button basic compact color={core.color}>
+                            <Button basic compact color="green">
                               Used
                             </Button>
                             <Button

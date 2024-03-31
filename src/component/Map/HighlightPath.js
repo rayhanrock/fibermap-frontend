@@ -1,8 +1,7 @@
-import { Popup, FeatureGroup, Polyline } from "react-leaflet";
+import { FeatureGroup, Polyline } from "react-leaflet";
 import { useSelector, useDispatch } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
 const HighlightPath = () => {
-  console.log("HighlightPath iun mapp");
   const dispatch = useDispatch();
   const highlightPath = useSelector((state) => state.map.highlightPath);
 
@@ -39,14 +38,12 @@ const HighlightPath = () => {
             </span>
           </button>
         )}
-        {highlightPath?.map((cable) => (
+        {highlightPath?.map((cable, index) => (
           <Polyline
-            key={cable.cable_id}
+            key={index}
             pathOptions={{ color: cable.color, weight: 6 }}
             positions={cable.cable_line}
-          >
-            <Popup>{cable.identifier}</Popup>
-          </Polyline>
+          ></Polyline>
         ))}
       </FeatureGroup>
     </>

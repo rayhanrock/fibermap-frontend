@@ -13,9 +13,9 @@ export const PopIcon = new Icon({
 
 export const ClientIcon = new Icon({
   iconUrl: peopleIcon,
-  iconSize: [38, 55],
+  iconSize: [34, 55],
   popupAnchor: [0, -40],
-  iconAnchor: [19, 52],
+  iconAnchor: [17.5, 52.5],
 });
 
 export const TJBoxIcon = new Icon({

@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 import { createReseller } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
@@ -18,7 +18,6 @@ import handleError from "../../utility/handleError";
 import isEmptyStirng from "../../utility/isEmptyStirng";
 
 const AddReseller = ({ show, setShow }) => {
-  console.log("add AddReseller");
   const dispatch = useDispatch();
   const latlang = useSelector((state) => state.map.latlang);
 

@@ -1,5 +1,5 @@
 import { Segment } from "semantic-ui-react";
-
+import banglaColorMap from "../../utility/banglaColorMap";
 const style = {
   textAlign: "center",
   padding: "0",
@@ -7,6 +7,7 @@ const style = {
   paddingBottom: "1px",
   whiteSpace: "nowrap",
 };
+
 const PathConnection = ({ path }) => (
   <div style={{ display: "flex", marginTop: "5px", marginBottom: "5rem" }}>
     <div
@@ -39,19 +40,34 @@ const PathConnection = ({ path }) => (
           <Segment basic style={style}>
             {item.model_type + " >"}
           </Segment>
-          <Segment basic color={item.color} style={style}>
+          <Segment
+            basic
+            style={{ ...style, borderTop: `2px solid ${item.color}` }}
+          >
             {item.cable_identifier}
           </Segment>
-          <Segment basic color={item.color} style={style}>
+          <Segment
+            basic
+            style={{ ...style, borderTop: `2px solid ${item.color}` }}
+          >
             {item.model_identifier}
           </Segment>
-          <Segment basic color={item.color} style={style}>
-            {item.color}
+          <Segment
+            basic
+            style={{ ...style, borderTop: `2px solid ${item.color}` }}
+          >
+            {banglaColorMap[item.color]}
           </Segment>
-          <Segment basic color={item.color} style={style}>
+          <Segment
+            basic
+            style={{ ...style, borderTop: `2px solid ${item.color}` }}
+          >
             {item.total_cable_core}
           </Segment>
-          <Segment basic color={item.color} style={style}>
+          <Segment
+            basic
+            style={{ ...style, borderTop: `2px solid ${item.color}` }}
+          >
             {item.cable_length}
           </Segment>
         </div>

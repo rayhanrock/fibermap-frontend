@@ -3,14 +3,11 @@ import { toast } from "react-toastify";
 import { Button, Confirm, Dropdown, Form } from "semantic-ui-react";
 import {
   deleteCable,
-  deleteClient,
   getCableDetails,
-  getClient,
   updateCableDetails,
-  updateClient,
 } from "../../../services";
 import handleError from "../../../utility/handleError";
-import { updateCables, updateClients } from "../../../store/map/actions";
+import { updateCables } from "../../../store/map/actions";
 import { useDispatch } from "react-redux";
 
 const cableTypeOptions = [
@@ -44,7 +41,6 @@ const CableEditTab = ({ cableId, modalClose }) => {
       setCableType(data.type);
     }
     if (error) {
-      console.log("error", error);
       handleError(error);
     }
   };

@@ -2,8 +2,6 @@ import { Marker, useMapEvents } from "react-leaflet";
 import { useDispatch, useSelector } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
 function LocationMarker() {
-  console.log("LocationMarker");
-
   const latlang = useSelector((state) => state.map.latlang);
   const dispatch = useDispatch();
 

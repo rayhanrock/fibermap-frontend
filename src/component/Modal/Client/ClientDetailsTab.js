@@ -9,7 +9,6 @@ const ClientDetailsTab = ({ clientId, modalClose }) => {
   const dispatch = useDispatch();
   const [connectionPaths, setConnectionPaths] = useState(null);
 
-  console.log("paths", connectionPaths);
   useEffect(() => {
     getPaths(clientId);
   }, []);
@@ -34,12 +33,23 @@ const ClientDetailsTab = ({ clientId, modalClose }) => {
       {connectionPaths && connectionPaths.length > 0 ? (
         connectionPaths.map((path, index) => {
           return (
-            <>
-              <Button onClick={() => handleHighlightPath(path.path_direction)}>
-                SHOW PATH ON MAP
+            <div
+              style={{
+                backgroundColor: "#F0F0F0",
+                padding: "10px",
+                textAlign: "center",
+                marginBottom: "1rem",
+              }}
+              key={index}
+            >
+              <Button
+                style={{ margin: "1rem" }}
+                onClick={() => handleHighlightPath(path.path_direction)}
+              >
+                SHOW THIS PATH ON MAP
               </Button>
               <PathConnection key={index} path={path} />
-            </>
+            </div>
           );
         })
       ) : (

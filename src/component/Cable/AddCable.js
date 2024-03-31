@@ -35,7 +35,6 @@ const coreOptions = [
 ];
 
 const AddCable = ({ visible }) => {
-  console.log("add cable visible");
   const dispatch = useDispatch();
   const drawLine = useSelector((state) => state.map.drawLine);
   const [id, setId] = useState("");

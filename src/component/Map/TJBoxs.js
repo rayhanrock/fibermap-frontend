@@ -5,7 +5,6 @@ import TJBoxModal from "../Modal/TJBox/TJBoxModal";
 import { useSelector } from "react-redux";
 import { List, ListItem } from "semantic-ui-react";
 const TJBoxs = () => {
-  console.log("TJBoxs iun mapp");
   const tjboxs = useSelector((state) => state.map.tjboxs);
   const [selectedTJBoxId, setSelectedTJBoxId] = useState(null);
   const [showTJBoxModal, setShowTJBoxModal] = useState(false);
