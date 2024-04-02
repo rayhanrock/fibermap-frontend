@@ -31,6 +31,8 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
     getCoreDetails(tjboxId);
   }, []);
 
+  console.log("splitterDetails", splitterDetails);
+
   const getCoreDetails = async (id) => {
     setLoading(true);
     try {
@@ -91,10 +93,17 @@ const TJBoxConnectionTab = ({ tjboxId, setLoading }) => {
     if (splitterCores) {
       const cores = [];
       splitterDetails.forEach((splitter) => {
-        splitter.output_cores.forEach((core) => {
-          cores.push(core.id);
-        });
+        if (data.coreNumber == 0) {
+          splitter.output_cores.forEach((core) => {
+            core.core_number == 0 && cores.push(core.id);
+          });
+        } else {
+          splitter.output_cores.forEach((core) => {
+            core.core_number != 0 && cores.push(core.id);
+          });
+        }
       });
+      splitterCores.forEach((core) => cores.push(core.id));
       setDisableButtonList((prev) => [...prev, ...cores]);
     } else {
       const cable = cableDetails.find((cable) => cable.id === data.cableId);

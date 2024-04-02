@@ -4,8 +4,6 @@ import {
   Header,
   Form,
   Button,
-  GridColumn,
-  Segment,
   Image,
   Checkbox,
 } from "semantic-ui-react";
@@ -15,8 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { authLogin } from "../store/auth/actions";
 import { Navigate } from "react-router-dom";
 import logo from "../assets/images/logo.jpg";
-import googolePlay from "../assets/images/google-play.png";
-import appStore from "../assets/images/softifybd-play-badge.png";
 
 const Login = () => {
   const dispatch = useDispatch();
