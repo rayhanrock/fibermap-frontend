@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
-import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
+import { EsriProvider, GeoSearchControl } from "leaflet-geosearch";
 import { useDispatch } from "react-redux";
 import { mapActions } from "../../store/map/reducer";
 
@@ -11,6 +11,7 @@ const SearchLocation = () => {
 
   const map = useMap();
   const handleSearchResults = (data) => {
+    console.log(data);
     if (data.location) {
       dispatch(
         mapActions.updateLatLang({ lat: data.location.y, lng: data.location.x })
@@ -18,7 +19,14 @@ const SearchLocation = () => {
     }
   };
   useEffect(() => {
-    const provider = new OpenStreetMapProvider();
+    // dispatch(
+    //   mapActions.updateLatLang({
+    //     lat: `22°53'24.1"N`,
+    //     lng: `91°00'24.7"E
+    // `,
+    //   })
+    // );
+    const provider = new EsriProvider();
 
     const searchControl = new GeoSearchControl({
       provider,

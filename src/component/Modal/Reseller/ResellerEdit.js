@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { Button, Confirm, Form } from "semantic-ui-react";
+import { Button, Confirm, Form, Input, Segment } from "semantic-ui-react";
 import { deleteReseller, getReseller, updateReseller } from "../../../services";
 import handleError from "../../../utility/handleError";
 import { updateCables, updateResellers } from "../../../store/map/actions";
@@ -14,6 +14,7 @@ const ResellerEdit = ({ resellerId, modalClose }) => {
   const notesInputRef = useRef();
   const descriptionInputRef = useRef();
   const mobileInputRef = useRef();
+  const [latLng, setLatLng] = useState("");
 
   const [confirmSubmit, setConfirmSubmit] = useState(false);
 
@@ -29,6 +30,7 @@ const ResellerEdit = ({ resellerId, modalClose }) => {
       notesInputRef.current.value = data.marker.notes;
       descriptionInputRef.current.value = data.marker.description;
       mobileInputRef.current.value = data.mobile_number;
+      setLatLng(`[${data.marker.latitude}, ${data.marker.longitude}]`);
     }
     if (error) {
       handleError(error);
@@ -85,6 +87,24 @@ const ResellerEdit = ({ resellerId, modalClose }) => {
 
   return (
     <Form>
+      <Form.Field>
+        <Segment secondary>
+          <Input
+            readOnly
+            action={{
+              color: "primary",
+              labelPosition: "right",
+              icon: "copy",
+              content: "Copy",
+              onClick: () => {
+                navigator.clipboard.writeText(latLng);
+                toast.success("Copied to clipboard");
+              },
+            }}
+            value={`latitude and longitude : ${latLng}`}
+          />
+        </Segment>
+      </Form.Field>
       <Form.Group widths="equal">
         <Form.Field>
           <label>Reseller Name</label>

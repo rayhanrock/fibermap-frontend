@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { Button, Confirm, Dropdown, Form } from "semantic-ui-react";
+import {
+  Button,
+  Confirm,
+  Dropdown,
+  Form,
+  Input,
+  Segment,
+} from "semantic-ui-react";
 import { getPop, updatePop, deletePop } from "../../../services";
 import handleError from "../../../utility/handleError";
 import { updateCables, updatePops } from "../../../store/map/actions";
@@ -20,6 +27,7 @@ const PopEdit = ({ popId, modalClose }) => {
   const notesInputRef = useRef();
   const descriptionInputRef = useRef();
   const [popType, setPopType] = useState("");
+  const [latLng, setLatLng] = useState("");
 
   const [confirmSubmit, setConfirmSubmit] = useState(false);
 
@@ -34,6 +42,7 @@ const PopEdit = ({ popId, modalClose }) => {
       addressInputRef.current.value = data.marker.address;
       notesInputRef.current.value = data.marker.notes;
       descriptionInputRef.current.value = data.marker.description;
+      setLatLng(`[${data.marker.latitude}, ${data.marker.longitude}]`);
 
       setPopType(data.pop_type);
       setPrevName(data.name);
@@ -96,6 +105,24 @@ const PopEdit = ({ popId, modalClose }) => {
 
   return (
     <Form>
+      <Form.Field>
+        <Segment secondary>
+          <Input
+            readOnly
+            action={{
+              color: "primary",
+              labelPosition: "right",
+              icon: "copy",
+              content: "Copy",
+              onClick: () => {
+                navigator.clipboard.writeText(latLng);
+                toast.success("Copied to clipboard");
+              },
+            }}
+            value={`latitude and longitude : ${latLng}`}
+          />
+        </Segment>
+      </Form.Field>
       <Form.Group widths="equal">
         <Form.Field>
           <label>Pop Name</label>
