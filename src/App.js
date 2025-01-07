@@ -8,7 +8,7 @@ import RequireAuth from "./HOC/RequireAuth";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { authCheckState } from "./store/auth/actions";
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
 
 function App() {
   const dispatch = useDispatch();
