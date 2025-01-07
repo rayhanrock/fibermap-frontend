@@ -3,6 +3,7 @@ import { Grid, GridColumn, Segment, Statistic } from "semantic-ui-react";
 import { fetchDashboardData } from "../services";
 
 import handleError from "../utility/handleError";
+import CountCard from "../component/ui/CounterCard/CountCard";
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -21,57 +22,47 @@ const Dashboard = () => {
   }, []);
   return (
     <>
-      <Grid columns="equal" padded textAlign="center">
-        <GridColumn>
-          <Segment color="black">
-            <Statistic
-              size="small"
-              label="Number of clients"
-              value={dashboardData?.total_clients}
-            />
-          </Segment>
-        </GridColumn>
-        <GridColumn textAlign="center">
-          <Segment color="black">
-            <Statistic
-              size="small"
-              label="Number of Resellers"
-              value={dashboardData?.total_resellers}
-            />
-          </Segment>
-        </GridColumn>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          padding: "20px",
+          gap: "20px",
+        }}
+      >
+        <CountCard
+          title="Number of clients"
+          color="#004953"
+          value={dashboardData?.total_clients}
+          icon="home"
+        />
 
-        <GridColumn>
-          <Segment color="black">
-            <Statistic
-              size="small"
-              label="Number of POPs"
-              value={dashboardData?.total_pop}
-            />
-          </Segment>
-        </GridColumn>
-      </Grid>
-      <Grid columns={3} padded>
-        <GridColumn textAlign="center">
-          <Segment color="black">
-            <Statistic
-              size="small"
-              label="Number of TJ Boxs"
-              value={dashboardData?.total_gpons}
-            />
-          </Segment>
-        </GridColumn>
-
-        <GridColumn textAlign="center">
-          <Segment color="black">
-            <Statistic
-              size="small"
-              label="Number of cables"
-              value={dashboardData?.total_cables}
-            />
-          </Segment>
-        </GridColumn>
-      </Grid>
+        <CountCard
+          title="Number of resellers"
+          color="#7261C9"
+          value={dashboardData?.total_resellers}
+          icon="dollar sign"
+        />
+        <CountCard
+          title="Number of POPs"
+          color="#568203"
+          value={dashboardData?.total_pop}
+          icon="building"
+        />
+        <CountCard
+          title="Number of TJ Boxes"
+          color="#1B9CFC"
+          value={dashboardData?.total_gpons}
+          icon="linkify"
+        />
+        <CountCard
+          title="Number of cables"
+          color="#FEBE10"
+          value={dashboardData?.total_cables}
+          icon="shuffle"
+        />
+      </div>
     </>
   );
 };

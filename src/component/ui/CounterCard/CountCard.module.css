@@ -1,0 +1,126 @@
+@import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&display=swap");
+
+:root {
+  --main-color: #3b54c3;
+}
+.counter {
+  color: var(--main-color);
+  font-family: "Alegreya Sans", sans-serif;
+  text-align: center;
+  width: 210px;
+  height: 210px;
+  padding: 40px 25px;
+  margin: 0 auto;
+  border-radius: 20px 0;
+  border: 3px solid var(--main-color);
+  position: relative;
+  z-index: 1;
+}
+.counter:before,
+.counter:after {
+  content: "";
+  position: absolute;
+}
+.counter:before {
+  background: #f9f9f9;
+  width: calc(100% - 30px);
+  height: calc(100% - 30px);
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transform: translateX(-50%) translateY(-50%);
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+}
+.counter:after {
+  background: var(--main-color);
+  width: 150px;
+  height: 150px;
+  border-radius: 15px 0 0;
+  top: 0;
+  left: 0;
+  z-index: -2;
+}
+.counter .counter-icon {
+  font-size: 35px;
+  line-height: 35px;
+  margin: 0 0 15px;
+}
+.counter .counter-icon i {
+  line-height: inherit;
+}
+.counter h3 {
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin: 0 0 15px;
+}
+.counter .counter-value {
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 30px;
+  display: block;
+}
+.counter.purple {
+  --main-color: #82589f;
+}
+.counter.blue {
+  --main-color: #1b9cfc;
+}
+.counter.pink {
+  --main-color: #fc427b;
+}
+/* @import url("https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&display=swap");
+h1 {
+  padding: 0 0 30px;
+}
+.counter {
+  color: #fff;
+  background: linear-gradient(225deg, #90ccaf, #2faaba);
+  font-family: "Bitter", serif;
+  width: 210px;
+  padding: 15px;
+  margin: 0 auto;
+  border: 5px solid #fff;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.counter .counter-icon {
+  font-size: 35px;
+  margin: 0 0 10px;
+}
+.counter h3 {
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  margin: 0 0 15px;
+}
+.counter .counter-value {
+  color: #2faaba;
+  background-color: #fff;
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  padding: 5px 5px 4px;
+  border-radius: 20px;
+  display: block;
+}
+.counter.purple {
+  background: linear-gradient(225deg, #7261c9, #4751ad);
+}
+.counter.purple .counter-value {
+  color: #4751ad;
+}
+.counter.green {
+  background: linear-gradient(225deg, #5fcb71, #03776b);
+}
+.counter.green .counter-value {
+  color: #03776b;
+}
+.counter.orange {
+  background: linear-gradient(225deg, #ffb01d, #fd622e);
+}
+.counter.orange .counter-value {
+  color: #fd622e;
+} */

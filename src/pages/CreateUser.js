@@ -44,7 +44,7 @@ const CreateUser = () => {
 
   return (
     <Grid centered>
-      <Grid.Column mobile={12} tablet={10} computer={8}>
+      <Grid.Column mobile={12} tablet={10} computer={6}>
         <Header
           style={{
             marginTop: "15px",
