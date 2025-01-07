@@ -44,8 +44,9 @@ const Login = () => {
       style={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "flex-start",
+        alignItems: "center",
         height: "100vh",
+        backgroundColor: "#F0F0F0",
       }}
     >
       <Grid.Column
@@ -54,25 +55,6 @@ const Login = () => {
         computer={8}
         style={{ maxWidth: "450px" }}
       >
-        <div>
-          <Image
-            centered
-            src={logo}
-            alt="logo"
-            style={{ height: "150px", width: "200px" }}
-          />
-
-          <Header
-            style={{
-              marginTop: "-0px", //13px",
-              marginBottom: "30px",
-
-              textAlign: "center",
-            }}
-          >
-            <Header.Subheader>Chittagong Divisional ISP</Header.Subheader>
-          </Header>
-        </div>
         <Header
           style={{
             marginTop: "15px",
@@ -85,8 +67,7 @@ const Login = () => {
           as="h1"
           dividing
         >
-          Maijdee Supernet
-          <Header.Subheader>Optical Fiber Management Map</Header.Subheader>
+          Login to your account
         </Header>
         <Form onSubmit={handleSubmit}>
           <Form.Field>

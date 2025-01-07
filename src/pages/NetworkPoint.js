@@ -7,7 +7,7 @@ export default function NetworkPoint() {
   return (
     <Grid padded>
       <Grid.Column width={3}>
-        <Message success header="MODELS" style={{ textAlign: "center" }} />
+        <Message success header="Components" style={{ textAlign: "center" }} />
         <Segment>
           <Models />
         </Segment>

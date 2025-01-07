@@ -12,7 +12,7 @@ const Header = () => {
 
   return (
     <>
-      <Menu pointing secondary>
+      <Menu pointing style={{ marginTop: "10px" }}>
         <Menu.Item
           name="dashboard"
           active={activeItem === "dashboard"}
@@ -36,7 +36,7 @@ const Header = () => {
         /> */}
         <Menu.Item
           name="Create User"
-          active={activeItem === "create User"}
+          active={activeItem === "Create User"}
           onClick={handleItemClick}
           to={PathConstants.CREATE_USER}
           as={Link}
