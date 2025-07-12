@@ -112,6 +112,7 @@ const Login = () => {
           id="username"
           name="username"
           className={styles.input}
+          value="admin"
         />
 
         <label htmlFor="password">Password</label>
@@ -121,6 +122,7 @@ const Login = () => {
           id="password"
           name="password"
           className={styles.input}
+          value="admin"
         />
 
         <button
